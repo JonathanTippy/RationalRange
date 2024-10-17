@@ -91,4 +91,12 @@ public class Rational
             , this.denomenator.multiply(divisor.numerator)
             );
     }
+
+    // Multiplication
+    public Rational multiply(Rational factor) {
+        return new Rational(
+            this.numerator.multiply(factor.numerator)
+            , this.denomenator.multiply(factor.denomenator)
+        );
+    }
 }
