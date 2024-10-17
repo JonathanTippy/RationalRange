@@ -38,7 +38,7 @@ public class Rational
     // Adaptive constructors
     public Rational(String fraction) throws ArithmeticException, IllegalArgumentException {
 
-        if (fraction.matches("^\\d+(/?\\d+)?$\n")) {
+        if (fraction.matches("^(-?)\\d+(/?(-?)\\d+)")) {
             if (fraction.contains("/")) {
                 String[] terms = fraction.split("/");
                 numerator = new BigInteger(terms[0]);
