@@ -104,6 +104,13 @@ public class RationalTest {
         assertEquals("1/3", s);
     }
 
-    
+    @Test
+    public void hardDivisionTest() {
+        Rational dividend = new Rational("5/6");
+        Rational divisor = new Rational("2/3");
+        Rational answer = dividend.divide(divisor);
+        String s = answer.toString();
+        assertEquals("15/12", s);
+    }
 
 }

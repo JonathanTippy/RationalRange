@@ -9,8 +9,6 @@ public class Rational
     public static final Rational ONE = new Rational(1);
 
 
-
-
     private BigInteger numerator;
     private BigInteger denomenator;
 
