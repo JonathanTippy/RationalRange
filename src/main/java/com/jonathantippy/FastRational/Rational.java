@@ -4,6 +4,13 @@ import java.math.BigInteger;
 
 public class Rational 
 {
+
+    public static final Rational ZERO = new Rational(0);
+    public static final Rational ONE = new Rational(1);
+
+
+
+
     private BigInteger numerator;
     private BigInteger denomenator;
 
@@ -77,5 +84,10 @@ public class Rational
         } else {
             return "-" + this.numerator.abs().toString() + "/" + this.denomenator.abs().toString();
         }
+    }
+
+    // Division
+    public Rational divide(Rational divisor) {
+        return Rational.ZERO;
     }
 }

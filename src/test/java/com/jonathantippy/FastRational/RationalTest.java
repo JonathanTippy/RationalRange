@@ -5,31 +5,76 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RationalTest {
 
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //STRINGS
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+
     @Test
     public void stringPositiveTest() {
         Rational r = new Rational("50/7");
         String s = r.toString();
-        assertEquals(s, "50/7");
+        assertEquals("50/7", s);
     }
 
     @Test
     public void stringNegativeTest() {
         Rational r = new Rational("-50/7");
         String s = r.toString();
-        assertEquals(s, "-50/7");
+        assertEquals("-50/7", s);
     }
 
     @Test
     public void stringNegativeSimplifyTest() {
         Rational r = new Rational("-50/-7");
         String s = r.toString();
-        assertEquals(s, "50/7");
+        assertEquals("50/7", s);
     }
 
     @Test
     public void stringIntegerTest() {
         Rational r = new Rational("60");
         String s = r.toString();
-        assertEquals(s, "60/1");
+        assertEquals("60/1", s);
     }
+
+
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //INTEGERS
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void intPositiveTest() {
+        Rational r = new Rational(50L);
+        String s = r.toString();
+        assertEquals("50/1", s);
+    }
+
+    @Test
+    public void intNegativeTest() {
+        Rational r = new Rational(-50L);
+        String s = r.toString();
+        assertEquals("-50/1", s);
+    }
+
+
+
+    
+
 }
