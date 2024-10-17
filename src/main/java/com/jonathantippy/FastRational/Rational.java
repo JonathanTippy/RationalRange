@@ -17,7 +17,7 @@ public class Rational
     // Constructors with both numerator and denomenator
     public Rational(BigInteger numerator, BigInteger denomenator) throws ArithmeticException {
         this.numerator = numerator; 
-        if (!this.denomenator.equals(BigInteger.ZERO)) {
+        if (!denomenator.equals(BigInteger.ZERO)) {
             this.denomenator = denomenator;
         } else {
             throw new ArithmeticException("/ by zero");
@@ -88,6 +88,9 @@ public class Rational
 
     // Division
     public Rational divide(Rational divisor) {
-        return Rational.ZERO;
+        return new Rational(
+            this.numerator.multiply(divisor.denomenator)
+            , this.denomenator.multiply(divisor.numerator)
+            );
     }
 }
