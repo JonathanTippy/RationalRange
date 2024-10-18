@@ -43,7 +43,7 @@ public class Rational
     // Adaptive constructors
     public Rational(String fraction) throws ArithmeticException, IllegalArgumentException {
 
-        if (fraction.matches("^(-?)\\d+(/?(-?)\\d+)")) {
+        if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
             if (fraction.contains("/")) {
                 String[] terms = fraction.split("/");
                 numerator = new BigInteger(terms[0]);
@@ -97,6 +97,23 @@ public class Rational
         return new Rational(
             this.numerator.multiply(factor.numerator)
             , this.denomenator.multiply(factor.denomenator)
+        );
+    }
+
+    // Simplification
+    public Rational simplify() {
+        BigInteger GCD = this.numerator.gcd(this.denomenator);
+        return new Rational(
+            this.numerator.divide(GCD)
+            , this.denomenator.divide(GCD)
+        );
+    }
+
+    // Addition
+    public Rational add(Rational addend) {
+        return new Rational(
+            this.numerator.multiply(addend.denomenator).add(addend.numerator.multiply(this.denomenator))
+            ,this.denomenator.multiply(addend.denomenator)
         );
     }
 }

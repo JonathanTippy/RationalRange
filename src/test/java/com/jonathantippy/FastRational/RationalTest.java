@@ -29,8 +29,6 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
-
-
     @Test
     public void stringPositiveTest() {
         Rational r = new Rational("50/7");
@@ -54,15 +52,17 @@ public class RationalTest {
 
     @Test
     public void stringIntegerTest() {
+        Rational r = new Rational("5");
+        String s = r.toString();
+        assertEquals("5/1", s);
+    }
+
+    @Test
+    public void hardStringIntegerTest() {
         Rational r = new Rational("60");
         String s = r.toString();
         assertEquals("60/1", s);
     }
-
-
-
-
-
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -128,6 +128,50 @@ public class RationalTest {
         Rational answer = factorOne.multiply(factorTwo);
         String s = answer.toString();
         assertEquals("3/1", s);
+    }
+
+    @Test
+    public void hardMultiplicationTest() {
+        Rational factorOne = new Rational("5/7");
+        Rational factorTwo = new Rational("2/3");
+        Rational answer = factorOne.multiply(factorTwo);
+        String s = answer.toString();
+        assertEquals("10/21", s);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //SIMPLIFICATION
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void simplificationTest() {
+        Rational a = new Rational("50/20");
+        Rational answer = a.simplify();
+        String s = answer.toString();
+        assertEquals("5/2", s);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //ADDITION
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void additionTest() {
+        Rational a = new Rational(5);
+        Rational b = new Rational(6);
+        Rational answer = a.add(b);
+        String s = answer.toString();
+        assertEquals("11/1", s);
     }
 
 }
