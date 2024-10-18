@@ -151,9 +151,17 @@ public class RationalTest {
     @Test
     public void simplificationTest() {
         Rational a = new Rational("50/20");
-        Rational answer = a.simplify();
+        Rational answer = a.slowSimplify();
         String s = answer.toString();
         assertEquals("5/2", s);
+    }
+
+    @Test
+    public void simplifyTwosTest() {
+        Rational a = new Rational("50/20");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("25/10", s);
     }
 
 

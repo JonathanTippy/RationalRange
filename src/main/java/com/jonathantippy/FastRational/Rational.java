@@ -101,11 +101,35 @@ public class Rational
     }
 
     // Simplification
-    public Rational simplify() {
+    public Rational slowSimplify() {
         BigInteger GCD = this.numerator.gcd(this.denomenator);
         return new Rational(
             this.numerator.divide(GCD)
             , this.denomenator.divide(GCD)
+        );
+    }
+
+    // Squeezes (incomplete simplification)
+    public Rational twoSimplify() {
+        int extraTwos = Math.min(
+            this.numerator.getLowestSetBit()
+            , this.denomenator.getLowestSetBit()
+            );
+        return new Rational(
+            this.numerator.shiftRight(extraTwos)
+            , this.denomenator.shiftRight(extraTwos)
+        );
+    }
+
+    // Crushes (approximate simplfication)
+    public Rational bitApproxSimplify(int maxBitLength) {
+        int unwantedBits = Math.max(
+            this.numerator.bitLength() - maxBitLength
+            , this.denomenator.bitLength() - maxBitLength
+        );
+        return new Rational(
+            this.numerator.shiftRight(unwantedBits)
+            , this.denomenator.shiftRight(unwantedBits)
         );
     }
 
