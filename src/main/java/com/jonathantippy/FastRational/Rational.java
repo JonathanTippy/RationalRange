@@ -127,10 +127,19 @@ public class Rational
             this.numerator.bitLength() - maxBitLength
             , this.denomenator.bitLength() - maxBitLength
         );
-        return new Rational(
-            this.numerator.shiftRight(unwantedBits)
-            , this.denomenator.shiftRight(unwantedBits)
-        );
+
+        BigInteger maybeDenomenator = this.denomenator.shiftRight(unwantedBits);
+        if (!maybeDenomenator.equals(BigInteger.ZERO)) {
+            return new Rational(
+                this.numerator.shiftRight(unwantedBits)
+                , this.denomenator.shiftRight(unwantedBits)
+                );
+        } else {
+            return new Rational(
+                this.numerator.shiftRight(unwantedBits)
+                , BigInteger.ONE
+                );
+        }
     }
 
     // Addition
