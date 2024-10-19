@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
     <!-- Project Deets -->
-    <groupId>com.jonathantippy.FastRational</groupId>
-    <artifactId>fast-rational</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>Fast Rational</name>
-    <description>Fractions!</description>
+    <groupId>com.jonathantippy.FuzzyFraction</groupId>
+    <artifactId>fuzzy-fraction</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+    <name>Fuzzy Fraction</name>
+    <description>Fuzzy Fractions!</description>
 
 
 

@@ -1,4 +1,4 @@
-package com.jonathantippy.FastRational;
+package com.jonathantippy.FuzzyFraction;
 
 import java.math.BigInteger;
 import static java.lang.Math.max;
