@@ -5,6 +5,10 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 
+/*
+for now uses longs but eventually want to make hexaLong or octaLong 
+(hexaLong would represent integers up to about 10^300)
+*/
 
 public class Rational 
 {
@@ -12,7 +16,7 @@ public class Rational
     public static final Rational ZERO = new Rational(0);
     public static final Rational ONE = new Rational(1);
 
-
+    private final Rational plusOrMinus;
     private final BigInteger numerator;
     private final BigInteger denomenator;
     private final int sign;
@@ -20,13 +24,14 @@ public class Rational
     // Constructors with both numerator and denomenator
     public Rational(BigInteger numerator, BigInteger denomenator) 
     throws ArithmeticException {
-        this.numerator = numerator; 
+        this.numerator = numerator;
         if (!denomenator.equals(BigInteger.ZERO)) {
             this.denomenator = denomenator;
         } else {
             throw new ArithmeticException("/ by zero");
         }
         this.sign = this.calcSign();
+        this.plusOrMinus = Rational.ZERO;
     }
     public Rational(long numerator, long denomenator) 
     throws ArithmeticException {
@@ -37,6 +42,7 @@ public class Rational
             throw new ArithmeticException("/ by zero");
         }
         this.sign = this.calcSign();
+        this.plusOrMinus = Rational.ZERO;
     }
 
     // Constructors with integers
@@ -44,11 +50,13 @@ public class Rational
         this.numerator = numerator; 
         this.denomenator = BigInteger.ONE;
         this.sign = this.calcSign();
+        this.plusOrMinus = Rational.ZERO;
     }
     public Rational(long numerator) {
         this.numerator = BigInteger.valueOf(numerator);
         this.denomenator = BigInteger.ONE;
         this.sign = this.calcSign();
+        this.plusOrMinus = Rational.ZERO;
     }
 
     // Adaptive constructors
@@ -71,6 +79,22 @@ public class Rational
             throw new IllegalArgumentException("Not a fraction");
         }
         this.sign = this.calcSign();
+        this.plusOrMinus = Rational.ZERO;
+    }
+
+    // Constructors with plusOrMinus
+
+    public Rational(BigInteger numerator, BigInteger denomenator, Rational plusOrMinus) 
+    throws ArithmeticException {
+        this.numerator = numerator; 
+        if (!denomenator.equals(BigInteger.ZERO)) {
+            this.denomenator = denomenator;
+        } else {
+            throw new ArithmeticException("/ by zero");
+        }
+        this.sign = this.calcSign();
+        this.plusOrMinus = plusOrMinus;
+        assert(plusOrMinus.plusOrMinus.equals(Rational.ZERO));
     }
 
     // Accessors
@@ -81,19 +105,28 @@ public class Rational
         return this.denomenator;
     }
     public int getSign() {
-        return sign;
+        return this.sign;
+    }
+    public Rational getPlusOrMinus() {
+        return this.plusOrMinus;
     }
 
     // Display
     @Override
     public String toString() {
-        if (sign >= 0) {
-            return this.numerator.abs().toString() 
-            + "/" + this.denomenator.abs().toString();
-        } else {
-            return "-" + this.numerator.abs().toString() 
-            + "/" + this.denomenator.abs().toString();
+        StringBuilder numberConstruct = new StringBuilder();
+
+        if (sign >= 0) {;} else {
+            numberConstruct.append('-');
         }
+        numberConstruct.append(numerator.toString());
+        numberConstruct.append('/');
+        numberConstruct.append(denomenator.toString());
+        if (plusOrMinus.equals(Rational.ZERO)) {;} else {
+            numberConstruct.append('±');
+            numberConstruct.append(plusOrMinus.toString());
+        }
+        return numberConstruct.toString();
     }
 
     // Division

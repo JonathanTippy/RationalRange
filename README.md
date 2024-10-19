@@ -1,2 +1,2 @@
 # FastRational
-(WIP) Rational number in java using BigInteger.
+(WIP) Fast Rational number in java.
