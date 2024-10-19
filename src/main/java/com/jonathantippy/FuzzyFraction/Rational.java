@@ -1,9 +1,5 @@
 package com.jonathantippy.FuzzyFraction;
 
-import static java.lang.Math.*;
-import static java.lang.Math.abs;
-import static java.lang.Long.*;
-
 /*
 for now uses longs but eventually want to make hexaLong or octaLong 
 (hexaLong would represent integers up to about 10^300)
@@ -45,14 +41,14 @@ public class Rational
         if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
             if (fraction.contains("/")) {
                 String[] terms = fraction.split("/");
-                numerator = parseLong(terms[0]);
-                if (!(0==(parseLong(terms[1])))) {
-                    denomenator = parseLong(terms[1]);
+                numerator = Long.parseLong(terms[0]);
+                if (!(0==(Long.parseLong(terms[1])))) {
+                    denomenator = Long.parseLong(terms[1]);
                 } else {
                     throw new ArithmeticException("/ by zero");
                 }
             } else {
-                numerator = parseLong(fraction);
+                numerator = Long.parseLong(fraction);
                 denomenator = 1;
             }
         } else {
