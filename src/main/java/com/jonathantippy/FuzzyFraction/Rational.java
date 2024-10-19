@@ -119,9 +119,9 @@ public class Rational
         if (sign >= 0) {;} else {
             numberConstruct.append('-');
         }
-        numberConstruct.append(numerator.toString());
+        numberConstruct.append(numerator.abs().toString());
         numberConstruct.append('/');
-        numberConstruct.append(denomenator.toString());
+        numberConstruct.append(denomenator.abs().toString());
         if (plusOrMinus.equals(Rational.ZERO)) {;} else {
             numberConstruct.append('±');
             numberConstruct.append(plusOrMinus.toString());
