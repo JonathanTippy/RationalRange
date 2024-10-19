@@ -1,2 +1,2 @@
-# FastRational
-(WIP) Fast Rational number in java.
+# FuzzyFraction
+(WIP) Fuzzy, Fast Rational number in java.
