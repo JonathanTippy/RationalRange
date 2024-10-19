@@ -16,7 +16,6 @@ public class Rational
     public static final Rational ZERO = new Rational(0);
     public static final Rational ONE = new Rational(1);
 
-    private final Rational plusOrMinus;
     private final BigInteger numerator;
     private final BigInteger denomenator;
     private final int sign;
@@ -31,7 +30,6 @@ public class Rational
             throw new ArithmeticException("/ by zero");
         }
         this.sign = this.calcSign();
-        this.plusOrMinus = Rational.ZERO;
     }
     public Rational(long numerator, long denomenator) 
     throws ArithmeticException {
@@ -42,7 +40,6 @@ public class Rational
             throw new ArithmeticException("/ by zero");
         }
         this.sign = this.calcSign();
-        this.plusOrMinus = Rational.ZERO;
     }
 
     // Constructors with integers
@@ -50,13 +47,11 @@ public class Rational
         this.numerator = numerator; 
         this.denomenator = BigInteger.ONE;
         this.sign = this.calcSign();
-        this.plusOrMinus = Rational.ZERO;
     }
     public Rational(long numerator) {
         this.numerator = BigInteger.valueOf(numerator);
         this.denomenator = BigInteger.ONE;
         this.sign = this.calcSign();
-        this.plusOrMinus = Rational.ZERO;
     }
 
     // Adaptive constructors
@@ -79,22 +74,6 @@ public class Rational
             throw new IllegalArgumentException("Not a fraction");
         }
         this.sign = this.calcSign();
-        this.plusOrMinus = Rational.ZERO;
-    }
-
-    // Constructors with plusOrMinus
-
-    public Rational(BigInteger numerator, BigInteger denomenator, Rational plusOrMinus) 
-    throws ArithmeticException {
-        this.numerator = numerator; 
-        if (!denomenator.equals(BigInteger.ZERO)) {
-            this.denomenator = denomenator;
-        } else {
-            throw new ArithmeticException("/ by zero");
-        }
-        this.sign = this.calcSign();
-        this.plusOrMinus = plusOrMinus;
-        assert(plusOrMinus.plusOrMinus.equals(Rational.ZERO));
     }
 
     // Accessors
@@ -106,9 +85,6 @@ public class Rational
     }
     public int getSign() {
         return this.sign;
-    }
-    public Rational getPlusOrMinus() {
-        return this.plusOrMinus;
     }
 
     // Display
@@ -122,10 +98,6 @@ public class Rational
         numberConstruct.append(numerator.abs().toString());
         numberConstruct.append('/');
         numberConstruct.append(denomenator.abs().toString());
-        if (plusOrMinus.equals(Rational.ZERO)) {;} else {
-            numberConstruct.append('±');
-            numberConstruct.append(plusOrMinus.toString());
-        }
         return numberConstruct.toString();
     }
 
