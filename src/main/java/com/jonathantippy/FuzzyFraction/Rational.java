@@ -13,7 +13,6 @@ public class Rational
 
     private final long numerator;
     private final long denomenator;
-    private final int sign;
 
     // Constructors with both numerator and denomenator
     public Rational(long numerator, long denomenator) 
@@ -24,14 +23,12 @@ public class Rational
         } else {
             throw new ArithmeticException("/ by zero");
         }
-        this.sign = this.calcSign();
     }
 
     // Constructors with integers
     public Rational(long numerator) {
         this.numerator = numerator; 
         this.denomenator = 1;
-        this.sign = this.calcSign();
     }
 
 
@@ -54,7 +51,6 @@ public class Rational
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
-        this.sign = this.calcSign();
     }
 
     // Accessors
@@ -64,16 +60,13 @@ public class Rational
     public long getDenomenator() {
         return this.denomenator;
     }
-    public int getSign() {
-        return this.sign;
-    }
 
     // Display
     @Override
     public String toString() {
         StringBuilder numberConstruct = new StringBuilder();
 
-        if (sign >= 0) {;} else {
+        if (calcSign() >= 0) {;} else {
             numberConstruct.append('-');
         }
         numberConstruct.append(Math.abs(numerator));
@@ -107,6 +100,23 @@ public class Rational
         );
     }
 
+    // Negation
+    public Rational negate(Rational input) {
+        return new Rational(
+            this.numerator * -1
+            , this.denomenator
+        );
+    }
+
+    // Subtraction
+    public Rational subtract(Rational minuend) {
+        return new Rational(
+            (this.numerator * minuend.denomenator)
+            - (minuend.numerator * this.denomenator)
+            , this.denomenator * minuend.denomenator
+        );
+    }
+
     // Absoulte Value
     public Rational abs() {
         return new Rational(
@@ -124,4 +134,5 @@ public class Rational
         int sign = numeratorSign*denomenatorSign;
         return sign;
     }
+    
 }

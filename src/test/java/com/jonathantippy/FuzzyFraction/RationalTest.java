@@ -158,4 +158,13 @@ public class RationalTest {
         assertEquals("11/1", s);
     }
 
+    @Test
+    public void subtractionTest() {
+        Rational a = new Rational(5);
+        Rational b = new Rational(6);
+        Rational answer = a.subtract(b);
+        String s = answer.toString();
+        assertEquals("-1/1", s);
+    }
+
 }
