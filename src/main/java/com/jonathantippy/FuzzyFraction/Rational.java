@@ -128,6 +128,43 @@ public class Rational
 
     // UTILS
 
+    // Squeezes (incomplete simplification)
+    public Rational twoSimplify() {
+        int extraTwos = 
+            Math.min(               
+            Long.numberOfTrailingZeros(this.numerator)
+            , Long.numberOfTrailingZeros(this.denomenator)
+            );
+        return new Rational(
+            this.numerator >> extraTwos
+            , this.denomenator >> extraTwos
+        );
+    }
+
+     // Crushes (approximate simplfication)
+     protected Rational bitShiftSimplify(int maxBitLength) {
+    
+        int unwantedBits = 
+            Math.max(
+            Math.max(
+                (63 - Long.numberOfLeadingZeros(Math.abs(this.numerator))) - (maxBitLength-1)
+            , (63 - Long.numberOfLeadingZeros(Math.abs(this.denomenator))) - (maxBitLength-1)
+            )
+            , 0);
+
+        System.out.println("input: " + this + "\nunwanted bits: " + unwantedBits);
+        
+        long maybeDenomenator = this.denomenator >> unwantedBits;
+
+        if (! (maybeDenomenator == 0)) {;}
+            else {maybeDenomenator = 1;}
+        return new Rational(
+            numerator >> unwantedBits
+            , maybeDenomenator
+            );
+    }
+
+
     private int calcSign() {
         int numeratorSign = Long.signum(this.numerator);
         int denomenatorSign = Long.signum(this.denomenator);
@@ -152,5 +189,13 @@ public class Rational
             );
 
     }
-    
+/*
+    public Rational lowMultiply(Rational multiplier) {
+        short[] bitsAfterMultiply = this.bitsAfterMultiply(multiplier);
+        short numeratorBAM = bitsAfterMultiply[0];
+        short denomenatorBAM = bitsAfterMultiply[1];
+
+
+    }
+*/
 }

@@ -123,20 +123,28 @@ public class FuzzyFraction {
 /*
     public multiply(FuzzyFraction multiplier) {
 
+        short[][] bitsAfterMultiply = this.bitsAfterMultiply(multiplier);
+
+        short[] lowerBAM = bitsAfterMultiply[0];
+        short[] upperBAM = bitsAfterMultiply[1];
+
+        short lowerBAMMax = (short) Math.max(lowerBAM[0], lowerBAM[1]);
+        short upperBAMMax = (short) Math.max(upperBAM[0], upperBAM[1]);
 
 
     }
 */
-
-    public static short[][] bitsAfterMultiply(FuzzyFraction that) {
+    public short[][] bitsAfterMultiply(FuzzyFraction that) {
         Rational thisLowerBound = new Rational(this.lowerBoundNumerator, this.lowerBoundDenomenator);
         Rational thisUpperBound = new Rational(this.upperBoundNumerator, this.upperBoundDenomenator);
-        
-
-
 
         return new short[][]{
-            
+            thisLowerBound.bitsAfterMultiply(
+                new Rational(that.lowerBoundNumerator, that.lowerBoundDenomenator)
+            )
+            , thisUpperBound.bitsAfterMultiply(
+                new Rational(that.upperBoundNumerator, that.upperBoundDenomenator)
+            )
         };
     }
 }

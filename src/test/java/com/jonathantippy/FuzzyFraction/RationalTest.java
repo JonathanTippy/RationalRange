@@ -167,4 +167,98 @@ public class RationalTest {
         assertEquals("-1/1", s);
     }
 
+     //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //SIMPLIFICATION
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void simplifyTwosTest() {
+        Rational a = new Rational("50/20");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("25/10", s);
+    }
+    @Test
+    public void simplifyTwosTest2() {
+        Rational a = new Rational("1/1");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("1/1", s);
+    }
+    @Test
+    public void simplifyTwosTest3() {
+        Rational a = new Rational("0/1");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("0/1", s);
+    }
+    @Test
+    public void negativeSimplifyTwosTest() {
+        Rational a = new Rational("-50/20");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("-25/10", s);
+    }
+    @Test
+    public void negativeSimplifyTwosTest2() {
+        Rational a = new Rational("-50/-20");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("25/10", s);
+    }
+    @Test
+    public void negativeSimplifyTwosTest3() {
+        Rational a = new Rational("50/-20");
+        Rational answer = a.twoSimplify();
+        String s = answer.toString();
+        assertEquals("-25/10", s);
+    }
+
+    
+    @Test
+    public void shiftSimplifyTest() {
+        Rational a = new Rational("50/20");
+        Rational answer = a.bitShiftSimplify(2);
+        String s = answer.toString();
+        assertEquals("3/1", s);
+    }
+    @Test
+    public void shiftSimplifyTest2() {
+        Rational a = new Rational("1/1");
+        Rational answer = a.bitShiftSimplify(2);
+        String s = answer.toString();
+        assertEquals("1/1", s);
+    }
+    @Test
+    public void shiftSimplifyTest3() {
+        Rational a = new Rational("0/1");
+        Rational answer = a.bitShiftSimplify(2);
+        String s = answer.toString();
+        assertEquals("0/1", s);
+    }
+    @Test
+    public void negativeShiftSimplifyTest() {
+        Rational a = new Rational("-50/20");
+        Rational answer = a.bitShiftSimplify(2);
+        String s = answer.toString();
+        assertEquals("-3/1", s);
+    }
+    @Test
+    public void negativeShiftSimplifyTest2() {
+        Rational a = new Rational("-50/-20");
+        Rational answer = a.bitShiftSimplify(2);
+        String s = answer.toString();
+        assertEquals("3/1", s);
+    }
+    @Test
+    public void negativeShiftSimplifyTest3() {
+        Rational a = new Rational("50/-20");
+        Rational answer = a.bitShiftSimplify(2);
+        String s = answer.toString();
+        assertEquals("-3/1", s);
+    }
 }
