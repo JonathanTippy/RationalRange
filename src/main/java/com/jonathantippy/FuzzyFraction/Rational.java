@@ -134,5 +134,23 @@ public class Rational
         int sign = numeratorSign*denomenatorSign;
         return sign;
     }
+
+
+    // FuzzyFractions stuff
+
+    public short[] bitsAfterMultiply(Rational that) {
+        return new short[]{
+            bitsAfterMultiply(this.numerator, that.numerator)
+            , bitsAfterMultiply(this.denomenator, that.denomenator)
+            };
+    }
+
+    public static short bitsAfterMultiply(long a, long b) {
+        return (short) (
+            (63 - Long.numberOfLeadingZeros(a))
+            + (63 - Long.numberOfLeadingZeros(b))
+            );
+
+    }
     
 }

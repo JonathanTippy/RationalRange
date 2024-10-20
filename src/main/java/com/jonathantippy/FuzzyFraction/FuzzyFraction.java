@@ -116,13 +116,27 @@ public class FuzzyFraction {
         return numberConstruct.toString();
     }
 
+
+
+
     // Multiply
-
+/*
     public multiply(FuzzyFraction multiplier) {
-        Rational lowerBound = this.getLowerBound();
-        Rational upperBound = this.getUpperBound();
 
-        int 
 
+
+    }
+*/
+
+    public static short[][] bitsAfterMultiply(FuzzyFraction that) {
+        Rational thisLowerBound = new Rational(this.lowerBoundNumerator, this.lowerBoundDenomenator);
+        Rational thisUpperBound = new Rational(this.upperBoundNumerator, this.upperBoundDenomenator);
+        
+
+
+
+        return new short[][]{
+            
+        };
     }
 }
