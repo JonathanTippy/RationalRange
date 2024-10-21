@@ -8,8 +8,15 @@ for now uses longs but eventually want to make hexaLong or octaLong
 public class Rational 
 {
 
-    public static final Rational ZERO = new Rational(0);
-    public static final Rational ONE = new Rational(1);
+    public static final Rational ZERO = new Rational(0L, 1L);
+    public static final Rational ONE = new Rational(1L, 1L);
+
+    public static final Rational MAX_VALUE = new Rational(Long.MAX_VALUE, 1L);
+    public static final Rational MIN_VALUE = new Rational(-Long.MAX_VALUE, 1L);
+
+    public static final Rational MIN_POSITIVE_VALUE = new Rational(1L, Long.MAX_VALUE);
+    public static final Rational MAX_NEGATIVE_VALUE = new Rational(-1L, Long.MAX_VALUE);
+
 
     private final long numerator;
     private final long denomenator;
@@ -17,18 +24,24 @@ public class Rational
     // Constructors with both numerator and denomenator
     public Rational(long numerator, long denomenator) 
     throws ArithmeticException {
-        this.numerator = numerator;
-        if (!(denomenator==0)) {
-            this.denomenator = denomenator;
-        } else {
+        if (!(denomenator==0)) {;} else {
             throw new ArithmeticException("/ by zero");
         }
+        if (!(numerator==Long.MIN_VALUE||denomenator==Long.MIN_VALUE)) {;} else {
+            throw new ArithmeticException("input too small");
+        }
+
+        this.numerator = numerator;
+        this.denomenator = denomenator;
     }
 
     // Constructors with integers
     public Rational(long numerator) {
+        if (!(numerator==Long.MIN_VALUE)) {;} else {
+            throw new ArithmeticException("input too small");
+        }
         this.numerator = numerator; 
-        this.denomenator = 1;
+        this.denomenator = 1L;
     }
 
 
@@ -38,15 +51,28 @@ public class Rational
         if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
             if (fraction.contains("/")) {
                 String[] terms = fraction.split("/");
-                numerator = Long.parseLong(terms[0]);
-                if (!(0==(Long.parseLong(terms[1])))) {
-                    denomenator = Long.parseLong(terms[1]);
-                } else {
+                long maybeNumerator = Long.parseLong(terms[0]);
+                long maybeDenomenator = Long.parseLong(terms[1]);
+                if (!(maybeDenomenator==0)) {;} else {
                     throw new ArithmeticException("/ by zero");
                 }
+                if (
+                    !(
+                    maybeNumerator==Long.MIN_VALUE
+                    ||maybeDenomenator==Long.MIN_VALUE
+                    )
+                ) {;} else {
+                    throw new ArithmeticException("input too small");
+                }
+                this.numerator = maybeNumerator;
+                this.denomenator = maybeDenomenator;
             } else {
-                numerator = Long.parseLong(fraction);
-                denomenator = 1;
+                long maybeNumerator = Long.parseLong(fraction);
+                if (!(maybeNumerator==Long.MIN_VALUE)) {;} else {
+                    throw new ArithmeticException("input too small");
+                }
+                this.numerator = maybeNumerator;
+                this.denomenator = 1L;
             }
         } else {
             throw new IllegalArgumentException("Not a fraction");
@@ -66,7 +92,7 @@ public class Rational
     public String toString() {
         StringBuilder numberConstruct = new StringBuilder();
 
-        if (calcSign() >= 0) {;} else {
+        if (signum() >= 0) {;} else {
             numberConstruct.append('-');
         }
         numberConstruct.append(Math.abs(numerator));
@@ -142,36 +168,56 @@ public class Rational
     }
 
      // Crushes (approximate simplfication)
+
      protected Rational bitShiftSimplify(int maxBitLength) {
-    
+
+        // Purposefully performing the shift on negatives so that the result is 
+        // more accurate, just like how we round up on .5
+        int sign = signum();
+        long absNumerator = Math.abs(this.numerator);
+        long absDenomenator = Math.abs(this.denomenator);
+
         int unwantedBits = 
             Math.max(
             Math.max(
-                (63 - Long.numberOfLeadingZeros(Math.abs(this.numerator))) - (maxBitLength-1)
-            , (63 - Long.numberOfLeadingZeros(Math.abs(this.denomenator))) - (maxBitLength-1)
+                (63 - Long.numberOfLeadingZeros(absNumerator)) - (maxBitLength-1)
+            , (63 - Long.numberOfLeadingZeros(absDenomenator)) - (maxBitLength-1)
             )
             , 0);
 
-        System.out.println("input: " + this + "\nunwanted bits: " + unwantedBits);
-        
-        long maybeDenomenator = this.denomenator >> unwantedBits;
+        long newDenomenator = -((-absDenomenator) >> unwantedBits);
 
-        if (! (maybeDenomenator == 0)) {;}
-            else {maybeDenomenator = 1;}
+        if (! (newDenomenator == 0)) {;} else {newDenomenator = 1;}
+        System.out.println("input: " + this + "\nunwanted bits: " + unwantedBits + "\nnumpostshift:" + (this.numerator >> unwantedBits) + "\ndenomenpostshify" + newDenomenator);
         return new Rational(
-            numerator >> unwantedBits
-            , maybeDenomenator
+            (-((-absNumerator) >> unwantedBits))*sign
+            , newDenomenator
             );
     }
+/*
+    protected static long bitLimitRoundUp(long input, int bitLimit) {
+        long signBit = (input & Long.MIN_VALUE) >>> 63;
+        long signMask = signBit * (-1);
+        long absInput = (input ^ signMask);
+    }
+*/
 
 
-    private int calcSign() {
+
+    // UTILS
+
+    public int signum() {
         int numeratorSign = Long.signum(this.numerator);
         int denomenatorSign = Long.signum(this.denomenator);
         int sign = numeratorSign*denomenatorSign;
         return sign;
     }
 
+    protected static long branchlessAbs(long input) {
+        long signBit = (input & Long.MIN_VALUE) >>> 63;
+        long signMask = signBit * (-1);
+        return (input ^ signMask) + signBit;
+    }
 
     // FuzzyFractions stuff
 

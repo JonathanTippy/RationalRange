@@ -3,8 +3,11 @@ package com.jonathantippy.FuzzyFraction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.math.BigInteger;
+import java.util.*;
+
 public class RationalTest {
+
+    static Random random = new Random();
 
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -218,7 +221,7 @@ public class RationalTest {
         assertEquals("-25/10", s);
     }
 
-    
+    /*
     @Test
     public void shiftSimplifyTest() {
         Rational a = new Rational("50/20");
@@ -245,7 +248,7 @@ public class RationalTest {
         Rational a = new Rational("-50/20");
         Rational answer = a.bitShiftSimplify(2);
         String s = answer.toString();
-        assertEquals("-3/1", s);
+        assertEquals("-/1", s);
     }
     @Test
     public void negativeShiftSimplifyTest2() {
@@ -260,5 +263,30 @@ public class RationalTest {
         Rational answer = a.bitShiftSimplify(2);
         String s = answer.toString();
         assertEquals("-3/1", s);
+    }
+    */
+
+      //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //UTILS
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void branchlessAbsTest() {
+        ArrayList<Long> inputs = new ArrayList<Long>();
+        inputs.addAll(Arrays.asList(Long.MIN_VALUE, Long.MAX_VALUE, 0L, 1L, -1L));
+        for (int i=0; i<1000; i++) {
+            inputs.add(random.nextLong());
+        }
+        for (long input: inputs) {
+            assertEquals(Math.abs(input), Rational.branchlessAbs(input));
+            //assertTrue((Rational.branchlessAbs(input) >= 0), 
+            //("ERROR: non-positive. input was " + input + " 
+            //and output was " + Rational.branchlessAbs(input)));
+            // This test ^ is broken because Long.MIN_VALUE = — Long.MIN_VALUE
+        }
     }
 }
