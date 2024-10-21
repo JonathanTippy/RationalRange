@@ -245,18 +245,26 @@ public class Rational
             );
     }
 
-/*
+
     protected static long branchlessDoz(long inputA, long inputB) {
-        long difference = inputA-inputB;
-        return (difference)*(1-((difference & Long.MIN_VALUE) >>> 63));
+        long difference = inputA - inputB; 
+        return (difference)&(((difference & Long.MIN_VALUE) >>> 63)-1);
     }
 
     protected static long branchlessMax(long inputA, long inputB) {
         
-        return -(-inputB + branchlessDoz(inputA, inputB));
+        long maxBit = ((branchlessDoz(inputA, inputB)&Long.MIN_VALUE) >>> 63)-1;
+        long obv = -(((inputA^inputB)&Long.MIN_VALUE)>>>63);
+        long obvMax = -((inputB&Long.MIN_VALUE)>>>63);
+        long returned = ((((inputA&maxBit)|(inputB&(~maxBit))))&(~obv))
+            | ((((inputA&obvMax)|(inputB&(~obvMax))))&(obv));
 
+        System.out.println("inputs: " + inputA + ", " + inputB + "\ndiff: " + branchlessDoz(inputA, inputB) + "\nmaxBit, obv, obvMax: " + maxBit + ", " + obv + ", " + obvMax + "\nreturned: " + returned);
+        return returned;
+
+        
     }
-*/
+
     protected static int unwantedBits(long input, int maxBitLength) {
         return 63 
         - Long.numberOfLeadingZeros(branchlessAbs(input)) 

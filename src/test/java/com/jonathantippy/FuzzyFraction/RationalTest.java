@@ -333,7 +333,7 @@ public class RationalTest {
             // This test ^ is broken because Long.MIN_VALUE = — Long.MIN_VALUE
         }
     }
-/*
+
     @Test
     public void branchlessMaxTest() {
         ArrayList<Long> inputs = new ArrayList<Long>();
@@ -371,5 +371,5 @@ public class RationalTest {
         }
         return returned;
     }
-*/
+
 }
