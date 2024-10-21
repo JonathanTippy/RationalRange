@@ -169,7 +169,7 @@ public class Rational
 
      // Crushes (approximate simplfication)
 
-     protected Rational bitShiftSimplify(int maxBitLength) {
+    protected Rational bitShiftSimplify(int maxBitLength) {
 
         // Purposefully performing the shift on negatives so that the result is 
         // more accurate, just like how we round up on .5
@@ -194,18 +194,38 @@ public class Rational
             , newDenomenator
             );
     }
-/*
-    protected static long bitLimitRoundUp(long input, int bitLimit) {
-        long signBit = (input & Long.MIN_VALUE) >>> 63;
-        long signMask = signBit * (-1);
-        long absInput = (input ^ signMask);
+
+    //crush with bias
+
+    private static long crushRoundUp(long input, int maxBitLength) {
+        int signum = Long.signum(input);
+        int unwantedBits = unwantedBits(input, maxBitLength);
+        return signum*(branchlessAbs(input) >> unwantedBits);
     }
-*/
+    private static long crushRoundDown(long input, int maxBitLength) {
+        int signum = Long.signum(input);
+        int unwantedBits = unwantedBits(input, maxBitLength);
+        return signum*((-branchlessAbs(input)) >> unwantedBits);
+    }
+
+    protected Rational crushRoundUp(int maxBitLength) {
+        return new Rational(
+            crushRoundUp(this.numerator, maxBitLength)
+            , crushRoundDown(this.denomenator, maxBitLength)
+        );
+    }
+    protected Rational crushRoundDown(int maxBitLength) {
+        return new Rational(
+            crushRoundDown(this.numerator, maxBitLength)
+            , crushRoundUp(this.denomenator, maxBitLength)
+        );
+    }
+
+
 
 
 
     // UTILS
-
     public int signum() {
         int numeratorSign = Long.signum(this.numerator);
         int denomenatorSign = Long.signum(this.denomenator);
@@ -217,6 +237,43 @@ public class Rational
         long signBit = (input & Long.MIN_VALUE) >>> 63;
         long signMask = signBit * (-1);
         return (input ^ signMask) + signBit;
+    }
+    protected int countFreeTwos() {
+        return Math.min(               
+            Long.numberOfTrailingZeros(this.numerator)
+            , Long.numberOfTrailingZeros(this.denomenator)
+            );
+    }
+
+/*
+    protected static long branchlessDoz(long inputA, long inputB) {
+        long difference = inputA-inputB;
+        return (difference)*(1-((difference & Long.MIN_VALUE) >>> 63));
+    }
+
+    protected static long branchlessMax(long inputA, long inputB) {
+        
+        return -(-inputB + branchlessDoz(inputA, inputB));
+
+    }
+*/
+    protected static int unwantedBits(long input, int maxBitLength) {
+        return 63 
+        - Long.numberOfLeadingZeros(branchlessAbs(input)) 
+        - (maxBitLength-1);
+    }
+
+    protected static Rational handleMinValue(Rational input) { //TODO
+        long maybeNumerator = input.numerator;
+        long maybeDenomenator = input.denomenator;
+        assert maybeDenomenator != 0 : "CHAOS: / by zero";
+        if (!(maybeNumerator==Long.MIN_VALUE)) {;} else {
+            maybeNumerator = -Long.MAX_VALUE;
+        }
+        if (!(maybeDenomenator==Long.MIN_VALUE)) {;} else {
+            maybeDenomenator = -Long.MAX_VALUE;
+        }
+        return new Rational(maybeNumerator, maybeDenomenator);
     }
 
     // FuzzyFractions stuff
@@ -235,13 +292,15 @@ public class Rational
             );
 
     }
-/*
-    public Rational lowMultiply(Rational multiplier) {
+
+    public Rational multiplyRoundDown(Rational multiplier) {
         short[] bitsAfterMultiply = this.bitsAfterMultiply(multiplier);
-        short numeratorBAM = bitsAfterMultiply[0];
-        short denomenatorBAM = bitsAfterMultiply[1];
-
-
+        short BAM = (short) Math.max(bitsAfterMultiply[0], bitsAfterMultiply[1]);
+        short unwantedBits = (short) -((-(Math.max(BAM - 63, 0)))>>1);
+        // divide by two and round up ^
+        short maxBitLength = (short) (63 - unwantedBits);
+        Rational thisCrushed = this.crushRoundDown(maxBitLength);
+        Rational thatCrushed = multiplier.crushRoundDown(maxBitLength);
+        return handleMinValue(thisCrushed.multiply(thatCrushed));
     }
-*/
 }
