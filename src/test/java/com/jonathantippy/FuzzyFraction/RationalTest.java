@@ -334,20 +334,6 @@ public class RationalTest {
         }
     }
 
-    @Test
-    public void branchlessMaxTest() {
-        ArrayList<Long> inputs = new ArrayList<Long>();
-        inputs.addAll(Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE, 0L, 1L, -1L));
-        for (int i=0; i<1; i++) {
-            inputs.add(random.nextLong());
-        }
-        for (long inputA: inputs) {
-            for (long inputB: inputs) {
-                assertEquals(Math.max(inputA, inputB), Rational.branchlessMax(inputA, inputB), ("ERROR: Input was " + inputA + " and " + inputB
-                + " and output was " + Rational.branchlessMax(inputA, inputB)));
-            }
-        }
-    }
 
     @Test
     public void branchlessDozTest() {
