@@ -23,9 +23,11 @@ public class Rational
     public static final Rational MAX_NEGATIVE_VALUE 
     = new Rational(-1L, Long.MAX_VALUE);
 
-
     private final long numerator;
     private final long denomenator;
+
+    private long tnum; // mutables for testing answers
+    private long tden;
 
     // Constructors with both numerator and denomenator
     public Rational(long numerator, long denomenator) 
@@ -205,6 +207,7 @@ public class Rational
     }
 
     //crush with bias
+    //TODO: nicer crush could be done by checking .5 bit to choose which way to round when possible
 
     private static long crushRoundUp(long input, int maxBitLength) {
         int signum = Long.signum(input);
@@ -218,15 +221,35 @@ public class Rational
     }
 
     protected Rational crushRoundUp(int maxBitLength) {
+        tnum = crushRoundUp(this.numerator, maxBitLength);
+        tden = crushRoundDown(this.denomenator, maxBitLength);
+
+        if (tden!=0) {;} else {
+            tnum = Long.MAX_VALUE;
+            tden = 1;
+        }
+        if (tnum!=0) {;} else {
+            tnum = Long.MAX_VALUE;
+            tden = 1;
+        }
+
         return new Rational(
-            crushRoundUp(this.numerator, maxBitLength)
-            , handleZero(crushRoundDown(this.denomenator, maxBitLength))
+            tnum
+            , tden
         );
     }
     protected Rational crushRoundDown(int maxBitLength) {
+
+        tnum = crushRoundDown(this.numerator, maxBitLength);
+        tden = crushRoundUp(this.denomenator, maxBitLength);
+
+        if (tden!=0) {;} else {
+            tden = Long.MAX_VALUE;
+        }
+
         return new Rational(
-            crushRoundDown(this.numerator, maxBitLength)
-            , handleZero(crushRoundUp(this.denomenator, maxBitLength))
+            tnum
+            , tden
         );
     }
 
@@ -235,8 +258,7 @@ public class Rational
             return 1;
         }
         return a;
-    } // large integers that overflow upon multimplication will "bump" 
-      // the bit limit and come back down to just under it
+    } // medium sized numbers get their denomenators crushed and hit 0 and lose a lot of data
 
 
 
