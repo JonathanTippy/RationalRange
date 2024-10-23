@@ -8,14 +8,20 @@ for now uses longs but eventually want to make hexaLong or octaLong
 public class Rational 
 {
 
-    public static final Rational ZERO = new Rational(0L, 1L);
-    public static final Rational ONE = new Rational(1L, 1L);
+    public static final Rational ZERO 
+    = new Rational(0L, 1L);
+    public static final Rational ONE 
+    = new Rational(1L, 1L);
 
-    public static final Rational MAX_VALUE = new Rational(Long.MAX_VALUE, 1L);
-    public static final Rational MIN_VALUE = new Rational(-Long.MAX_VALUE, 1L);
+    public static final Rational MAX_VALUE 
+    = new Rational(Long.MAX_VALUE, 1L);
+    public static final Rational MIN_VALUE 
+    = new Rational(-Long.MAX_VALUE, 1L);
 
-    public static final Rational MIN_POSITIVE_VALUE = new Rational(1L, Long.MAX_VALUE);
-    public static final Rational MAX_NEGATIVE_VALUE = new Rational(-1L, Long.MAX_VALUE);
+    public static final Rational MIN_POSITIVE_VALUE 
+    = new Rational(1L, Long.MAX_VALUE);
+    public static final Rational MAX_NEGATIVE_VALUE 
+    = new Rational(-1L, Long.MAX_VALUE);
 
 
     private final long numerator;
@@ -27,7 +33,8 @@ public class Rational
         if (!(denomenator==0)) {;} else {
             throw new ArithmeticException("/ by zero");
         }
-        if (!(numerator==Long.MIN_VALUE||denomenator==Long.MIN_VALUE)) {;} else {
+        if (!(numerator==Long.MIN_VALUE||denomenator==Long.MIN_VALUE)) {;} 
+        else {
             throw new ArithmeticException("input too small");
         }
 
@@ -181,15 +188,16 @@ public class Rational
         int unwantedBits = 
             Math.max(
             Math.max(
-                (63 - Long.numberOfLeadingZeros(absNumerator)) - (maxBitLength-1)
-            , (63 - Long.numberOfLeadingZeros(absDenomenator)) - (maxBitLength-1)
+                (63 - Long.numberOfLeadingZeros(absNumerator)) 
+                - (maxBitLength-1)
+            , (63 - Long.numberOfLeadingZeros(absDenomenator)) 
+              - (maxBitLength-1)
             )
             , 0);
 
         long newDenomenator = -((-absDenomenator) >> unwantedBits);
 
         if (! (newDenomenator == 0)) {;} else {newDenomenator = 1;}
-        System.out.println("input: " + this + "\nunwanted bits: " + unwantedBits + "\nnumpostshift:" + (this.numerator >> unwantedBits) + "\ndenomenpostshify" + newDenomenator);
         return new Rational(
             (-((-absNumerator) >> unwantedBits))*sign
             , newDenomenator
@@ -302,7 +310,9 @@ public class Rational
     public Rational multiplyRoundDown(Rational multiplier) {
         Rational that = multiplier;
         short[] bitsAfterMultiply = this.bitsAfterMultiply(that);
-        short BAM = (short) Math.max(bitsAfterMultiply[0], bitsAfterMultiply[1]);
+        short BAM = (short) Math.max(
+            bitsAfterMultiply[0]
+          , bitsAfterMultiply[1]);
         short unwantedBits = (short) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
         short maxBitLength = (short) (63 - unwantedBits);
@@ -319,8 +329,6 @@ public class Rational
             + maxBitLength
             + "\ncrushed: "
             + handleMinValue(thisCrushed.multiply(thatCrushed))
-        
-        
         );
         return handleMinValue(thisCrushed.multiply(thatCrushed));
     }
