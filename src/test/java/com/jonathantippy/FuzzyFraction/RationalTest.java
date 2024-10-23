@@ -162,16 +162,16 @@ public class RationalTest {
         String s = answer.toString();
         assertEquals("10/21", s);
     }
-/*
+
     @Test
     public void hardermrdTest() {
-        Rational factorOne = new Rational(1<<40);
-        Rational factorTwo = new Rational(2<<40);
-        Rational answer = factorOne.multiply(factorTwo);
+        Rational factorOne = new Rational(Long.MAX_VALUE);
+        Rational factorTwo = new Rational(1);
+        Rational answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
-        assertEquals("10/21", s);
+        assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
     }
-*/
+
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -249,51 +249,6 @@ public class RationalTest {
         assertEquals("-25/10", s);
     }
 
-    /*
-    @Test
-    public void shiftSimplifyTest() {
-        Rational a = new Rational("50/20");
-        Rational answer = a.bitShiftSimplify(2);
-        String s = answer.toString();
-        assertEquals("3/1", s);
-    }
-    @Test
-    public void shiftSimplifyTest2() {
-        Rational a = new Rational("1/1");
-        Rational answer = a.bitShiftSimplify(2);
-        String s = answer.toString();
-        assertEquals("1/1", s);
-    }
-    @Test
-    public void shiftSimplifyTest3() {
-        Rational a = new Rational("0/1");
-        Rational answer = a.bitShiftSimplify(2);
-        String s = answer.toString();
-        assertEquals("0/1", s);
-    }
-    @Test
-    public void negativeShiftSimplifyTest() {
-        Rational a = new Rational("-50/20");
-        Rational answer = a.bitShiftSimplify(2);
-        String s = answer.toString();
-        assertEquals("-/1", s);
-    }
-    @Test
-    public void negativeShiftSimplifyTest2() {
-        Rational a = new Rational("-50/-20");
-        Rational answer = a.bitShiftSimplify(2);
-        String s = answer.toString();
-        assertEquals("3/1", s);
-    }
-    @Test
-    public void negativeShiftSimplifyTest3() {
-        Rational a = new Rational("50/-20");
-        Rational answer = a.bitShiftSimplify(2);
-        String s = answer.toString();
-        assertEquals("-3/1", s);
-    }
-    */
-
       //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -311,10 +266,6 @@ public class RationalTest {
         }
         for (long input: inputs) {
             assertEquals(Math.abs(input), Rational.branchlessAbs(input));
-            //assertTrue((Rational.branchlessAbs(input) >= 0), 
-            //("ERROR: non-positive. input was " + input + " 
-            //and output was " + Rational.branchlessAbs(input)));
-            // This test ^ is broken because Long.MIN_VALUE = — Long.MIN_VALUE
         }
     }
 
@@ -343,7 +294,9 @@ public class RationalTest {
         }
         for (long inputA: inputs) {
             for (long inputB: inputs) {
-                assertEquals(doz(inputA, inputB), Rational.branchlessDoz(inputA, inputB), ("ERROR: Input was " + inputA + " and " + inputB
+                assertEquals(doz(inputA, inputB), 
+                Rational.branchlessDoz(inputA, inputB), 
+                ("ERROR: Input was " + inputA + " and " + inputB
                 + " and output was " + Rational.branchlessDoz(inputA, inputB)));
             }
         }

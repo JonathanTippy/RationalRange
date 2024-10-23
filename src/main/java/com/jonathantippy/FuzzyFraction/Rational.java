@@ -173,7 +173,7 @@ public class Rational
 
         // Purposefully performing the shift on negatives so that the result is 
         // more accurate, just like how we round up on .5
-        //TODO: could decide weather to negate based on the .5 bit
+        // could decide weather to negate based on the .5 bit
         int sign = signum();
         long absNumerator = Math.abs(this.numerator);
         long absDenomenator = Math.abs(this.denomenator);
@@ -222,12 +222,13 @@ public class Rational
         );
     }
 
-    protected long handleZero(long a) { //TODO: this is very bad
+    protected long handleZero(long a) { 
         if (a!=0) {;} else {
             return 1;
         }
         return a;
-    }
+    } // large integers that overflow upon multimplication will "bump" 
+      // the bit limit and come back down to just under it
 
 
 
@@ -265,7 +266,7 @@ public class Rational
         return Math.max(0, bitLength(input) - maxBitLength);
     }
 
-    protected static Rational handleMinValue(Rational input) { //TODO vreby bad
+    protected static Rational handleMinValue(Rational input) {
         long maybeNumerator = input.numerator;
         long maybeDenomenator = input.denomenator;
         assert maybeDenomenator != 0 : "CHAOS: / by zero";
@@ -276,7 +277,7 @@ public class Rational
             maybeDenomenator = -Long.MAX_VALUE;
         }
         return new Rational(maybeNumerator, maybeDenomenator);
-    }
+    } // if min value is found it will result in an error not exceeding one
 
     // FuzzyFractions stuff
 
