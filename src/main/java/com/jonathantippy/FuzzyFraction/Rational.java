@@ -173,6 +173,7 @@ public class Rational
 
         // Purposefully performing the shift on negatives so that the result is 
         // more accurate, just like how we round up on .5
+        //TODO: could decide weather to negate based on the .5 bit
         int sign = signum();
         long absNumerator = Math.abs(this.numerator);
         long absDenomenator = Math.abs(this.denomenator);
@@ -211,17 +212,22 @@ public class Rational
     protected Rational crushRoundUp(int maxBitLength) {
         return new Rational(
             crushRoundUp(this.numerator, maxBitLength)
-            , crushRoundDown(this.denomenator, maxBitLength)
+            , handleZero(crushRoundDown(this.denomenator, maxBitLength))
         );
     }
     protected Rational crushRoundDown(int maxBitLength) {
         return new Rational(
             crushRoundDown(this.numerator, maxBitLength)
-            , crushRoundUp(this.denomenator, maxBitLength)
+            , handleZero(crushRoundUp(this.denomenator, maxBitLength))
         );
     }
 
-
+    protected long handleZero(long a) { //TODO: this is very bad
+        if (a!=0) {;} else {
+            return 1;
+        }
+        return a;
+    }
 
 
 
@@ -250,13 +256,16 @@ public class Rational
         return (difference)&(((difference & Long.MIN_VALUE) >>> 63)-1);
     }
 
-    protected static int unwantedBits(long input, int maxBitLength) {
-        return 63 
-        - Long.numberOfLeadingZeros(branchlessAbs(input)) 
-        - (maxBitLength-1);
+    protected static long sadDoz(long inputA, long inputB) {
+        long difference = inputA - inputB;
+        return Math.max(0, difference);
     }
 
-    protected static Rational handleMinValue(Rational input) { //TODO
+    protected static int unwantedBits(long input, int maxBitLength) {
+        return Math.max(0, bitLength(input) - maxBitLength);
+    }
+
+    protected static Rational handleMinValue(Rational input) { //TODO vreby bad
         long maybeNumerator = input.numerator;
         long maybeDenomenator = input.denomenator;
         assert maybeDenomenator != 0 : "CHAOS: / by zero";
@@ -280,20 +289,38 @@ public class Rational
 
     public static short bitsAfterMultiply(long a, long b) {
         return (short) (
-            (63 - Long.numberOfLeadingZeros(a))
-            + (63 - Long.numberOfLeadingZeros(b))
+            bitLength(a)
+            + bitLength(b)
             );
+    }
 
+    public static short bitLength(long a) {
+        return (short) Math.max((63 - Long.numberOfLeadingZeros(a)), 0);
     }
 
     public Rational multiplyRoundDown(Rational multiplier) {
-        short[] bitsAfterMultiply = this.bitsAfterMultiply(multiplier);
+        Rational that = multiplier;
+        short[] bitsAfterMultiply = this.bitsAfterMultiply(that);
         short BAM = (short) Math.max(bitsAfterMultiply[0], bitsAfterMultiply[1]);
-        short unwantedBits = (short) -((-(Math.max(BAM - 63, 0)))>>1);
+        short unwantedBits = (short) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
         short maxBitLength = (short) (63 - unwantedBits);
         Rational thisCrushed = this.crushRoundDown(maxBitLength);
-        Rational thatCrushed = multiplier.crushRoundDown(maxBitLength);
+        Rational thatCrushed = that.crushRoundDown(maxBitLength);
+        System.out.println(
+            "input: "
+            + this + " and " + that
+            + "\nBAM: "
+            + BAM
+            + "\nunwanted bits: "
+            + unwantedBits
+            + "\nmaxBitLength: "
+            + maxBitLength
+            + "\ncrushed: "
+            + handleMinValue(thisCrushed.multiply(thatCrushed))
+        
+        
+        );
         return handleMinValue(thisCrushed.multiply(thatCrushed));
     }
 }

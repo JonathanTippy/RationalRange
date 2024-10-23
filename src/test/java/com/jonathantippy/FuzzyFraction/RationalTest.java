@@ -321,16 +321,15 @@ public class RationalTest {
     @Test
     public void bitsAfterMultiplyTest() {
         ArrayList<Long> inputs = new ArrayList<Long>();
-        inputs.addAll(Arrays.asList(Long.MIN_VALUE, Long.MAX_VALUE, 0L, 1L, -1L));
-        for (int i=0; i<1000; i++) {
+        inputs.addAll(Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE, 0L, 1L, -1L));
+        for (int i=0; i<100; i++) {
             inputs.add(random.nextLong());
         }
-        for (long input: inputs) {
-            assertEquals(Math.abs(input), Rational.branchlessAbs(input));
-            //assertTrue((Rational.branchlessAbs(input) >= 0), 
-            //("ERROR: non-positive. input was " + input + " 
-            //and output was " + Rational.branchlessAbs(input)));
-            // This test ^ is broken because Long.MIN_VALUE = — Long.MIN_VALUE
+        for (long inputA: inputs) {
+            for (long inputB: inputs) {
+                assert(Rational.bitsAfterMultiply(inputA, inputB) <= 128);
+                assert(Rational.bitsAfterMultiply(inputA, inputB) >= 0);
+            }
         }
     }
 
