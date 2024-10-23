@@ -263,6 +263,9 @@ public class Rational
 
 
     // UTILS
+
+    public Rational quickClean()
+
     public int signum() {
         int numeratorSign = Long.signum(this.numerator);
         int denomenatorSign = Long.signum(this.denomenator);
