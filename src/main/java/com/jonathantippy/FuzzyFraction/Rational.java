@@ -5,7 +5,7 @@ for now uses longs but eventually want to make hexaLong or octaLong
 (hexaLong would represent integers up to about 10^300)
 */
 
-public class Rational 
+class Rational 
 {
 
     public static final Rational ZERO 
@@ -225,12 +225,13 @@ public class Rational
         tden = crushRoundDown(this.denomenator, maxBitLength);
 
         if (tden!=0) {;} else {
-            tnum = Long.MAX_VALUE;
             tden = 1;
         }
         if (tnum!=0) {;} else {
-            tnum = Long.MAX_VALUE;
-            tden = 1;
+            if (this.numerator==0) {;} else {
+                tnum = Long.MAX_VALUE;
+                tden = 1;
+            }
         }
 
         return new Rational(
