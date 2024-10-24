@@ -3,18 +3,21 @@ package com.jonathantippy.FuzzyFraction;
 class Utility {
     
     static int addBits(long a, long b) {
-        return (
-            bitLength(a)
-            + bitLength(b)
-            );
-    }
-
-    static final long spreadSign(long x) {
-        return x >> 63;
+        long ta = bitLength(a);
+        long tb = bitLength(b);
+        
+        if ((tb!=0)&&(tb!=0)) {;} else {
+            return 0;
+        }
+        if ((tb!=1)&&(tb!=1)) {;} else {
+            return (int) (ta * tb);
+        }
+        return (int) (ta + tb);
     }
 
     static final int bitLength(long a) {
-        return Math.max((63 - Long.numberOfLeadingZeros(a)), 0);
+        long x = a^(a>>63);
+        return 64 - Long.numberOfLeadingZeros(x);
     }
 
     static long branchlessDoz(long inputA, long inputB) {
@@ -32,8 +35,8 @@ class Utility {
     }
 
     static long branchlessAbs(long input) {
-        long signBit = (input & Long.MIN_VALUE) >>> 63;
-        long signMask = signBit * (-1);
+        long signMask = input >> 63;
+        long signBit = -signMask;
         return (input ^ signMask) + signBit;
     }
 
