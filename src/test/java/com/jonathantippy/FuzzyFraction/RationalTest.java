@@ -1,11 +1,14 @@
 package com.jonathantippy.FuzzyFraction;
 
+import static com.jonathantippy.FuzzyFraction.Utility.addBits;
+import static com.jonathantippy.FuzzyFraction.Utility.branchlessDoz;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
-
-import static com.jonathantippy.FuzzyFraction.Utility.*;
 
 
 public class RationalTest {
@@ -175,6 +178,73 @@ public class RationalTest {
         assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
     }
 
+    @Test
+    public void hardermrdTest2() {
+        Rational factorOne = new Rational(Long.MAX_VALUE);
+        Rational factorTwo = new Rational(1, Long.MAX_VALUE);
+        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        String s = answer.toString();
+        assertEquals(Long.toString(Long.MAX_VALUE) + "/" + Long.MAX_VALUE, s);
+    }
+
+    @Test
+    public void hardermrdTest3() {
+        Rational factorOne = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
+        Rational factorTwo = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
+        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        String s = answer.toString();
+        assert(((double) answer.getNumerator()/(double)answer.getDenomenator() <= 1.0)
+        ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is greater than one";
+    }
+
+    // MULTIPLY ROUND UP
+
+    @Test
+    public void mruTest() {
+        Rational factorOne = new Rational(1);
+        Rational factorTwo = new Rational(3);
+        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        String s = answer.toString();
+        assertEquals("3/1", s);
+    }
+
+    @Test
+    public void hardmruTest() {
+        Rational factorOne = new Rational("5/7");
+        Rational factorTwo = new Rational("2/3");
+        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        String s = answer.toString();
+        assertEquals("10/21", s);
+    }
+
+    @Test
+    public void hardermruTest() {
+        Rational factorOne = new Rational(Long.MAX_VALUE);
+        Rational factorTwo = new Rational(1);
+        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        String s = answer.toString();
+        assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
+    }
+
+    @Test
+    public void hardermruTest2() {
+        Rational factorOne = new Rational(Long.MAX_VALUE);
+        Rational factorTwo = new Rational(1, Long.MAX_VALUE);
+        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        String s = answer.toString();
+        assertEquals(Long.toString(Long.MAX_VALUE) + "/" + Long.MAX_VALUE, s);
+    }
+
+    @Test
+    public void hardermruTest3() {
+        Rational factorOne = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
+        Rational factorTwo = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
+        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        String s = answer.toString();
+        assert(((double) answer.getNumerator()/(double)answer.getDenomenator() >= 1.0)
+        ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is less than one";
+    }
+
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -259,19 +329,7 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
-/*
-    @Test
-    public void branchlessAbsTest() {
-        ArrayList<Long> inputs = new ArrayList<Long>();
-        inputs.addAll(Arrays.asList(Long.MIN_VALUE, Long.MAX_VALUE, 0L, 1L, -1L));
-        for (int i=0; i<1000; i++) {
-            inputs.add(random.nextLong());
-        }
-        for (long input: inputs) {
-            assertEquals(Math.abs(input), Rational.branchlessAbs(input));
-        }
-    }
-*/
+
     @Test
     public void addBitsTest() {
         ArrayList<Long> inputs = new ArrayList<Long>();
@@ -281,7 +339,7 @@ public class RationalTest {
         }
         for (long inputA: inputs) {
             for (long inputB: inputs) {
-                assert(addBits(inputA, inputB) <= 128);
+                assert(addBits(inputA, inputB) <= 126);
                 assert(addBits(inputA, inputB) >= 0);
             }
         }
