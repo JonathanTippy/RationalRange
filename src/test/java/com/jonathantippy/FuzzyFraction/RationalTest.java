@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
+import static com.jonathantippy.FuzzyFraction.Utility.*;
+
+
 public class RationalTest {
 
     static Random random = new Random();
@@ -256,7 +259,7 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
-
+/*
     @Test
     public void branchlessAbsTest() {
         ArrayList<Long> inputs = new ArrayList<Long>();
@@ -268,9 +271,9 @@ public class RationalTest {
             assertEquals(Math.abs(input), Rational.branchlessAbs(input));
         }
     }
-
+*/
     @Test
-    public void bitsAfterMultiplyTest() {
+    public void addBitsTest() {
         ArrayList<Long> inputs = new ArrayList<Long>();
         inputs.addAll(Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE, 0L, 1L, -1L));
         for (int i=0; i<100; i++) {
@@ -278,8 +281,8 @@ public class RationalTest {
         }
         for (long inputA: inputs) {
             for (long inputB: inputs) {
-                assert(Rational.bitsAfterMultiply(inputA, inputB) <= 128);
-                assert(Rational.bitsAfterMultiply(inputA, inputB) >= 0);
+                assert(addBits(inputA, inputB) <= 128);
+                assert(addBits(inputA, inputB) >= 0);
             }
         }
     }
@@ -295,9 +298,9 @@ public class RationalTest {
         for (long inputA: inputs) {
             for (long inputB: inputs) {
                 assertEquals(doz(inputA, inputB), 
-                Rational.branchlessDoz(inputA, inputB), 
+                branchlessDoz(inputA, inputB), 
                 ("ERROR: Input was " + inputA + " and " + inputB
-                + " and output was " + Rational.branchlessDoz(inputA, inputB)));
+                + " and output was " + branchlessDoz(inputA, inputB)));
             }
         }
     }

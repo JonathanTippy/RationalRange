@@ -1,5 +1,5 @@
 package com.jonathantippy.FuzzyFraction;
-
+import static com.jonathantippy.FuzzyFraction.Utility.*;
 /*
 for now uses longs but eventually want to make hexaLong or octaLong 
 (hexaLong would represent integers up to about 10^300)
@@ -138,7 +138,7 @@ class Rational
     // Negation
     public Rational negate(Rational input) {
         return new Rational(
-            this.numerator * -1
+            - this.numerator
             , this.denomenator
         );
     }
@@ -272,31 +272,8 @@ class Rational
         return sign;
     }
 
-    protected static long branchlessAbs(long input) {
-        long signBit = (input & Long.MIN_VALUE) >>> 63;
-        long signMask = signBit * (-1);
-        return (input ^ signMask) + signBit;
-    }
-    protected int countFreeTwos() {
-        return Math.min(               
-            Long.numberOfTrailingZeros(this.numerator)
-            , Long.numberOfTrailingZeros(this.denomenator)
-            );
-    }
 
-    protected static long branchlessDoz(long inputA, long inputB) {
-        long difference = inputA - inputB; 
-        return (difference)&(((difference & Long.MIN_VALUE) >>> 63)-1);
-    }
 
-    protected static long sadDoz(long inputA, long inputB) {
-        long difference = inputA - inputB;
-        return Math.max(0, difference);
-    }
-
-    protected static int unwantedBits(long input, int maxBitLength) {
-        return Math.max(0, bitLength(input) - maxBitLength);
-    }
 
     protected static Rational handleMinValue(Rational input) {
         long maybeNumerator = input.numerator;
@@ -309,37 +286,27 @@ class Rational
             maybeDenomenator = -Long.MAX_VALUE;
         }
         return new Rational(maybeNumerator, maybeDenomenator);
-    } // if min value is found it will result in an error not exceeding one
+    } // if min value is found it will result in an error huge
 
     // FuzzyFractions stuff
 
-    public short[] bitsAfterMultiply(Rational that) {
-        return new short[]{
-            bitsAfterMultiply(this.numerator, that.numerator)
-            , bitsAfterMultiply(this.denomenator, that.denomenator)
+    public int[] bitsAfterMultiply(Rational that) {
+        return new int[]{
+            addBits(this.numerator, that.numerator)
+            , addBits(this.denomenator, that.denomenator)
             };
     }
 
-    public static short bitsAfterMultiply(long a, long b) {
-        return (short) (
-            bitLength(a)
-            + bitLength(b)
-            );
-    }
-
-    public static short bitLength(long a) {
-        return (short) Math.max((63 - Long.numberOfLeadingZeros(a)), 0);
-    }
 
     public Rational multiplyRoundDown(Rational multiplier) {
         Rational that = multiplier;
-        short[] bitsAfterMultiply = this.bitsAfterMultiply(that);
-        short BAM = (short) Math.max(
+        int[] bitsAfterMultiply = this.bitsAfterMultiply(that);
+        int BAM = Math.max(
             bitsAfterMultiply[0]
           , bitsAfterMultiply[1]);
-        short unwantedBits = (short) -((-(sadDoz(BAM, 63)))>>1);
+        int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
-        short maxBitLength = (short) (63 - unwantedBits);
+        int maxBitLength = (63 - unwantedBits);
         Rational thisCrushed = this.crushRoundDown(maxBitLength);
         Rational thatCrushed = that.crushRoundDown(maxBitLength);
         System.out.println(

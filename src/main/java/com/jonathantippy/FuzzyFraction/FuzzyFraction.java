@@ -134,16 +134,20 @@ public class FuzzyFraction {
 
     }
 */
-    public short[][] bitsAfterMultiply(FuzzyFraction that) {
-        Rational thisLowerBound = new Rational(this.lowerBoundNumerator, this.lowerBoundDenomenator);
-        Rational thisUpperBound = new Rational(this.upperBoundNumerator, this.upperBoundDenomenator);
+    public int[][] bitsAfterMultiply(FuzzyFraction that) {
+        Rational thisLowerBound = new Rational(
+            this.lowerBoundNumerator, this.lowerBoundDenomenator);
+        Rational thisUpperBound = new Rational(
+            this.upperBoundNumerator, this.upperBoundDenomenator);
 
-        return new short[][]{
+        return new int[][]{
             thisLowerBound.bitsAfterMultiply(
-                new Rational(that.lowerBoundNumerator, that.lowerBoundDenomenator)
+                new Rational(that.lowerBoundNumerator, 
+                that.lowerBoundDenomenator)
             )
             , thisUpperBound.bitsAfterMultiply(
-                new Rational(that.upperBoundNumerator, that.upperBoundDenomenator)
+                new Rational(that.upperBoundNumerator, 
+                that.upperBoundDenomenator)
             )
         };
     }
