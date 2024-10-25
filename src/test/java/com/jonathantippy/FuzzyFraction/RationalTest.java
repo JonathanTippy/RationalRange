@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import net.jqwik.api.*;
 
 
 public class RationalTest {
@@ -191,6 +192,20 @@ public class RationalTest {
     public void hardermrdTest3() {
         Rational factorOne = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
         Rational factorTwo = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
+        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        String s = answer.toString();
+        assert(((double) answer.getNumerator()/(double)answer.getDenomenator() <= 1.0)
+        ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is greater than one";
+    }
+
+    @Property
+    void mrdOneGoesDown(@ForAll long a, @ForAll long b) {
+        if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
+            return;
+        }
+
+        Rational factorOne = new Rational(a, a);
+        Rational factorTwo = new Rational(b, b);
         Rational answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
         assert(((double) answer.getNumerator()/(double)answer.getDenomenator() <= 1.0)
