@@ -93,6 +93,13 @@ class Rational
         }
     }
 
+    // Conversions
+
+    public double toDouble() {
+        return (double) (((double) numerator) / ((double) denomenator));
+    }
+
+
     // Accessors
     public long getNumerator() {
         return this.numerator;
