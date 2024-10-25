@@ -208,7 +208,7 @@ public class RationalTest {
         Rational factorTwo = new Rational(b, b);
         Rational answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
-        assert(((double) answer.getNumerator()<=(double)answer.getDenomenator())
+        assert((answer.getNumerator() <= answer.getDenomenator())
         ): answer + " or in decimal " + answer.toDouble() + " is greater than one";
     }
 

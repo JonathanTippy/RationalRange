@@ -15,15 +15,13 @@ class Utility {
         return (int) (ta + tb);
     }
 
-    static long crushRoundUp(long input, int maxBitLength) {
+    static long crushRoundUp(long input, int bitsToDrop) {
         int signum = Long.signum(input);
-        int unwantedBits = unwantedBits(input, maxBitLength);
-        return signum*((-branchlessAbs(input)) >> unwantedBits);
+        return signum*((-branchlessAbs(input)) >> bitsToDrop);
     }
-    static long crushRoundDown(long input, int maxBitLength) {
+    static long crushRoundDown(long input, int bitsToDrop) {
         int signum = Long.signum(input);
-        int unwantedBits = unwantedBits(input, maxBitLength);
-        return signum*((branchlessAbs(input)) >> unwantedBits);
+        return signum*((branchlessAbs(input)) >> bitsToDrop);
     }
 
     static final int bitLength(long a) {
@@ -39,10 +37,6 @@ class Utility {
     static long sadDoz(long inputA, long inputB) {
         long difference = inputA - inputB;
         return Math.max(0, difference);
-    }
-
-    static int unwantedBits(long input, int maxBitLength) {
-        return Math.max(0, bitLength(input) - maxBitLength);
     }
 
     static long branchlessAbs(long input) {

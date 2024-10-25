@@ -197,9 +197,9 @@ class Rational
 
 
 
-    protected Rational roundUp(int maxBitLength) {
-        tnum = crushRoundUp(this.numerator, maxBitLength);
-        tden = crushRoundDown(this.denomenator, maxBitLength);
+    protected Rational roundUp(int bitsToDrop) {
+        tnum = crushRoundUp(this.numerator, bitsToDrop);
+        tden = crushRoundDown(this.denomenator, bitsToDrop);
 
         if (tden!=0) {;} else {
             tden = 1;
@@ -216,10 +216,10 @@ class Rational
             , tden
         );
     }
-    protected Rational roundDown(int maxBitLength) {
+    protected Rational roundDown(int bitsToDrop) {
 
-        tnum = crushRoundDown(this.numerator, maxBitLength);
-        tden = crushRoundUp(this.denomenator, maxBitLength);
+        tnum = crushRoundDown(this.numerator, bitsToDrop);
+        tden = crushRoundUp(this.denomenator, bitsToDrop);
 
         if (tden!=0) {;} else {
             tden = 1;
@@ -283,9 +283,8 @@ class Rational
           , bitsAfterMultiply[1]);
         int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
-        int maxBitLength = (63 - unwantedBits);
-        Rational thisCrushed = this.roundDown(maxBitLength);
-        Rational thatCrushed = that.roundDown(maxBitLength);
+        Rational thisCrushed = this.roundDown(unwantedBits);
+        Rational thatCrushed = that.roundDown(unwantedBits);
         log.info(
             "input: "
             + this + " and " + that
@@ -293,8 +292,6 @@ class Rational
             + BAM
             + "\nunwanted bits: "
             + unwantedBits
-            + "\nmaxBitLength: "
-            + maxBitLength
             + "\ncrushed: "
             + handleMinValue(thisCrushed.multiply(thatCrushed))
         );
@@ -309,9 +306,8 @@ class Rational
           , bitsAfterMultiply[1]);
         int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
-        int maxBitLength = (63 - unwantedBits);
-        Rational thisCrushed = this.roundUp(maxBitLength);
-        Rational thatCrushed = that.roundUp(maxBitLength);
+        Rational thisCrushed = this.roundUp(unwantedBits);
+        Rational thatCrushed = that.roundUp(unwantedBits);
         log.info(
             "input: "
             + this + " and " + that
@@ -319,8 +315,6 @@ class Rational
             + BAM
             + "\nunwanted bits: "
             + unwantedBits
-            + "\nmaxBitLength: "
-            + maxBitLength
             + "\ncrushed: "
             + handleMinValue(thisCrushed.multiply(thatCrushed))
         );
