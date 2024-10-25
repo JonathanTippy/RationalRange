@@ -1,5 +1,9 @@
 package com.jonathantippy.FuzzyFraction;
 import static com.jonathantippy.FuzzyFraction.Utility.*;
+import org.apache.logging.log4j.Logger;  
+import org.apache.logging.log4j.LogManager;  
+
+
 /*
 for now uses longs but eventually want to make hexaLong or octaLong 
 (hexaLong would represent integers up to about 10^300)
@@ -7,6 +11,7 @@ for now uses longs but eventually want to make hexaLong or octaLong
 
 class Rational 
 {
+    private static final Logger log = LogManager.getLogger(Rational.class);
 
     public static final Rational ZERO 
     = new Rational(0L, 1L);
@@ -274,7 +279,7 @@ class Rational
         int maxBitLength = (63 - unwantedBits);
         Rational thisCrushed = this.roundDown(maxBitLength);
         Rational thatCrushed = that.roundDown(maxBitLength);
-        System.out.println(
+        log.info(
             "input: "
             + this + " and " + that
             + "\nBAM: "
@@ -300,7 +305,7 @@ class Rational
         int maxBitLength = (63 - unwantedBits);
         Rational thisCrushed = this.roundUp(maxBitLength);
         Rational thatCrushed = that.roundUp(maxBitLength);
-        System.out.println(
+        log.info(
             "input: "
             + this + " and " + that
             + "\nBAM: "

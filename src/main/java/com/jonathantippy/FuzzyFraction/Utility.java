@@ -18,12 +18,12 @@ class Utility {
     static long crushRoundUp(long input, int maxBitLength) {
         int signum = Long.signum(input);
         int unwantedBits = unwantedBits(input, maxBitLength);
-        return signum*(-branchlessAbs(input) >> unwantedBits);
+        return signum*(-(branchlessAbs(input)) >> unwantedBits);
     }
     static long crushRoundDown(long input, int maxBitLength) {
         int signum = Long.signum(input);
         int unwantedBits = unwantedBits(input, maxBitLength);
-        return signum*((branchlessAbs(input)) >> unwantedBits);
+        return signum*(branchlessAbs(input) >> unwantedBits);
     }
 
     static final int bitLength(long a) {
