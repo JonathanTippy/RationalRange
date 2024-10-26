@@ -112,13 +112,9 @@ class Rational
     @Override
     public String toString() {
         StringBuilder numberConstruct = new StringBuilder();
-
-        if (signum() >= 0) {;} else {
-            numberConstruct.append('-');
-        }
-        numberConstruct.append(Math.abs(numerator));
+        numberConstruct.append(numerator);
         numberConstruct.append('/');
-        numberConstruct.append(Math.abs(denomenator));
+        numberConstruct.append(denomenator);
         return numberConstruct.toString();
     }
 
@@ -249,7 +245,13 @@ class Rational
         return sign;
     }
 
-
+    public boolean isGreaterThanOne() {
+        boolean positive = (signum()>0);
+        return (
+            (
+            branchlessAbs(numerator) > branchlessAbs(denomenator)
+            )&&(positive));
+    }
 
 
     protected static Rational handleMinValue(Rational input) {

@@ -207,9 +207,8 @@ public class RationalTest {
         Rational factorOne = new Rational(a, a);
         Rational factorTwo = new Rational(b, b);
         Rational answer = factorOne.multiplyRoundDown(factorTwo);
-        String s = answer.toString();
-        assert((answer.getNumerator() <= answer.getDenomenator())
-        ): answer + " or in decimal " + answer.toDouble() + " is greater than one";
+        assert(!answer.isGreaterThanOne())
+        : answer + " or in decimal " + answer.toDouble() + " is greater than one";
     }
 
     // MULTIPLY ROUND UP
@@ -378,12 +377,39 @@ public class RationalTest {
         }
     }
 
+    @Property
+    public void gtOneTest(@ForAll long a, @ForAll long b) {
+        if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
+            return;
+        }
+        Rational x = new Rational(a, b);
+        assert isGTOne(x) == (x.isGreaterThanOne()): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + x.isGreaterThanOne();
+    }
+
+
     private static long doz(long inputA, long inputB) {
         long returned = inputA-inputB;
         if (returned<0) {
             returned=0;
         }
         return returned;
+    }
+
+    private static boolean isGTOne(Rational x) {
+        if (Long.signum(x.getNumerator()) == 1) {
+            if (Long.signum(x.getDenomenator()) == 1) {
+                return (x.getNumerator() > x.getDenomenator());
+            } else {
+                return false;
+            }
+        } else {
+            if (Long.signum(x.getDenomenator()) == 1) {
+                return false;
+            } else {
+                return (x.getDenomenator() > x.getNumerator());
+            }
+        }
     }
 
 }
