@@ -26,7 +26,7 @@ public class RationalTest {
 
     @Test
     public void basicConstructorTest() {
-        Rational r = new Rational(1, 1);
+        RationalBound r = new RationalBound(1, 1);
         String s = r.toString();
         assertEquals("1/1", s);
     }
@@ -42,28 +42,28 @@ public class RationalTest {
 
     @Test
     public void stringPositiveTest() {
-        Rational r = new Rational("50/7");
+        RationalBound r = new RationalBound("50/7");
         String s = r.toString();
         assertEquals("50/7", s);
     }
 
     @Test
     public void stringNegativeTest() {
-        Rational r = new Rational("-50/7");
+        RationalBound r = new RationalBound("-50/7");
         String s = r.toString();
         assertEquals("-50/7", s);
     }
 
     @Test
     public void stringIntegerTest() {
-        Rational r = new Rational("5");
+        RationalBound r = new RationalBound("5");
         String s = r.toString();
         assertEquals("5/1", s);
     }
 
     @Test
     public void hardStringIntegerTest() {
-        Rational r = new Rational("60");
+        RationalBound r = new RationalBound("60");
         String s = r.toString();
         assertEquals("60/1", s);
     }
@@ -79,14 +79,14 @@ public class RationalTest {
 
     @Test
     public void intPositiveTest() {
-        Rational r = new Rational(50L);
+        RationalBound r = new RationalBound(50L);
         String s = r.toString();
         assertEquals("50/1", s);
     }
 
     @Test
     public void intNegativeTest() {
-        Rational r = new Rational(-50L);
+        RationalBound r = new RationalBound(-50L);
         String s = r.toString();
         assertEquals("-50/1", s);
     }
@@ -101,18 +101,18 @@ public class RationalTest {
 
     @Test
     public void divisionTest() {
-        Rational dividend = new Rational(1);
-        Rational divisor = new Rational(3);
-        Rational answer = dividend.divide(divisor);
+        RationalBound dividend = new RationalBound(1);
+        RationalBound divisor = new RationalBound(3);
+        RationalBound answer = dividend.divide(divisor);
         String s = answer.toString();
         assertEquals("1/3", s);
     }
 
     @Test
     public void hardDivisionTest() {
-        Rational dividend = new Rational("5/6");
-        Rational divisor = new Rational("2/3");
-        Rational answer = dividend.divide(divisor);
+        RationalBound dividend = new RationalBound("5/6");
+        RationalBound divisor = new RationalBound("2/3");
+        RationalBound answer = dividend.divide(divisor);
         String s = answer.toString();
         assertEquals("15/12", s);
     }
@@ -127,18 +127,18 @@ public class RationalTest {
 
     @Test
     public void multiplicationTest() {
-        Rational factorOne = new Rational(1);
-        Rational factorTwo = new Rational(3);
-        Rational answer = factorOne.multiply(factorTwo);
+        RationalBound factorOne = new RationalBound(1);
+        RationalBound factorTwo = new RationalBound(3);
+        RationalBound answer = factorOne.multiply(factorTwo);
         String s = answer.toString();
         assertEquals("3/1", s);
     }
 
     @Test
     public void hardMultiplicationTest() {
-        Rational factorOne = new Rational("5/7");
-        Rational factorTwo = new Rational("2/3");
-        Rational answer = factorOne.multiply(factorTwo);
+        RationalBound factorOne = new RationalBound("5/7");
+        RationalBound factorTwo = new RationalBound("2/3");
+        RationalBound answer = factorOne.multiply(factorTwo);
         String s = answer.toString();
         assertEquals("10/21", s);
     }
@@ -147,45 +147,45 @@ public class RationalTest {
 
     @Test
     public void mrdTest() {
-        Rational factorOne = new Rational(1);
-        Rational factorTwo = new Rational(3);
-        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        RationalBound factorOne = new RationalBound(1);
+        RationalBound factorTwo = new RationalBound(3);
+        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
         assertEquals("3/1", s);
     }
 
     @Test
     public void hardmrdTest() {
-        Rational factorOne = new Rational("5/7");
-        Rational factorTwo = new Rational("2/3");
-        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        RationalBound factorOne = new RationalBound("5/7");
+        RationalBound factorTwo = new RationalBound("2/3");
+        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
         assertEquals("10/21", s);
     }
 
     @Test
     public void hardermrdTest() {
-        Rational factorOne = new Rational(Long.MAX_VALUE);
-        Rational factorTwo = new Rational(1);
-        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
+        RationalBound factorTwo = new RationalBound(1);
+        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
         assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
     }
 
     @Test
     public void hardermrdTest2() {
-        Rational factorOne = new Rational(Long.MAX_VALUE);
-        Rational factorTwo = new Rational(1, Long.MAX_VALUE);
-        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
+        RationalBound factorTwo = new RationalBound(1, Long.MAX_VALUE);
+        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
         assertEquals(Long.toString(Long.MAX_VALUE) + "/" + Long.MAX_VALUE, s);
     }
 
     @Test
     public void hardermrdTest3() {
-        Rational factorOne = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
-        Rational factorTwo = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
-        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        RationalBound factorOne = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
+        RationalBound factorTwo = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
+        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
         String s = answer.toString();
         assert(((double) answer.getNumerator()/(double)answer.getDenomenator() <= 1.0)
         ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is greater than one";
@@ -197,9 +197,9 @@ public class RationalTest {
             return;
         }
 
-        Rational factorOne = new Rational(a, a);
-        Rational factorTwo = new Rational(b, b);
-        Rational answer = factorOne.multiplyRoundDown(factorTwo);
+        RationalBound factorOne = new RationalBound(a, a);
+        RationalBound factorTwo = new RationalBound(b, b);
+        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
         assert(!answer.isGreaterThanOne())
         : answer + " or in decimal " + answer.toDouble() + " is greater than one";
     }
@@ -208,45 +208,45 @@ public class RationalTest {
 
     @Test
     public void mruTest() {
-        Rational factorOne = new Rational(1);
-        Rational factorTwo = new Rational(3);
-        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        RationalBound factorOne = new RationalBound(1);
+        RationalBound factorTwo = new RationalBound(3);
+        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
         String s = answer.toString();
         assertEquals("3/1", s);
     }
 
     @Test
     public void hardmruTest() {
-        Rational factorOne = new Rational("5/7");
-        Rational factorTwo = new Rational("2/3");
-        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        RationalBound factorOne = new RationalBound("5/7");
+        RationalBound factorTwo = new RationalBound("2/3");
+        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
         String s = answer.toString();
         assertEquals("10/21", s);
     }
 
     @Test
     public void hardermruTest() {
-        Rational factorOne = new Rational(Long.MAX_VALUE);
-        Rational factorTwo = new Rational(1);
-        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
+        RationalBound factorTwo = new RationalBound(1);
+        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
         String s = answer.toString();
         assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
     }
 
     @Test
     public void hardermruTest2() {
-        Rational factorOne = new Rational(Long.MAX_VALUE);
-        Rational factorTwo = new Rational(1, Long.MAX_VALUE);
-        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
+        RationalBound factorTwo = new RationalBound(1, Long.MAX_VALUE);
+        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
         String s = answer.toString();
         assertEquals(Long.toString(Long.MAX_VALUE) + "/" + Long.MAX_VALUE, s);
     }
 
     @Test
     public void hardermruTest3() {
-        Rational factorOne = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
-        Rational factorTwo = new Rational(Long.MAX_VALUE, Long.MAX_VALUE);
-        Rational answer = factorOne.multiplyRoundUp(factorTwo);
+        RationalBound factorOne = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
+        RationalBound factorTwo = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
+        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
         String s = answer.toString();
         assert(((double) answer.getNumerator()/(double)answer.getDenomenator() >= 1.0)
         ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is less than one";
@@ -262,18 +262,18 @@ public class RationalTest {
 
     @Test
     public void additionTest() {
-        Rational a = new Rational(5);
-        Rational b = new Rational(6);
-        Rational answer = a.add(b);
+        RationalBound a = new RationalBound(5);
+        RationalBound b = new RationalBound(6);
+        RationalBound answer = a.add(b);
         String s = answer.toString();
         assertEquals("11/1", s);
     }
 
     @Test
     public void subtractionTest() {
-        Rational a = new Rational(5);
-        Rational b = new Rational(6);
-        Rational answer = a.subtract(b);
+        RationalBound a = new RationalBound(5);
+        RationalBound b = new RationalBound(6);
+        RationalBound answer = a.subtract(b);
         String s = answer.toString();
         assertEquals("-1/1", s);
     }
@@ -288,43 +288,43 @@ public class RationalTest {
 
     @Test
     public void simplifyTwosTest() {
-        Rational a = new Rational("50/20");
-        Rational answer = a.twoSimplify();
+        RationalBound a = new RationalBound("50/20");
+        RationalBound answer = a.twoSimplify();
         String s = answer.toString();
         assertEquals("25/10", s);
     }
     @Test
     public void simplifyTwosTest2() {
-        Rational a = new Rational("1/1");
-        Rational answer = a.twoSimplify();
+        RationalBound a = new RationalBound("1/1");
+        RationalBound answer = a.twoSimplify();
         String s = answer.toString();
         assertEquals("1/1", s);
     }
     @Test
     public void simplifyTwosTest3() {
-        Rational a = new Rational("0/1");
-        Rational answer = a.twoSimplify();
+        RationalBound a = new RationalBound("0/1");
+        RationalBound answer = a.twoSimplify();
         String s = answer.toString();
         assertEquals("0/1", s);
     }
     @Test
     public void negativeSimplifyTwosTest() {
-        Rational a = new Rational("-50/20");
-        Rational answer = a.twoSimplify();
-        assert(!answer.maybeDiffer(new Rational(50, -20)));
+        RationalBound a = new RationalBound("-50/20");
+        RationalBound answer = a.twoSimplify();
+        assert(!answer.maybeDiffer(new RationalBound(50, -20)));
     }
     @Test
     public void negativeSimplifyTwosTest2() {
-        Rational a = new Rational("-50/-20");
-        Rational answer = a.twoSimplify();
+        RationalBound a = new RationalBound("-50/-20");
+        RationalBound answer = a.twoSimplify();
         String s = answer.toString();
-        assert(!answer.maybeDiffer(new Rational(25/10)));
+        assert(!answer.maybeDiffer(new RationalBound(25/10)));
     }
     @Test
     public void negativeSimplifyTwosTest3() {
-        Rational a = new Rational("50/-20");
-        Rational answer = a.twoSimplify();
-        assert(!answer.maybeDiffer(new Rational(-50, 20)));
+        RationalBound a = new RationalBound("50/-20");
+        RationalBound answer = a.twoSimplify();
+        assert(!answer.maybeDiffer(new RationalBound(-50, 20)));
     }
 
       //////////////////////////////////////////////////////////////////////////
@@ -373,7 +373,7 @@ public class RationalTest {
         if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
             return;
         }
-        Rational x = new Rational(a, b);
+        RationalBound x = new RationalBound(a, b);
         assert isGTOne(x) == (x.isGreaterThanOne()): 
         "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + x.isGreaterThanOne();
     }
@@ -387,7 +387,7 @@ public class RationalTest {
         return returned;
     }
 
-    private static boolean isGTOne(Rational x) {
+    private static boolean isGTOne(RationalBound x) {
         if (Long.signum(x.getNumerator()) == 1) {
             if (Long.signum(x.getDenomenator()) == 1) {
                 return (x.getNumerator() > x.getDenomenator());
