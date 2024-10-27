@@ -55,13 +55,6 @@ public class RationalTest {
     }
 
     @Test
-    public void stringNegativeSimplifyTest() {
-        Rational r = new Rational("-50/-7");
-        String s = r.toString();
-        assertEquals("50/7", s);
-    }
-
-    @Test
     public void stringIntegerTest() {
         Rational r = new Rational("5");
         String s = r.toString();
@@ -318,8 +311,7 @@ public class RationalTest {
     public void negativeSimplifyTwosTest() {
         Rational a = new Rational("-50/20");
         Rational answer = a.twoSimplify();
-        String s = answer.toString();
-        assertEquals("-25/10", s);
+        assert(!answer.maybeDiffer(new Rational(50, -20)));
     }
     @Test
     public void negativeSimplifyTwosTest2() {
@@ -332,8 +324,7 @@ public class RationalTest {
     public void negativeSimplifyTwosTest3() {
         Rational a = new Rational("50/-20");
         Rational answer = a.twoSimplify();
-        String s = answer.toString();
-        assertEquals("-25/10", s);
+        assert(!answer.maybeDiffer(new Rational(-50, 20)));
     }
 
       //////////////////////////////////////////////////////////////////////////

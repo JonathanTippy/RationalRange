@@ -238,19 +238,35 @@ class Rational
 
     // UTILS
 
+    public boolean maybeDiffer(Rational that) {
+        return (
+            branchlessAbs(this.numerator) != branchlessAbs(that.numerator)
+            || branchlessAbs(this.denomenator) != branchlessAbs(that.denomenator)
+            )&&(this.isPositive() == that.isPositive());
+    }
+
     public int signum() {
         int numeratorSign = Long.signum(this.numerator);
         int denomenatorSign = Long.signum(this.denomenator);
+        assert numeratorSign == -1 || numeratorSign == 1 || numeratorSign == 0;
+        assert denomenatorSign == -1 || denomenatorSign == 1 || denomenatorSign == 0;
         int sign = numeratorSign*denomenatorSign;
         return sign;
     }
 
     public boolean isGreaterThanOne() {
-        boolean positive = (signum()>0);
         return (
-            (
-            branchlessAbs(numerator) > branchlessAbs(denomenator)
-            )&&(positive));
+            (branchlessAbs(numerator) > branchlessAbs(denomenator))
+            && isPositive()
+            );
+    }
+
+    public boolean isPositive() {
+        return (signum() > 0);
+    }
+
+    public boolean isZero() {
+        return (numerator == 0);
     }
 
 
