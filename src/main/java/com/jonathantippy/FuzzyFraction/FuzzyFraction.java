@@ -71,7 +71,7 @@ public class FuzzyFraction {
         String expression
     ) {
 
-        Rational r = new Rational(expression);
+        RationalBound r = new RationalBound(expression);
         this.lowerBoundNumerator = r.getNumerator();
         this.lowerBoundDenomenator = r.getDenomenator();
         this.upperBoundNumerator = r.getNumerator();
@@ -96,18 +96,18 @@ public class FuzzyFraction {
 
     // Private accessors
 
-    private Rational getLowerBound() {
-        return new Rational(lowerBoundNumerator, lowerBoundDenomenator);
+    private RationalBound getLowerBound() {
+        return new RationalBound(lowerBoundNumerator, lowerBoundDenomenator);
     }
-    private Rational getUpperBound() {
-        return new Rational(upperBoundNumerator, upperBoundDenomenator);
+    private RationalBound getUpperBound() {
+        return new RationalBound(upperBoundNumerator, upperBoundDenomenator);
     }
 
     // Display
     @Override
     public String toString() {
-        Rational lowerBound = this.getLowerBound();
-        Rational upperBound = this.getUpperBound();
+        RationalBound lowerBound = this.getLowerBound();
+        RationalBound upperBound = this.getUpperBound();
         StringBuilder numberConstruct = new StringBuilder();
 
         numberConstruct.append(lowerBound.toString());
@@ -135,18 +135,18 @@ public class FuzzyFraction {
     }
 */
     public int[][] bitsAfterMultiply(FuzzyFraction that) {
-        Rational thisLowerBound = new Rational(
+        RationalBound thisLowerBound = new RationalBound(
             this.lowerBoundNumerator, this.lowerBoundDenomenator);
-        Rational thisUpperBound = new Rational(
+        RationalBound thisUpperBound = new RationalBound(
             this.upperBoundNumerator, this.upperBoundDenomenator);
 
         return new int[][]{
             thisLowerBound.bitsAfterMultiply(
-                new Rational(that.lowerBoundNumerator, 
+                new RationalBound(that.lowerBoundNumerator, 
                 that.lowerBoundDenomenator)
             )
             , thisUpperBound.bitsAfterMultiply(
-                new Rational(that.upperBoundNumerator, 
+                new RationalBound(that.upperBoundNumerator, 
                 that.upperBoundDenomenator)
             )
         };

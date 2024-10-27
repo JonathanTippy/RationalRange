@@ -9,24 +9,24 @@ for now uses longs but eventually want to make hexaLong or octaLong
 (hexaLong would represent integers up to about 10^300)
 */
 
-class Rational 
+class RationalBound 
 {
-    private static final Logger log = LogManager.getLogger(Rational.class);
+    private static final Logger log = LogManager.getLogger(RationalBound.class);
 
-    public static final Rational ZERO 
-    = new Rational(0L, 1L);
-    public static final Rational ONE 
-    = new Rational(1L, 1L);
+    public static final RationalBound ZERO 
+    = new RationalBound(0L, 1L);
+    public static final RationalBound ONE 
+    = new RationalBound(1L, 1L);
 
-    public static final Rational MAX_VALUE 
-    = new Rational(Long.MAX_VALUE, 1L);
-    public static final Rational MIN_VALUE 
-    = new Rational(-Long.MAX_VALUE, 1L);
+    public static final RationalBound MAX_VALUE 
+    = new RationalBound(Long.MAX_VALUE, 1L);
+    public static final RationalBound MIN_VALUE 
+    = new RationalBound(-Long.MAX_VALUE, 1L);
 
-    public static final Rational MIN_POSITIVE_VALUE 
-    = new Rational(1L, Long.MAX_VALUE);
-    public static final Rational MAX_NEGATIVE_VALUE 
-    = new Rational(-1L, Long.MAX_VALUE);
+    public static final RationalBound MIN_POSITIVE_VALUE 
+    = new RationalBound(1L, Long.MAX_VALUE);
+    public static final RationalBound MAX_NEGATIVE_VALUE 
+    = new RationalBound(-1L, Long.MAX_VALUE);
 
     private long numerator;
     private long denomenator;
@@ -35,7 +35,7 @@ class Rational
     private long tden;
 
     // Constructors with both numerator and denomenator
-    public Rational(long numerator, long denomenator) 
+    public RationalBound(long numerator, long denomenator) 
     throws ArithmeticException {
         if (!(denomenator==0)) {;} else {
             throw new ArithmeticException("/ by zero");
@@ -50,7 +50,7 @@ class Rational
     }
 
     // Constructors with integers
-    public Rational(long numerator) {
+    public RationalBound(long numerator) {
         if (!(numerator==Long.MIN_VALUE)) {;} else {
             throw new ArithmeticException("input too small");
         }
@@ -60,7 +60,7 @@ class Rational
 
 
     // Adaptive constructors
-    public Rational(String fraction) 
+    public RationalBound(String fraction) 
     throws ArithmeticException, IllegalArgumentException {
         if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
             if (fraction.contains("/")) {
@@ -119,24 +119,24 @@ class Rational
     }
 
     // Division
-    public Rational divide(Rational divisor) {
-        return new Rational(
+    public RationalBound divide(RationalBound divisor) {
+        return new RationalBound(
             this.numerator * divisor.denomenator
             , this.denomenator * divisor.numerator
             );
     }
 
     // Multiplication
-    public Rational multiply(Rational factor) {
-        return new Rational(
+    public RationalBound multiply(RationalBound factor) {
+        return new RationalBound(
             this.numerator * factor.numerator
             , this.denomenator * factor.denomenator
         );
     }
 
     // Addition
-    public Rational add(Rational addend) {
-        return new Rational(
+    public RationalBound add(RationalBound addend) {
+        return new RationalBound(
             (this.numerator * addend.denomenator)
             + (addend.numerator * this.denomenator)
             , this.denomenator * addend.denomenator
@@ -144,16 +144,16 @@ class Rational
     }
 
     // Negation
-    public Rational negate(Rational input) {
-        return new Rational(
+    public RationalBound negate(RationalBound input) {
+        return new RationalBound(
             - this.numerator
             , this.denomenator
         );
     }
 
     // Subtraction
-    public Rational subtract(Rational minuend) {
-        return new Rational(
+    public RationalBound subtract(RationalBound minuend) {
+        return new RationalBound(
             (this.numerator * minuend.denomenator)
             - (minuend.numerator * this.denomenator)
             , this.denomenator * minuend.denomenator
@@ -161,8 +161,8 @@ class Rational
     }
 
     // Absoulte Value
-    public Rational abs() {
-        return new Rational(
+    public RationalBound abs() {
+        return new RationalBound(
             Math.abs(this.numerator)
             , Math.abs(this.denomenator)
             );
@@ -176,7 +176,7 @@ class Rational
         // more accurate, just like how we round up on .5
         // could decide weather to negate based on the .5 bit
 
-    protected Rational twoSimplify() {
+    protected RationalBound twoSimplify() {
         long n = this.getNumerator();
         long d = this.getDenomenator();
 
@@ -184,7 +184,7 @@ class Rational
             Long.numberOfTrailingZeros(branchlessAbs(n))
             , Long.numberOfTrailingZeros(branchlessAbs(d))
         );
-        return new Rational(n>>t, d>>t);
+        return new RationalBound(n>>t, d>>t);
     }
 
 
@@ -193,7 +193,7 @@ class Rational
 
 
 
-    protected Rational roundUp(int bitsToDrop) {
+    protected RationalBound roundUp(int bitsToDrop) {
         tnum = crushRoundUp(this.numerator, bitsToDrop);
         tden = crushRoundDown(this.denomenator, bitsToDrop);
 
@@ -207,12 +207,12 @@ class Rational
             }
         }
 
-        return new Rational(
+        return new RationalBound(
             tnum
             , tden
         );
     }
-    protected Rational roundDown(int bitsToDrop) {
+    protected RationalBound roundDown(int bitsToDrop) {
 
         tnum = crushRoundDown(this.numerator, bitsToDrop);
         tden = crushRoundUp(this.denomenator, bitsToDrop);
@@ -221,7 +221,7 @@ class Rational
             tden = 1;
         }
 
-        return new Rational(
+        return new RationalBound(
             tnum
             , tden
         );
@@ -238,7 +238,7 @@ class Rational
 
     // UTILS
 
-    public boolean maybeDiffer(Rational that) {
+    public boolean maybeDiffer(RationalBound that) {
         return (
             branchlessAbs(this.numerator) != branchlessAbs(that.numerator)
             || branchlessAbs(this.denomenator) != branchlessAbs(that.denomenator)
@@ -270,7 +270,7 @@ class Rational
     }
 
 
-    protected static Rational handleMinValue(Rational input) {
+    protected static RationalBound handleMinValue(RationalBound input) {
         long maybeNumerator = input.numerator;
         long maybeDenomenator = input.denomenator;
         assert maybeDenomenator != 0 : "CHAOS: / by zero";
@@ -280,12 +280,12 @@ class Rational
         if (!(maybeDenomenator==Long.MIN_VALUE)) {;} else {
             maybeDenomenator = -Long.MAX_VALUE;
         }
-        return new Rational(maybeNumerator, maybeDenomenator);
+        return new RationalBound(maybeNumerator, maybeDenomenator);
     } // if min value is found it will result in an error huge
 
     // FuzzyFractions stuff
 
-    public int[] bitsAfterMultiply(Rational that) {
+    public int[] bitsAfterMultiply(RationalBound that) {
         return new int[]{
             addBits(this.numerator, that.numerator)
             , addBits(this.denomenator, that.denomenator)
@@ -293,16 +293,16 @@ class Rational
     }
 
 
-    public Rational multiplyRoundDown(Rational multiplier) {
-        Rational that = multiplier;
+    public RationalBound multiplyRoundDown(RationalBound multiplier) {
+        RationalBound that = multiplier;
         int[] bitsAfterMultiply = this.bitsAfterMultiply(that);
         int BAM = Math.max(
             bitsAfterMultiply[0]
           , bitsAfterMultiply[1]);
         int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
-        Rational thisCrushed = this.roundDown(unwantedBits);
-        Rational thatCrushed = that.roundDown(unwantedBits);
+        RationalBound thisCrushed = handleMinValue(this.roundDown(unwantedBits));
+        RationalBound thatCrushed = handleMinValue(that.roundDown(unwantedBits));
         log.info(
             "input: "
             + this + " and " + that
@@ -316,16 +316,16 @@ class Rational
         return handleMinValue(thisCrushed.multiply(thatCrushed));
     }
 
-    public Rational multiplyRoundUp(Rational multiplier) {
-        Rational that = multiplier;
+    public RationalBound multiplyRoundUp(RationalBound multiplier) {
+        RationalBound that = multiplier;
         int[] bitsAfterMultiply = this.bitsAfterMultiply(that);
         int BAM = Math.max(
             bitsAfterMultiply[0]
           , bitsAfterMultiply[1]);
         int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
         // divide by two and round up ^
-        Rational thisCrushed = this.roundUp(unwantedBits);
-        Rational thatCrushed = that.roundUp(unwantedBits);
+        RationalBound thisCrushed = this.roundUp(unwantedBits);
+        RationalBound thatCrushed = that.roundUp(unwantedBits);
         log.info(
             "input: "
             + this + " and " + that

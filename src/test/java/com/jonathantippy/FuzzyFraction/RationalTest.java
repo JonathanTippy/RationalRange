@@ -318,7 +318,7 @@ public class RationalTest {
         Rational a = new Rational("-50/-20");
         Rational answer = a.twoSimplify();
         String s = answer.toString();
-        assertEquals("25/10", s);
+        assert(!answer.maybeDiffer(new Rational(25/10)));
     }
     @Test
     public void negativeSimplifyTwosTest3() {

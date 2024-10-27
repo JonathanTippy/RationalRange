@@ -67,11 +67,11 @@ class Utility {
         return new long[]{n>>t, d>>t};
     }
 
-    static Rational quickClean(Rational x) {
+    static RationalBound quickClean(RationalBound x) {
         long n = x.getNumerator();
         long d = x.getDenomenator();
         long[] h = fixOne(n, d);
         h = dropTwos(h[0],h[1]);
-        return new Rational(h[0],h[1]);
+        return new RationalBound(h[0],h[1]);
     }
 }
