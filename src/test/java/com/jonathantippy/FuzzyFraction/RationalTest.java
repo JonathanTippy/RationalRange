@@ -204,54 +204,7 @@ public class RationalTest {
         : answer + " or in decimal " + answer.toDouble() + " is greater than one";
     }
 
-    // MULTIPLY ROUND UP
-
-    @Test
-    public void mruTest() {
-        RationalBound factorOne = new RationalBound(1);
-        RationalBound factorTwo = new RationalBound(3);
-        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
-        String s = answer.toString();
-        assertEquals("3/1", s);
-    }
-
-    @Test
-    public void hardmruTest() {
-        RationalBound factorOne = new RationalBound("5/7");
-        RationalBound factorTwo = new RationalBound("2/3");
-        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
-        String s = answer.toString();
-        assertEquals("10/21", s);
-    }
-
-    @Test
-    public void hardermruTest() {
-        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
-        RationalBound factorTwo = new RationalBound(1);
-        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
-        String s = answer.toString();
-        assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
-    }
-
-    @Test
-    public void hardermruTest2() {
-        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
-        RationalBound factorTwo = new RationalBound(1, Long.MAX_VALUE);
-        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
-        String s = answer.toString();
-        assertEquals(Long.toString(Long.MAX_VALUE) + "/" + Long.MAX_VALUE, s);
-    }
-
-    @Test
-    public void hardermruTest3() {
-        RationalBound factorOne = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
-        RationalBound factorTwo = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
-        RationalBound answer = factorOne.multiplyRoundUp(factorTwo);
-        String s = answer.toString();
-        assert(((double) answer.getNumerator()/(double)answer.getDenomenator() >= 1.0)
-        ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is less than one";
-    }
-
+   
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////

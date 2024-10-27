@@ -316,26 +316,5 @@ class RationalBound
         return handleMinValue(thisCrushed.multiply(thatCrushed));
     }
 
-    public RationalBound multiplyRoundUp(RationalBound multiplier) {
-        RationalBound that = multiplier;
-        int[] bitsAfterMultiply = this.bitsAfterMultiply(that);
-        int BAM = Math.max(
-            bitsAfterMultiply[0]
-          , bitsAfterMultiply[1]);
-        int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
-        // divide by two and round up ^
-        RationalBound thisCrushed = this.roundUp(unwantedBits);
-        RationalBound thatCrushed = that.roundUp(unwantedBits);
-        log.info(
-            "input: "
-            + this + " and " + that
-            + "\nBAM: "
-            + BAM
-            + "\nunwanted bits: "
-            + unwantedBits
-            + "\ncrushed: "
-            + handleMinValue(thisCrushed.multiply(thatCrushed))
-        );
-        return handleMinValue(thisCrushed.multiply(thatCrushed));
-    }
+   
 }
