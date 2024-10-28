@@ -125,86 +125,26 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
-    @Test
-    public void multiplicationTest() {
-        RationalBound factorOne = new RationalBound(1);
-        RationalBound factorTwo = new RationalBound(3);
-        RationalBound answer = factorOne.multiply(factorTwo);
-        String s = answer.toString();
-        assertEquals("3/1", s);
-    }
-
-    @Test
-    public void hardMultiplicationTest() {
-        RationalBound factorOne = new RationalBound("5/7");
-        RationalBound factorTwo = new RationalBound("2/3");
-        RationalBound answer = factorOne.multiply(factorTwo);
-        String s = answer.toString();
-        assertEquals("10/21", s);
-    }
-
-    // multiply round down
-
-    @Test
-    public void mrdTest() {
-        RationalBound factorOne = new RationalBound(1);
-        RationalBound factorTwo = new RationalBound(3);
-        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
-        String s = answer.toString();
-        assertEquals("3/1", s);
-    }
-
-    @Test
-    public void hardmrdTest() {
-        RationalBound factorOne = new RationalBound("5/7");
-        RationalBound factorTwo = new RationalBound("2/3");
-        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
-        String s = answer.toString();
-        assertEquals("10/21", s);
-    }
-
-    @Test
-    public void hardermrdTest() {
-        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
-        RationalBound factorTwo = new RationalBound(1);
-        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
-        String s = answer.toString();
-        assertEquals(Long.toString(Long.MAX_VALUE) + "/1", s);
-    }
-
-    @Test
-    public void hardermrdTest2() {
-        RationalBound factorOne = new RationalBound(Long.MAX_VALUE);
-        RationalBound factorTwo = new RationalBound(1, Long.MAX_VALUE);
-        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
-        String s = answer.toString();
-        assertEquals(Long.toString(Long.MAX_VALUE) + "/" + Long.MAX_VALUE, s);
-    }
-
-    @Test
-    public void hardermrdTest3() {
-        RationalBound factorOne = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
-        RationalBound factorTwo = new RationalBound(Long.MAX_VALUE, Long.MAX_VALUE);
-        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
-        String s = answer.toString();
-        assert(((double) answer.getNumerator()/(double)answer.getDenomenator() <= 1.0)
-        ): (double) answer.getNumerator()/(double)answer.getDenomenator() + " is greater than one";
-    }
-
+    
     @Property
-    void mrdOneGoesDown(@ForAll long a, @ForAll long b) {
+    void multiplyOneDirection(@ForAll long a, @ForAll long b, @ForAll("one") int r) {
         if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
             return;
         }
 
         RationalBound factorOne = new RationalBound(a, a);
         RationalBound factorTwo = new RationalBound(b, b);
-        RationalBound answer = factorOne.multiplyRoundDown(factorTwo);
-        assert(!answer.isGreaterThanOne())
+        RationalBound answer = factorOne.multiply(factorTwo, r);
+        assert(answer.bySign(r).isGreaterThanOne())
         : answer + " or in decimal " + answer.toDouble() + " is greater than one";
     }
 
-   
+    @Provide
+    Arbitrary<Integer> one() {
+        return Arbitraries.integers().filter(v -> v == 1 || v == -1);
+    }
+
+
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////

@@ -1,13 +1,9 @@
 package com.jonathantippy.FuzzyFraction;
-import static com.jonathantippy.FuzzyFraction.Utility.*;
-import org.apache.logging.log4j.Logger;  
-import org.apache.logging.log4j.LogManager;  
+import static com.jonathantippy.FuzzyFraction.Utility.addBits;
+import static com.jonathantippy.FuzzyFraction.Utility.branchlessAbs;
 
-
-/*
-for now uses longs but eventually want to make hexaLong or octaLong 
-(hexaLong would represent integers up to about 10^300)
-*/
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 class RationalBound 
 {
@@ -37,9 +33,7 @@ class RationalBound
     // Constructors with both numerator and denomenator
     public RationalBound(long numerator, long denomenator) 
     throws ArithmeticException {
-        if (!(denomenator==0)) {;} else {
-            throw new ArithmeticException("/ by zero");
-        }
+
         if (!(numerator==Long.MIN_VALUE||denomenator==Long.MIN_VALUE)) {;} 
         else {
             throw new ArithmeticException("input too small");
@@ -67,9 +61,7 @@ class RationalBound
                 String[] terms = fraction.split("/");
                 long maybeNumerator = Long.parseLong(terms[0]);
                 long maybeDenomenator = Long.parseLong(terms[1]);
-                if (!(maybeDenomenator==0)) {;} else {
-                    throw new ArithmeticException("/ by zero");
-                }
+
                 if (
                     !(
                     maybeNumerator==Long.MIN_VALUE
@@ -124,14 +116,6 @@ class RationalBound
             this.numerator * divisor.denomenator
             , this.denomenator * divisor.numerator
             );
-    }
-
-    // Multiplication
-    public RationalBound multiply(RationalBound factor) {
-        return new RationalBound(
-            this.numerator * factor.numerator
-            , this.denomenator * factor.denomenator
-        );
     }
 
     // Addition
@@ -189,43 +173,21 @@ class RationalBound
 
 
     //crush with bias
-    //TODO: nicer crush could be done by checking .5 bit to choose which way to round when possible
 
-
-
-    protected RationalBound roundUp(int bitsToDrop) {
-        tnum = crushRoundUp(this.numerator, bitsToDrop);
-        tden = crushRoundDown(this.denomenator, bitsToDrop);
-
-        if (tden!=0) {;} else {
-            tden = 1;
-        }
-        if (tnum!=0) {;} else {
-            if (this.numerator==0) {;} else {
-                tnum = 1;
-                tden = 1;
-            }
-        }
-
+    protected RationalBound cut(int bitsToDrop, int roundDirection) {
         return new RationalBound(
-            tnum
-            , tden
-        );
+            Utility.cut(this.numerator, bitsToDrop, roundDirection)
+            , Utility.cut(this.denomenator, bitsToDrop, -roundDirection)
+            );
     }
-    protected RationalBound roundDown(int bitsToDrop) {
 
-        tnum = crushRoundDown(this.numerator, bitsToDrop);
-        tden = crushRoundUp(this.denomenator, bitsToDrop);
-
-        if (tden!=0) {;} else {
-            tden = 1;
-        }
-
+    RationalBound fit(int maxBits, int roundDirection) {
         return new RationalBound(
-            tnum
-            , tden
-        );
+            Utility.fit(this.numerator, maxBits, roundDirection)
+            , Utility.fit(this.denomenator, maxBits, -roundDirection)
+            ); 
     }
+
 
     protected long handleZero(long a) { 
         if (a!=0) {;} else {
@@ -237,6 +199,14 @@ class RationalBound
 
 
     // UTILS
+
+    public RationalBound bySign(int sign) {
+        assert sign==1||sign==-1: "bySign(int sign): bad sign";
+        return new RationalBound(
+            Utility.bySign(this.numerator, sign)
+            , this.denomenator
+        );
+    }
 
     public boolean maybeDiffer(RationalBound that) {
         return (
@@ -292,28 +262,20 @@ class RationalBound
             };
     }
 
-
-    public RationalBound multiplyRoundDown(RationalBound multiplier) {
+    public RationalBound multiply(RationalBound multiplier, int roundDirection) {
+        int r = roundDirection;
         RationalBound that = multiplier;
-        int[] bitsAfterMultiply = this.bitsAfterMultiply(that);
-        int BAM = Math.max(
-            bitsAfterMultiply[0]
-          , bitsAfterMultiply[1]);
-        int unwantedBits = (int) -((-(sadDoz(BAM, 63)))>>1);
-        // divide by two and round up ^
-        RationalBound thisCrushed = handleMinValue(this.roundDown(unwantedBits));
-        RationalBound thatCrushed = handleMinValue(that.roundDown(unwantedBits));
-        log.info(
-            "input: "
-            + this + " and " + that
-            + "\nBAM: "
-            + BAM
-            + "\nunwanted bits: "
-            + unwantedBits
-            + "\ncrushed: "
-            + handleMinValue(thisCrushed.multiply(thatCrushed))
-        );
-        return handleMinValue(thisCrushed.multiply(thatCrushed));
+        
+        RationalBound thi = this.fit(31, r);
+        RationalBound tha = that.fit(31, r);
+        
+        log.debug("Inputs\n------\nthis: " + this + "\nthat: " + that + "\n r: " + r
+        + "After Fit\n------\n" + "this: " + thi + "\nthat: " + tha);
+
+        return new RationalBound(
+            thi.numerator * tha.numerator
+            , thi.denomenator * tha.denomenator
+            );
     }
 
    

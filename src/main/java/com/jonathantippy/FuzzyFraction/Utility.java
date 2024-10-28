@@ -15,18 +15,20 @@ class Utility {
         return (int) (ta + tb);
     }
 
-    static long crushRoundUp(long input, int bitsToDrop) {
-        int signum = Long.signum(input);
-        return signum*((-branchlessAbs(input)) >> bitsToDrop);
-    }
-    static long crushRoundDown(long input, int bitsToDrop) {
-        int signum = Long.signum(input);
-        return signum*((branchlessAbs(input)) >> bitsToDrop);
+    static long cut(long input, int bitsToDrop, int roundDirection) {
+        long r = roundDirection;
+        return bySign(
+            ((((branchlessAbs(input))^(r>>63))+(r>>>63)) >> bitsToDrop)
+            , input
+            );
     }
 
-    static final int bitLength(long a) {
-        long x = a^(a>>63);
-        return 64 - Long.numberOfLeadingZeros(x);
+    static long fit(long input, int maxBits, int roundDirection) {
+        return cut(
+            input
+            , (int) branchlessDoz(bitLength(input), maxBits)
+            , roundDirection
+            );
     }
 
     static long branchlessDoz(long inputA, long inputB) {
@@ -73,5 +75,13 @@ class Utility {
         long[] h = fixOne(n, d);
         h = dropTwos(h[0],h[1]);
         return new RationalBound(h[0],h[1]);
+    }
+
+    static long bySign(long input, long sign) {
+        return (input^(sign>>63)) + sign>>>63;
+    }
+
+    static int bitLength(long input) {
+        return Long.bitCount(Long.highestOneBit(input)<<1-1);
     }
 }
