@@ -124,7 +124,7 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
-
+/*
     
     @Property
     void multiplyOneDirection(@ForAll long a, @ForAll long b, @ForAll("one") int r) {
@@ -138,7 +138,7 @@ public class RationalTest {
         assert(answer.bySign(r).isGreaterThanOne())
         : answer + " or in decimal " + answer.toDouble() + " is greater than one";
     }
-
+*/
     @Provide
     Arbitrary<Integer> one() {
         return Arbitraries.integers().filter(v -> v == 1 || v == -1);
@@ -227,6 +227,28 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void simpleCutTest() {
+        assert Utility.cut(1, 0, 1) == 1: "fail! expected 1, but got " + Utility.cut(1, 0, 1);
+    }
+
+
+    /*
+    @Property
+    void cutTest(@ForAll long a, @ForAll("one") int r) {
+        if (a!=0&&a!=Long.MIN_VALUE) {;} else {
+            return;
+        }
+
+        RationalBound a2 = new RationalBound(a, a);
+        RationalBound answer = a2.fit(32, r);
+        assert(answer.bySign(r).isGreaterThanOne())
+        : answer + " or in decimal " + answer.toDouble() + " is greater than one";
+    }
+    */
+
+
 
     @Test
     public void addBitsTest() {

@@ -18,7 +18,7 @@ class Utility {
     static long cut(long input, int bitsToDrop, int roundDirection) {
         long r = roundDirection;
         return bySign(
-            ((((branchlessAbs(input))^(r>>63))+(r>>>63)) >> bitsToDrop)
+            bySign(((bySign((branchlessAbs(input)), r)) >> bitsToDrop), r)
             , input
             );
     }
