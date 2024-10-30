@@ -203,7 +203,7 @@ class RationalBound
     public RationalBound bySign(int sign) {
         assert sign==1||sign==-1: "bySign(int sign): bad sign";
         return new RationalBound(
-            Utility.bySign(this.numerator, sign)
+            Utility.bySignZ(this.numerator, sign)
             , this.denomenator
         );
     }
@@ -227,6 +227,14 @@ class RationalBound
     public boolean isGreaterThanOne() {
         return (
             (branchlessAbs(numerator) > branchlessAbs(denomenator))
+            && isPositive()
+            );
+    }
+
+    public boolean compareToOne(int direction) {
+        return (
+            (Utility.bySign(branchlessAbs(numerator), direction)
+            > Utility.bySign(branchlessAbs(denomenator), direction))
             && isPositive()
             );
     }

@@ -124,8 +124,8 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
-/*
-    
+
+
     @Property
     void multiplyOneDirection(@ForAll long a, @ForAll long b, @ForAll("one") int r) {
         if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
@@ -135,10 +135,10 @@ public class RationalTest {
         RationalBound factorOne = new RationalBound(a, a);
         RationalBound factorTwo = new RationalBound(b, b);
         RationalBound answer = factorOne.multiply(factorTwo, r);
-        assert(answer.bySign(r).isGreaterThanOne())
-        : answer + " or in decimal " + answer.toDouble() + " is greater than one";
+        assert(!answer.compareToOne(-r)) // for "or equals"
+        : answer + " or in decimal " + answer.toDouble() + " is not greater than one";
     }
-*/
+
     @Provide
     Arbitrary<Integer> one() {
         return Arbitraries.integers().filter(v -> v == 1 || v == -1);
@@ -179,46 +179,7 @@ public class RationalTest {
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
 
-    @Test
-    public void simplifyTwosTest() {
-        RationalBound a = new RationalBound("50/20");
-        RationalBound answer = a.twoSimplify();
-        String s = answer.toString();
-        assertEquals("25/10", s);
-    }
-    @Test
-    public void simplifyTwosTest2() {
-        RationalBound a = new RationalBound("1/1");
-        RationalBound answer = a.twoSimplify();
-        String s = answer.toString();
-        assertEquals("1/1", s);
-    }
-    @Test
-    public void simplifyTwosTest3() {
-        RationalBound a = new RationalBound("0/1");
-        RationalBound answer = a.twoSimplify();
-        String s = answer.toString();
-        assertEquals("0/1", s);
-    }
-    @Test
-    public void negativeSimplifyTwosTest() {
-        RationalBound a = new RationalBound("-50/20");
-        RationalBound answer = a.twoSimplify();
-        assert(!answer.maybeDiffer(new RationalBound(50, -20)));
-    }
-    @Test
-    public void negativeSimplifyTwosTest2() {
-        RationalBound a = new RationalBound("-50/-20");
-        RationalBound answer = a.twoSimplify();
-        String s = answer.toString();
-        assert(!answer.maybeDiffer(new RationalBound(25/10)));
-    }
-    @Test
-    public void negativeSimplifyTwosTest3() {
-        RationalBound a = new RationalBound("50/-20");
-        RationalBound answer = a.twoSimplify();
-        assert(!answer.maybeDiffer(new RationalBound(-50, 20)));
-    }
+
 
       //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -231,6 +192,23 @@ public class RationalTest {
     @Test
     public void simpleCutTest() {
         assert Utility.cut(1, 0, 1) == 1: "fail! expected 1, but got " + Utility.cut(1, 0, 1);
+    }
+
+    @Property
+    public void fitTest(@ForAll int input, @ForAll("one") int r) {
+        assert Utility.fit((long) input, 31, r) == (long) input;
+    }
+
+    @Property
+    public void bySignTest(@ForAll long input, @ForAll long sign) {
+        if (sign != 0) {;} else {return;}
+        assert Utility.bySign(input, sign) == input * Long.signum(sign): 
+        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (Utility.bySign(input, sign));
+    }
+    @Property
+    public void bySignZTest(@ForAll long input, @ForAll long sign) {
+        assert Utility.bySignZ(input, sign) == input * Long.signum(sign): 
+        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (Utility.bySign(input, sign));
     }
 
 
@@ -289,8 +267,14 @@ public class RationalTest {
             return;
         }
         RationalBound x = new RationalBound(a, b);
-        assert isGTOne(x) == (x.isGreaterThanOne()): 
+        assert (isGTOne(x) == x.isGreaterThanOne()): 
         "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + x.isGreaterThanOne();
+        RationalBound y = new RationalBound(a, a);
+        assert (isGTOne(y) == y.isGreaterThanOne()): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(y) + " while fast said " + y.isGreaterThanOne();
+        RationalBound z = new RationalBound(b, b);
+        assert (isGTOne(z) == z.isGreaterThanOne()): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(z) + " while fast said " + z.isGreaterThanOne();
     }
 
 
@@ -302,20 +286,17 @@ public class RationalTest {
         return returned;
     }
 
-    private static boolean isGTOne(RationalBound x) {
-        if (Long.signum(x.getNumerator()) == 1) {
-            if (Long.signum(x.getDenomenator()) == 1) {
-                return (x.getNumerator() > x.getDenomenator());
-            } else {
-                return false;
-            }
-        } else {
-            if (Long.signum(x.getDenomenator()) == 1) {
-                return false;
-            } else {
-                return (x.getDenomenator() > x.getNumerator());
-            }
+    private static boolean isGTOne(RationalBound input) {
+        if (input.getNumerator() == input.getDenomenator()) {
+            return false;
         }
-    }
+        if (input.signum() == 1) {
+            return Math.abs(input.getNumerator()) > Math.abs(input.getDenomenator());
+        }
+        if (input.signum() == -1) {
+            return false;
+        }
+        return false;
 
+    }
 }

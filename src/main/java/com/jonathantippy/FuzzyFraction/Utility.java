@@ -77,8 +77,13 @@ class Utility {
         return new RationalBound(h[0],h[1]);
     }
 
-    static long bySign(long input, long sign) {
-        return (input^(sign>>63)) + sign>>>63;
+    static long bySign(long input, long sign) { // doesn't handle 0
+        return (input^(sign>>63))+(sign>>>63);
+    }
+
+    static long bySignZ(long input, long sign) { // does handle 0
+        long zero = (sign==0) ? 0 : -1;
+        return ((input^(sign>>63))+(sign>>>63))&zero;
     }
 
     static int bitLength(long input) {
