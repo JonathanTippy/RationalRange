@@ -10,48 +10,53 @@ class RationalBound
     private static final Logger log = LogManager.getLogger(RationalBound.class);
 
     public static final RationalBound ZERO 
-    = new RationalBound(0L, 1L);
+    = new RationalBound(0L, 1L, false);
     public static final RationalBound ONE 
-    = new RationalBound(1L, 1L);
+    = new RationalBound(1L, 1L, false);
 
     public static final RationalBound MAX_VALUE 
-    = new RationalBound(Long.MAX_VALUE, 1L);
+    = new RationalBound(Long.MAX_VALUE, 1L, false);
     public static final RationalBound MIN_VALUE 
-    = new RationalBound(-Long.MAX_VALUE, 1L);
+    = new RationalBound(-Long.MAX_VALUE, 1L, false);
 
     public static final RationalBound MIN_POSITIVE_VALUE 
-    = new RationalBound(1L, Long.MAX_VALUE);
+    = new RationalBound(1L, Long.MAX_VALUE, false);
     public static final RationalBound MAX_NEGATIVE_VALUE 
-    = new RationalBound(-1L, Long.MAX_VALUE);
+    = new RationalBound(-1L, Long.MAX_VALUE, false);
 
     private long numerator;
     private long denomenator;
+    private boolean infinite;
 
     private long tnum; // mutables for testing answers
     private long tden;
 
     // Constructors with both numerator and denomenator
+    public RationalBound(long numerator, long denomenator, boolean infinite) 
+    throws ArithmeticException {
+
+        Utility.validateRationalBound(numerator, denomenator, infinite);
+        this.numerator = numerator;
+        this.denomenator = denomenator;
+        this.infinite = infinite;
+    }
     public RationalBound(long numerator, long denomenator) 
     throws ArithmeticException {
 
-        if (!(numerator==Long.MIN_VALUE||denomenator==Long.MIN_VALUE)) {;} 
-        else {
-            throw new ArithmeticException("input too small");
-        }
-
+        Utility.validateRationalBound(numerator, denomenator, false);
         this.numerator = numerator;
         this.denomenator = denomenator;
+        this.infinite = false;
     }
 
     // Constructors with integers
     public RationalBound(long numerator) {
-        if (!(numerator==Long.MIN_VALUE)) {;} else {
-            throw new ArithmeticException("input too small");
-        }
+
+        Utility.validateRationalBound(numerator, 1L, false);
         this.numerator = numerator; 
         this.denomenator = 1L;
+        this.infinite = false;
     }
-
 
     // Adaptive constructors
     public RationalBound(String fraction) 
@@ -59,27 +64,16 @@ class RationalBound
         if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
             if (fraction.contains("/")) {
                 String[] terms = fraction.split("/");
-                long maybeNumerator = Long.parseLong(terms[0]);
-                long maybeDenomenator = Long.parseLong(terms[1]);
-
-                if (
-                    !(
-                    maybeNumerator==Long.MIN_VALUE
-                    ||maybeDenomenator==Long.MIN_VALUE
-                    )
-                ) {;} else {
-                    throw new ArithmeticException("input too small");
-                }
-                this.numerator = maybeNumerator;
-                this.denomenator = maybeDenomenator;
+                tnum = Long.parseLong(terms[0]);
+                tden = Long.parseLong(terms[1]);
             } else {
-                long maybeNumerator = Long.parseLong(fraction);
-                if (!(maybeNumerator==Long.MIN_VALUE)) {;} else {
-                    throw new ArithmeticException("input too small");
-                }
-                this.numerator = maybeNumerator;
-                this.denomenator = 1L;
+                tnum = Long.parseLong(fraction);
+                tden = 1L;
             }
+            Utility.validateRationalBound(tnum, tden, false);
+            this.numerator = tnum;
+            this.denomenator = tden;
+            this.infinite = false;
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
@@ -147,8 +141,8 @@ class RationalBound
     // Absoulte Value
     public RationalBound abs() {
         return new RationalBound(
-            Math.abs(this.numerator)
-            , Math.abs(this.denomenator)
+            branchlessAbs(this.numerator)
+            , branchlessAbs(this.denomenator)
             );
     }
 
@@ -156,9 +150,6 @@ class RationalBound
 
      // Crushes (approximate simplfication)
 
-        // Purposefully performing the shift on negatives so that the result is 
-        // more accurate, just like how we round up on .5
-        // could decide weather to negate based on the .5 bit
 
     protected RationalBound twoSimplify() {
         long n = this.getNumerator();
@@ -201,7 +192,6 @@ class RationalBound
     // UTILS
 
     public RationalBound bySign(int sign) {
-        assert sign==1||sign==-1: "bySign(int sign): bad sign";
         return new RationalBound(
             Utility.bySignZ(this.numerator, sign)
             , this.denomenator
@@ -216,12 +206,7 @@ class RationalBound
     }
 
     public int signum() {
-        int numeratorSign = Long.signum(this.numerator);
-        int denomenatorSign = Long.signum(this.denomenator);
-        assert numeratorSign == -1 || numeratorSign == 1 || numeratorSign == 0;
-        assert denomenatorSign == -1 || denomenatorSign == 1 || denomenatorSign == 0;
-        int sign = numeratorSign*denomenatorSign;
-        return sign;
+        return (int) Utility.bySign(Long.signum(this.numerator),this.denomenator);
     }
 
     public boolean isGreaterThanOne() {
@@ -245,6 +230,14 @@ class RationalBound
 
     public boolean isZero() {
         return (numerator == 0);
+    }
+
+    public boolean isInfinity() {
+        return (denomenator == 0);
+    }
+
+    public boolean isOne() {
+        return (numerator == denomenator);
     }
 
 

@@ -77,16 +77,26 @@ class Utility {
         return new RationalBound(h[0],h[1]);
     }
 
-    static long bySign(long input, long sign) { // doesn't handle 0
+    static long bySign(long input, long sign) { // doesn't handle 0 sign
         return (input^(sign>>63))+(sign>>>63);
     }
 
-    static long bySignZ(long input, long sign) { // does handle 0
+    static long bySignZ(long input, long sign) { // does handle 0 sign
         long zero = (sign==0) ? 0 : -1;
         return ((input^(sign>>63))+(sign>>>63))&zero;
     }
 
     static int bitLength(long input) {
         return Long.bitCount(Long.highestOneBit(input)<<1-1);
+    }
+
+    static void validateRationalBound(long numerator, long denomenator, boolean infinite)
+    throws ArithmeticException {
+        if (numerator!=Long.MAX_VALUE&&denomenator!=Long.MAX_VALUE) {;} else {
+            throw new ArithmeticException("long min value detected");
+        }
+        if (denomenator!=0||infinite) {;} else {
+            throw new ArithmeticException("divide by zero");
+        }
     }
 }
