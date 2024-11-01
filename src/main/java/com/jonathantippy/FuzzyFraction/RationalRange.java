@@ -1,6 +1,6 @@
 package com.jonathantippy.FuzzyFraction;
 
-public class FuzzyFraction {
+public class RationalRange {
 
     private final long lowerBoundNumerator;
     private final long lowerBoundDenomenator;
@@ -9,7 +9,7 @@ public class FuzzyFraction {
 
     // Private Constructors (upper & lower bound not completely checked)
 
-    private FuzzyFraction(
+    private RationalRange(
         long lowerBoundNumerator
         , long lowerBoundDenomenator
         , long upperBoundNumerator
@@ -36,7 +36,7 @@ public class FuzzyFraction {
 
     // Constructors with both numerator and denomenator
 
-    public FuzzyFraction(
+    public RationalRange(
         long numerator
         , long denomenator
     ) throws ArithmeticException {
@@ -54,7 +54,7 @@ public class FuzzyFraction {
 
     // Constructors with integers
 
-    public FuzzyFraction(
+    public RationalRange(
         long integer
     ) {
 
@@ -67,7 +67,7 @@ public class FuzzyFraction {
 
     // String Constructor
 
-    public FuzzyFraction(
+    public RationalRange(
         String expression
     ) {
 
@@ -134,7 +134,7 @@ public class FuzzyFraction {
 
     }
 */
-    public int[][] bitsAfterMultiply(FuzzyFraction that) {
+    public int[][] bitsAfterMultiply(RationalRange that) {
         RationalBound thisLowerBound = new RationalBound(
             this.lowerBoundNumerator, this.lowerBoundDenomenator);
         RationalBound thisUpperBound = new RationalBound(
