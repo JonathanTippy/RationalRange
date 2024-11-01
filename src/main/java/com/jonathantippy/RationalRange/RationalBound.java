@@ -1,6 +1,6 @@
 package com.jonathantippy.RationalRange;
-import static com.jonathantippy.RationalRange.Utility.addBits;
-import static com.jonathantippy.RationalRange.Utility.branchlessAbs;
+import static com.jonathantippy.RationalRange.util.addBits;
+import static com.jonathantippy.RationalRange.util.branchlessAbs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,7 @@ class RationalBound
     public RationalBound(long numerator, long denomenator, boolean infinite) 
     throws ArithmeticException {
 
-        Utility.validateRationalBound(numerator, denomenator, infinite);
+        util.validateRationalBound(numerator, denomenator, infinite);
         this.numerator = numerator;
         this.denomenator = denomenator;
         this.infinite = infinite;
@@ -43,7 +43,7 @@ class RationalBound
     public RationalBound(long numerator, long denomenator) 
     throws ArithmeticException {
 
-        Utility.validateRationalBound(numerator, denomenator, false);
+        util.validateRationalBound(numerator, denomenator, false);
         this.numerator = numerator;
         this.denomenator = denomenator;
         this.infinite = false;
@@ -52,7 +52,7 @@ class RationalBound
     // Constructors with integers
     public RationalBound(long numerator) {
 
-        Utility.validateRationalBound(numerator, 1L, false);
+        util.validateRationalBound(numerator, 1L, false);
         this.numerator = numerator; 
         this.denomenator = 1L;
         this.infinite = false;
@@ -70,7 +70,7 @@ class RationalBound
                 tnum = Long.parseLong(fraction);
                 tden = 1L;
             }
-            Utility.validateRationalBound(tnum, tden, false);
+            util.validateRationalBound(tnum, tden, false);
             this.numerator = tnum;
             this.denomenator = tden;
             this.infinite = false;
@@ -167,15 +167,15 @@ class RationalBound
 
     protected RationalBound cut(int bitsToDrop, int roundDirection) {
         return new RationalBound(
-            Utility.cut(this.numerator, bitsToDrop, roundDirection)
-            , Utility.cut(this.denomenator, bitsToDrop, -roundDirection)
+            util.cut(this.numerator, bitsToDrop, roundDirection)
+            , util.cut(this.denomenator, bitsToDrop, -roundDirection)
             );
     }
 
     RationalBound fit(int maxBits, int roundDirection) {
         return new RationalBound(
-            Utility.fit(this.numerator, maxBits, roundDirection)
-            , Utility.fit(this.denomenator, maxBits, -roundDirection)
+            util.fit(this.numerator, maxBits, roundDirection)
+            , util.fit(this.denomenator, maxBits, -roundDirection)
             ); 
     }
 
@@ -193,7 +193,7 @@ class RationalBound
 
     public RationalBound bySign(int sign) {
         return new RationalBound(
-            Utility.bySignZ(this.numerator, sign)
+            util.bySignZ(this.numerator, sign)
             , this.denomenator
         );
     }
@@ -206,7 +206,7 @@ class RationalBound
     }
 
     public int signum() {
-        return (int) Utility.bySign(Long.signum(this.numerator),this.denomenator);
+        return (int) util.bySign(Long.signum(this.numerator),this.denomenator);
     }
 
     public boolean isGreaterThanOne() {
@@ -218,8 +218,8 @@ class RationalBound
 
     public boolean compareToOne(int direction) {
         return (
-            (Utility.bySign(branchlessAbs(numerator), direction)
-            > Utility.bySign(branchlessAbs(denomenator), direction))
+            (util.bySign(branchlessAbs(numerator), direction)
+            > util.bySign(branchlessAbs(denomenator), direction))
             && isPositive()
             );
     }

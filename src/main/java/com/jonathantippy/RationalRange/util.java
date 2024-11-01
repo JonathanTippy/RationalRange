@@ -1,6 +1,6 @@
 package com.jonathantippy.RationalRange;
 
-class Utility {
+class util {
     
     static int addBits(long a, long b) {
         long ta = bitLength(a);

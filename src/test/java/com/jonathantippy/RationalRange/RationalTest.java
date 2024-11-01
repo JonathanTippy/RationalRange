@@ -1,7 +1,7 @@
 package com.jonathantippy.RationalRange;
 
-import static com.jonathantippy.RationalRange.Utility.addBits;
-import static com.jonathantippy.RationalRange.Utility.branchlessDoz;
+import static com.jonathantippy.RationalRange.util.addBits;
+import static com.jonathantippy.RationalRange.util.branchlessDoz;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import com.jonathantippy.RationalRange.RationalBound;
-import com.jonathantippy.RationalRange.Utility;
+import com.jonathantippy.RationalRange.util;
 
 import net.jqwik.api.*;
 
@@ -195,24 +195,24 @@ public class RationalTest {
 
     @Test
     public void simpleCutTest() {
-        assert Utility.cut(1, 0, 1) == 1: "fail! expected 1, but got " + Utility.cut(1, 0, 1);
+        assert util.cut(1, 0, 1) == 1: "fail! expected 1, but got " + util.cut(1, 0, 1);
     }
 
     @Property
     public void fitTest(@ForAll int input, @ForAll("one") int r) {
-        assert Utility.fit((long) input, 31, r) == (long) input;
+        assert util.fit((long) input, 31, r) == (long) input;
     }
 
     @Property
     public void bySignTest(@ForAll long input, @ForAll long sign) {
         if (sign != 0) {;} else {return;}
-        assert Utility.bySign(input, sign) == input * Long.signum(sign): 
-        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (Utility.bySign(input, sign));
+        assert util.bySign(input, sign) == input * Long.signum(sign): 
+        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (util.bySign(input, sign));
     }
     @Property
     public void bySignZTest(@ForAll long input, @ForAll long sign) {
-        assert Utility.bySignZ(input, sign) == input * Long.signum(sign): 
-        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (Utility.bySign(input, sign));
+        assert util.bySignZ(input, sign) == input * Long.signum(sign): 
+        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (util.bySign(input, sign));
     }
 
 
