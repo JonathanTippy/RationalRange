@@ -1,4 +1,4 @@
-# FuzzyFraction
+# RangeRational
 (WIP) Fuzzy, Fast Rational number in java.
 
 In this number system, epsilon is the smallest between zero and one, and epsilon becomes one at the largest numbers. In normal cases, however, epsilon is exactly zero. With the addition of upper bounds and lower bounds, if a number can be calculated exactly, it will be exact, but if it cannot, its epsilon will grow. 
