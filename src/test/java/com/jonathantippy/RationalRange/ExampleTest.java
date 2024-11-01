@@ -1,4 +1,4 @@
-package com.jonathantippy.FuzzyFraction;
+package com.jonathantippy.RationalRange;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

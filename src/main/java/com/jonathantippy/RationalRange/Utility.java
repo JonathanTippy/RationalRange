@@ -1,4 +1,4 @@
-package com.jonathantippy.FuzzyFraction;
+package com.jonathantippy.RationalRange;
 
 class Utility {
     
@@ -92,7 +92,7 @@ class Utility {
 
     static void validateRationalBound(long numerator, long denomenator, boolean infinite)
     throws ArithmeticException {
-        if (numerator!=Long.MAX_VALUE&&denomenator!=Long.MAX_VALUE) {;} else {
+        if (numerator!=Long.MIN_VALUE&&denomenator!=Long.MIN_VALUE) {;} else {
             throw new ArithmeticException("long min value detected");
         }
         if (denomenator!=0||infinite) {;} else {

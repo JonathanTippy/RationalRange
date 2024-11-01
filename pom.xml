@@ -3,10 +3,10 @@
   <modelVersion>4.0.0</modelVersion>
 
     <!-- Project Deets -->
-    <groupId>com.jonathantippy.FuzzyFraction</groupId>
-    <artifactId>fuzzy-fraction</artifactId>
+    <groupId>com.jonathantippy.RationalRange</groupId>
+    <artifactId>rational-range</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <name>Fuzzy Fraction</name>
+    <name>Rational Range</name>
     <description>Fuzzy Fractions!</description>
 
 

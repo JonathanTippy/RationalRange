@@ -1,7 +1,7 @@
-package com.jonathantippy.FuzzyFraction;
+package com.jonathantippy.RationalRange;
 
-import static com.jonathantippy.FuzzyFraction.Utility.addBits;
-import static com.jonathantippy.FuzzyFraction.Utility.branchlessDoz;
+import static com.jonathantippy.RationalRange.Utility.addBits;
+import static com.jonathantippy.RationalRange.Utility.branchlessDoz;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+
+import com.jonathantippy.RationalRange.RationalBound;
+import com.jonathantippy.RationalRange.Utility;
+
 import net.jqwik.api.*;
 
 

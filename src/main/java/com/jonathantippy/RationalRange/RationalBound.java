@@ -1,6 +1,6 @@
-package com.jonathantippy.FuzzyFraction;
-import static com.jonathantippy.FuzzyFraction.Utility.addBits;
-import static com.jonathantippy.FuzzyFraction.Utility.branchlessAbs;
+package com.jonathantippy.RationalRange;
+import static com.jonathantippy.RationalRange.Utility.addBits;
+import static com.jonathantippy.RationalRange.Utility.branchlessAbs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

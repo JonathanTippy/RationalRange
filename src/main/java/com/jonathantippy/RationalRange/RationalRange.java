@@ -1,4 +1,4 @@
-package com.jonathantippy.FuzzyFraction;
+package com.jonathantippy.RationalRange;
 
 public class RationalRange {
 
