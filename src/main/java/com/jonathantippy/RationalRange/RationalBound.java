@@ -104,6 +104,23 @@ class RationalBound
         return numberConstruct.toString();
     }
 
+    // Multiplication
+    public RationalBound multiply(RationalBound multiplier, int roundDirection) {
+        int r = roundDirection;
+        RationalBound that = multiplier;
+        
+        RationalBound thi = this.fit(31, r);
+        RationalBound tha = that.fit(31, r);
+        
+        log.debug("Inputs\n------\nthis: " + this + "\nthat: " + that + "\n r: " + r
+        + "After Fit\n------\n" + "this: " + thi + "\nthat: " + tha);
+
+        return new RationalBound(
+            thi.numerator * tha.numerator
+            , thi.denomenator * tha.denomenator
+            );
+    }
+
     // Division
     public RationalBound divide(RationalBound divisor) {
         return new RationalBound(
@@ -262,22 +279,4 @@ class RationalBound
             , addBits(this.denomenator, that.denomenator)
             };
     }
-
-    public RationalBound multiply(RationalBound multiplier, int roundDirection) {
-        int r = roundDirection;
-        RationalBound that = multiplier;
-        
-        RationalBound thi = this.fit(31, r);
-        RationalBound tha = that.fit(31, r);
-        
-        log.debug("Inputs\n------\nthis: " + this + "\nthat: " + that + "\n r: " + r
-        + "After Fit\n------\n" + "this: " + thi + "\nthat: " + tha);
-
-        return new RationalBound(
-            thi.numerator * tha.numerator
-            , thi.denomenator * tha.denomenator
-            );
-    }
-
-   
 }
