@@ -23,7 +23,7 @@
         <jqwik.version>1.9.1</jqwik.version>
         <!-- Plugin Version Numbers -->
         <mcp.version>3.13.0</mcp.version>
-        <msf.version>3.0.0-M5</msf.version>
+        <msf.version>3.5.1</msf.version>
     </properties>
 
 
