@@ -16,8 +16,8 @@
     <properties>
 
         <!-- Dependancy Version Numbers -->
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <junit.version>5.10.0</junit.version>
         <log4j.version>2.24.1</log4j.version>
         <jqwik.version>1.9.1</jqwik.version>
