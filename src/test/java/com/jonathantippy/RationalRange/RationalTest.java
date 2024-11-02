@@ -214,6 +214,11 @@ public class RationalTest {
         assert util.bySignZ(input, sign) == input * Long.signum(sign): 
         "Fail! expected " + (input * Long.signum(sign)) + " but got " + (util.bySign(input, sign));
     }
+    @Property
+    public void branchlessMaxTest(@ForAll long inputA, @ForAll long inputB) {
+        assert util.branchlessMax(inputA, inputB) == Math.max(inputA, inputB):
+        "Fail! expected " + Math.max(inputA, inputB) + " but got " + util.branchlessMax(inputA, inputB);
+    }
 
 
     

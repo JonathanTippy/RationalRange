@@ -109,8 +109,10 @@ class RationalBound
         int r = roundDirection;
         RationalBound that = multiplier;
         
-        RationalBound thi = this.fit(31, r);
-        RationalBound tha = that.fit(31, r);
+        int bitsCeiling = util.getBitsCeiling(this.numerator, this.denomenator, that.numerator, that.denomenator);
+
+        RationalBound thi = this.fit(bitsCeiling, r);
+        RationalBound tha = that.fit(bitsCeiling, r);
         
         log.debug("Inputs\n------\nthis: " + this + "\nthat: " + that + "\n r: " + r
         + "After Fit\n------\n" + "this: " + thi + "\nthat: " + tha);

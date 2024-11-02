@@ -1,7 +1,35 @@
 package com.jonathantippy.RationalRange;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 class util {
     
+    private static final Logger log = LogManager.getLogger(RationalBound.class);
+
+
+    static int getBitsCeiling(
+        long thisNumerator
+        , long thisDenomenator
+        , long thatNumerator
+        , long thatDenomenator
+        ) {
+
+            // bit budget for each mult is 63 bits
+            int usedBitsNumerator = addBits(thisNumerator, thatNumerator);
+            int unusedBitsNumerator = 63 - usedBitsNumerator;
+            int bitCielNumerator = usedBitsNumerator
+
+            //int unusedBitsDenomenator = freeBits(thisDenomenator) + freeBits(thatDenomenator);
+            int usedBitsDenomenator = addBits(thisNumerator, thatNumerator);
+            return 31 + branchlessMin(unusedBitsNumerator, unusedBitsDenomenator);
+
+
+
+
+            return 31;
+    }
+
     static int addBits(long a, long b) {
         long ta = bitLength(a);
         long tb = bitLength(b);
@@ -47,6 +75,23 @@ class util {
         return (input ^ signMask) + signBit;
     }
 
+    static long branchlessMax(long inputA, long inputB) { // ocd, see?
+        long o = (inputA>>63) ^ (inputB>>63); //obvious
+        long oc = inputB>>63; //obvious choice
+        long d = inputB - inputA; //difference
+        long c = d>>63; //choice
+        log.debug("inputA: " + inputA + "\ninputB: " + inputB + "\nobvious: " + o + "\nobchoice: " + oc + "\ndiff: " + d + "\nchoice: " + c);
+        return 
+        (~o&(
+            (c&inputA)
+            |((~c)&inputB)
+            ))
+        |(o&(
+            (oc&inputA)
+            |((~oc)&inputB)
+            ));
+    }
+
     static int countFreeTwos(long numerator, long denomenator) {
         return Math.min(               
             Long.numberOfTrailingZeros(numerator)
@@ -87,7 +132,16 @@ class util {
     }
 
     static int bitLength(long input) {
-        return Long.bitCount(Long.highestOneBit(input)<<1-1);
+        return Long.bitCount(branchlessHighestOneBit(input)<<1-1);
+    }
+
+    static long branchlessHighestOneBit(long input) {
+        long tupni = Long.reverse(input);
+        return Long.reverse(tupni&(-tupni));
+    }
+
+    static int freeBits(long input) {
+        return 63 - bitLength(input);
     }
 
     static void validateRationalBound(long numerator, long denomenator, boolean infinite)
