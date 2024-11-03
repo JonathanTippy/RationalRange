@@ -1,7 +1,7 @@
 package com.jonathantippy.RationalRange;
 
 import static com.jonathantippy.RationalRange.util.addBits;
-import static com.jonathantippy.RationalRange.util.branchlessDoz;
+import static com.jonathantippy.RationalRange.util.branchlessDOZ;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -83,14 +83,14 @@ public class RationalTest {
 
     @Test
     public void intPositiveTest() {
-        RationalBound r = new RationalBound(50L);
+        RationalBound r = new RationalBound(50);
         String s = r.toString();
         assertEquals("50/1", s);
     }
 
     @Test
     public void intNegativeTest() {
-        RationalBound r = new RationalBound(-50L);
+        RationalBound r = new RationalBound(-50);
         String s = r.toString();
         assertEquals("-50/1", s);
     }
@@ -131,8 +131,8 @@ public class RationalTest {
 
 
     @Property
-    void multiplyOneDirection(@ForAll long a, @ForAll long b, @ForAll("one") int r) {
-        if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
+    void multiplyOneDirection(@ForAll int a, @ForAll int b, @ForAll("one") int r) {
+        if (a!=0&&b!=0&&a!=Integer.MIN_VALUE&&b!=Integer.MIN_VALUE) {;} else {
             return;
         }
 
@@ -200,22 +200,22 @@ public class RationalTest {
 
     @Property
     public void fitTest(@ForAll int input, @ForAll("one") int r) {
-        assert util.fit((long) input, 31, r) == (long) input;
+        assert util.fit((int) input, 31, r) == (int) input;
     }
 
     @Property
-    public void bySignTest(@ForAll long input, @ForAll long sign) {
+    public void bySignTest(@ForAll int input, @ForAll int sign) {
         if (sign != 0) {;} else {return;}
-        assert util.bySign(input, sign) == input * Long.signum(sign): 
-        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (util.bySign(input, sign));
+        assert util.bySign(input, sign) == input * Integer.signum(sign): 
+        "Fail! expected " + (input * Integer.signum(sign)) + " but got " + (util.bySign(input, sign));
     }
     @Property
-    public void bySignZTest(@ForAll long input, @ForAll long sign) {
-        assert util.bySignZ(input, sign) == input * Long.signum(sign): 
-        "Fail! expected " + (input * Long.signum(sign)) + " but got " + (util.bySign(input, sign));
+    public void bySignZTest(@ForAll int input, @ForAll int sign) {
+        assert util.bySignZ(input, sign) == input * Integer.signum(sign): 
+        "Fail! expected " + (input * Integer.signum(sign)) + " but got " + (util.bySign(input, sign));
     }
     @Property
-    public void branchlessMaxTest(@ForAll long inputA, @ForAll long inputB) {
+    public void branchlessMaxTest(@ForAll int inputA, @ForAll int inputB) {
         assert util.branchlessMax(inputA, inputB) == Math.max(inputA, inputB):
         "Fail! expected " + Math.max(inputA, inputB) + " but got " + util.branchlessMax(inputA, inputB);
     }
@@ -223,8 +223,8 @@ public class RationalTest {
 
     
     @Property
-    void cutTest(@ForAll long a, @ForAll("one") int r) {
-        if (a!=0&&a!=Long.MIN_VALUE) {;} else {
+    void cutTest(@ForAll int a, @ForAll("one") int r) {
+        if (a!=0&&a!=Integer.MIN_VALUE) {;} else {
             return;
         }
 
@@ -239,13 +239,13 @@ public class RationalTest {
 
     @Test
     public void addBitsTest() {
-        ArrayList<Long> inputs = new ArrayList<Long>();
-        inputs.addAll(Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE, 0L, 1L, -1L));
+        ArrayList<Integer> inputs = new ArrayList<Integer>();
+        inputs.addAll(Arrays.asList(Integer.MAX_VALUE, Integer.MIN_VALUE, 0, 1, -1));
         for (int i=0; i<100; i++) {
-            inputs.add(random.nextLong());
+            inputs.add(random.nextInt());
         }
-        for (long inputA: inputs) {
-            for (long inputB: inputs) {
+        for (int inputA: inputs) {
+            for (int inputB: inputs) {
                 assert(addBits(inputA, inputB) <= 126);
                 assert(addBits(inputA, inputB) >= 0);
             }
@@ -255,24 +255,24 @@ public class RationalTest {
 
     @Test
     public void branchlessDozTest() {
-        ArrayList<Long> inputs = new ArrayList<Long>();
-        inputs.addAll(Arrays.asList(Long.MAX_VALUE, Long.MIN_VALUE, 0L, 1L, -1L));
+        ArrayList<Integer> inputs = new ArrayList<Integer>();
+        inputs.addAll(Arrays.asList(Integer.MAX_VALUE, Integer.MIN_VALUE, 0, 1, -1));
         for (int i=0; i<100; i++) {
-            inputs.add(random.nextLong());
+            inputs.add(random.nextInt());
         }
-        for (long inputA: inputs) {
-            for (long inputB: inputs) {
+        for (int inputA: inputs) {
+            for (int inputB: inputs) {
                 assertEquals(doz(inputA, inputB), 
-                branchlessDoz(inputA, inputB), 
+                branchlessDOZ(inputA, inputB), 
                 ("ERROR: Input was " + inputA + " and " + inputB
-                + " and output was " + branchlessDoz(inputA, inputB)));
+                + " and output was " + branchlessDOZ(inputA, inputB)));
             }
         }
     }
 
     @Property
-    public void gtOneTest(@ForAll long a, @ForAll long b) {
-        if (a!=0&&b!=0&&a!=Long.MIN_VALUE&&b!=Long.MIN_VALUE) {;} else {
+    public void gtOneTest(@ForAll int a, @ForAll int b) {
+        if (a!=0&&b!=0&&a!=Integer.MIN_VALUE&&b!=Integer.MIN_VALUE) {;} else {
             return;
         }
         RationalBound x = new RationalBound(a, b);
@@ -287,8 +287,8 @@ public class RationalTest {
     }
 
 
-    private static long doz(long inputA, long inputB) {
-        long returned = inputA-inputB;
+    private static int doz(int inputA, int inputB) {
+        int returned = inputA-inputB;
         if (returned<0) {
             returned=0;
         }
