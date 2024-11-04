@@ -9,6 +9,7 @@ class RationalBound
 {
     private static final Logger log = LogManager.getLogger(RationalBound.class);
 
+    // CONSTS
     public static final RationalBound ZERO 
     = new RationalBound(0, 1, false);
     public static final RationalBound ONE 
@@ -24,6 +25,7 @@ class RationalBound
     public static final RationalBound MAX_NEGATIVE_VALUE 
     = new RationalBound(-1, Integer.MAX_VALUE, false);
 
+    // FIELDS
     private int numerator;
     private int denomenator;
     private boolean infinite;
@@ -117,7 +119,7 @@ class RationalBound
         log.debug("Inputs\n------\nthis: " + this + "\nthat: " + that + "\n r: " + r
         + "After Fit\n------\n" + "this: " + thi + "\nthat: " + tha);
 
-        return new RationalBound(
+        result = new RationalBound(
             thi.numerator * tha.numerator
             , thi.denomenator * tha.denomenator
             , (thi.infinite || tha.infinite)

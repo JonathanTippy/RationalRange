@@ -7,42 +7,6 @@ class util {
     
     private static final Logger log = LogManager.getLogger(RationalBound.class);
 
-
-    static int getBitsCeiling(
-        int thisNumerator
-        , int thisDenomenator
-        , int thatNumerator
-        , int thatDenomenator
-        ) {
-
-            int thisNumXB = (int)
-            branchlessDOZ(
-                bitLength(thisNumerator)
-                , (31-bitLength(thatNumerator))
-                );
-
-            int shorterNum = (int) branchlessMin(bitLength(thisNumerator), bitLength(thatNumerator));
-            int ceilNum = (int) branchlessMax(31, 31-shorterNum);
-
-            int shorterDen = (int) branchlessMin(bitLength(thisDenomenator), bitLength(thatDenomenator));
-            int ceilDen = (int) branchlessMax(31, 31-shorterDen);
-            return 31;
-    }
-
-
-    static int addBits(int a, int b) {
-        int ta = bitLength(a);
-        int tb = bitLength(b);
-        
-        if ((ta!=0)&&(tb!=0)) {;} else {
-            return 0;
-        }
-        if ((ta!=1)&&(tb!=1)) {;} else {
-            return (int) (ta * tb);
-        }
-        return (int) (ta + tb);
-    }
-
     static int cut(int input, int bitsToDrop, int roundDirection) {
         int r = roundDirection;
         return bySign(
@@ -50,8 +14,6 @@ class util {
             , input
             );
     }
-
-   
 
     static int fit(int input, int maxBits, int roundDirection) {
         return cut(
@@ -82,7 +44,6 @@ class util {
         int oc = inputB>>31; //obvious choice
         int d = inputB - inputA; //difference
         int c = d>>31; //choice
-        log.debug("inputA: " + inputA + "\ninputB: " + inputB + "\nobvious: " + o + "\nobchoice: " + oc + "\ndiff: " + d + "\nchoice: " + c);
         return 
         (~o&(
             (c&inputA)
@@ -99,7 +60,6 @@ class util {
         int oc = inputB>>31; //obvious choice
         int d = inputB - inputA; //difference
         int c = d>>31; //choice
-        log.debug("inputA: " + inputA + "\ninputB: " + inputB + "\nobvious: " + o + "\nobchoice: " + oc + "\ndiff: " + d + "\nchoice: " + c);
         return 
         (~o&(
             ((~c)&inputA)
