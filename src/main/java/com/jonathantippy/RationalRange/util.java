@@ -114,6 +114,10 @@ class util {
         return Integer.bitCount(branchlessHighestOneBit(input)<<1-1);
     }
 
+    static int bitLength(long input) {
+        return Long.bitCount(branchlessHighestOneBit(input)<<1-1);
+    }
+
     static int branchlessHighestOneBit(int input) {
         int tupni = Integer.reverse(input);
         return Integer.reverse(tupni&(-tupni));
@@ -121,6 +125,9 @@ class util {
 
     static int freeBits(int input) {
         return 31 - bitLength(input);
+    }
+    static int freeBits(long input) {
+        return 63 - bitLength(input);
     }
 
     static void validateRationalBound(int numerator, int denomenator, boolean infinite)

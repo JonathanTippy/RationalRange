@@ -1,5 +1,4 @@
 package com.jonathantippy.RationalRange;
-import static com.jonathantippy.RationalRange.util.addBits;
 import static com.jonathantippy.RationalRange.util.branchlessAbs;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,8 +29,6 @@ class RationalBound
     private int denomenator;
     private boolean infinite;
 
-    private int tnum; // mutables for testing answers
-    private int tden;
 
     // Constructors with both numerator and denomenator
     public RationalBound(int numerator, int denomenator, boolean infinite) 
@@ -63,6 +60,8 @@ class RationalBound
     // Adaptive constructors
     public RationalBound(String fraction) 
     throws ArithmeticException, IllegalArgumentException {
+        int tnum;
+        int tden;
         if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
             if (fraction.contains("/")) {
                 String[] terms = fraction.split("/");
@@ -107,23 +106,14 @@ class RationalBound
     }
 
     // Multiplication
-    public RationalBound multiply(RationalBound multiplier, int roundDirection) {
-        int r = roundDirection;
-        RationalBound that = multiplier;
+    public RationalBound multiply(RationalBound that, int roundDirection) {
         
-        int bitsCeiling = util.getBitsCeiling(this.numerator, this.denomenator, that.numerator, that.denomenator);
+        long expandedNumerator = (long) this.numerator * (long) that.numerator;
+        long expandedDenomenator = (long) this.denomenator * (long) that.denomenator;
 
-        RationalBound thi = this.fit(bitsCeiling, r);
-        RationalBound tha = that.fit(bitsCeiling, r);
         
-        log.debug("Inputs\n------\nthis: " + this + "\nthat: " + that + "\n r: " + r
-        + "After Fit\n------\n" + "this: " + thi + "\nthat: " + tha);
-
-        result = new RationalBound(
-            thi.numerator * tha.numerator
-            , thi.denomenator * tha.denomenator
-            , (thi.infinite || tha.infinite)
-            );
+        
+        return ONE;
     }
 
     // Division
@@ -202,7 +192,8 @@ class RationalBound
 */
 
     RationalBound fit(int maxBits, int roundDirection) {
-
+        int tnum;
+        int tden;
         // bits removed must be balanced or the franctoion will fall over
         tnum = this.numerator;
         tden = this.denomenator;
@@ -298,10 +289,4 @@ class RationalBound
 
     // FuzzyFractions stuff
 
-    public int[] bitsAfterMultiply(RationalBound that) {
-        return new int[]{
-            addBits(this.numerator, that.numerator)
-            , addBits(this.denomenator, that.denomenator)
-            };
-    }
 }

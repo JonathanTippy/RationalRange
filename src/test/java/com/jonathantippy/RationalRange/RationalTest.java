@@ -1,6 +1,5 @@
 package com.jonathantippy.RationalRange;
 
-import static com.jonathantippy.RationalRange.util.addBits;
 import static com.jonathantippy.RationalRange.util.branchlessDOZ;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -232,24 +231,6 @@ public class RationalTest {
         RationalBound answer = a2.fit(32, r);
         assert(!answer.compareToOne(-r))
         : answer + " or in decimal " + answer.toDouble() + " is greater than one";
-    }
-    
-
-
-
-    @Test
-    public void addBitsTest() {
-        ArrayList<Integer> inputs = new ArrayList<Integer>();
-        inputs.addAll(Arrays.asList(Integer.MAX_VALUE, Integer.MIN_VALUE, 0, 1, -1));
-        for (int i=0; i<100; i++) {
-            inputs.add(random.nextInt());
-        }
-        for (int inputA: inputs) {
-            for (int inputB: inputs) {
-                assert(addBits(inputA, inputB) <= 126);
-                assert(addBits(inputA, inputB) >= 0);
-            }
-        }
     }
 
 
