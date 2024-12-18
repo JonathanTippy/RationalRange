@@ -110,7 +110,7 @@ class RationalBound
         
         long expandedNumerator = (long) this.numerator * (long) that.numerator;
         long expandedDenomenator = (long) this.denomenator * (long) that.denomenator;
-
+        
         
         
         return ONE;
@@ -211,6 +211,11 @@ class RationalBound
             , tden
             , inf
             );
+    }
+
+    RationalBound refit(long num, long den, int r) {
+        int largerBits = (int) util.branchlessMax()
+
     }
 
     protected int handleZero(int a) { 
