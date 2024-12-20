@@ -23,6 +23,14 @@ class util {
             );
     }
 
+    static long cut(long input, int bitsToDrop, int roundDirection) {
+        int r = roundDirection;
+        return bySign(
+            bySign(((bySign((branchlessAbs(input)), r)) >> bitsToDrop), r)
+            , input
+            );
+    }
+
     static int branchlessDOZ(int inputA, int inputB) {
         int difference = inputA - inputB; 
         return (difference)&(((difference & Integer.MIN_VALUE) >>> 31)-1);
@@ -36,6 +44,11 @@ class util {
     static int branchlessAbs(int input) {
         int signMask = input >> 31;
         int signBit = -signMask;
+        return (input ^ signMask) + signBit;
+    }
+    static long branchlessAbs(long input) {
+        long signMask = input >> 63;
+        long signBit = -signMask;
         return (input ^ signMask) + signBit;
     }
 
@@ -104,6 +117,9 @@ class util {
     static int bySign(int input, int sign) { // doesn't handle 0 sign
         return (input^(sign>>31))+(sign>>>31);
     }
+    static long bySign(long input, long sign) { // doesn't handle 0 sign
+        return (input^(sign>>63))+(sign>>>63);
+    }
 
     static int bySignZ(int input, int sign) { // does handle 0 sign
         int zero = (sign==0) ? 0 : -1;
@@ -122,6 +138,11 @@ class util {
         int tupni = Integer.reverse(input);
         return Integer.reverse(tupni&(-tupni));
     }
+    static long branchlessHighestOneBit(long input) {
+        long tupni = Long.reverse(input);
+        return Long.reverse(tupni&(-tupni));
+    }
+
 
     static int freeBits(int input) {
         return 31 - bitLength(input);

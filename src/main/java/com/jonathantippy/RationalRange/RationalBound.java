@@ -111,9 +111,23 @@ class RationalBound
         long expandedNumerator = (long) this.numerator * (long) that.numerator;
         long expandedDenomenator = (long) this.denomenator * (long) that.denomenator;
         
+        int maxBitLength = Math.max(
+            util.bitLength(expandedNumerator)
+            , util.bitLength(expandedDenomenator)
+        );
+
+        int bitsToDrop = util.branchlessDOZ(maxBitLength, 31);
+
+        int newNumerator = (int) util.cut(expandedNumerator, bitsToDrop, roundDirection);
+        int newDenomenator = (int) util.cut(expandedDenomenator, bitsToDrop, -roundDirection);
         
-        
-        return ONE;
+        boolean becameInfinite = (newDenomenator == 0);
+
+        return new RationalBound(
+            newNumerator
+            , newDenomenator
+            , (this.infinite || that.infinite || becameInfinite)
+        );
     }
 
     // Division
@@ -213,10 +227,6 @@ class RationalBound
             );
     }
 
-    RationalBound refit(long num, long den, int r) {
-        int largerBits = (int) util.branchlessMax()
-
-    }
 
     protected int handleZero(int a) { 
         if (a!=0) {;} else {
