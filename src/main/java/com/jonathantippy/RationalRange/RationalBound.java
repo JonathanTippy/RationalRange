@@ -49,10 +49,10 @@ class RationalBound
     }
 
     // Constructors with integers
-    public RationalBound(int numerator) {
+    public RationalBound(int units) {
 
         util.validateRationalBound(numerator, 1, false);
-        this.numerator = numerator; 
+        this.numerator = units; 
         this.denomenator = 1;
         this.infinite = false;
     }
@@ -122,37 +122,49 @@ class RationalBound
     }
 
     // Division
-    public RationalBound divide(RationalBound divisor) {
-        return new RationalBound(
-            this.numerator * divisor.denomenator
-            , this.denomenator * divisor.numerator
-            );
+    public RationalBound divide(RationalBound divisor, int roundDirection) {
+        return this.multiply(reciprocate(divisor), roundDirection);
     }
 
     // Addition
-    public RationalBound add(RationalBound addend) {
-        return new RationalBound(
-            (this.numerator * addend.denomenator)
-            + (addend.numerator * this.denomenator)
-            , this.denomenator * addend.denomenator
+    public RationalBound add(RationalBound addend, int roundDirection) {
+
+        long fatNumerator = 
+            ((long) this.numerator * (long) addend.denomenator)
+            + ((long) addend.numerator * (long) this.denomenator);
+        long fatDenomenator = (long) this.denomenator * (long) addend.denomenator
+
+        boolean isInfinite = (this.infinite || that.infinite);
+
+        return cutConstruct(
+            fatNumerator
+            , fatDenomenator
+            , roundDirection
+            , isInfinite
         );
     }
 
     // Negation
     public RationalBound negate(RationalBound input) {
         return new RationalBound(
-            - this.numerator
-            , this.denomenator
+            - input.numerator
+            , input.denomenator
+            , input.infinite
         );
     }
 
-    // Subtraction
-    public RationalBound subtract(RationalBound minuend) {
+    // Reciprocal
+    public RationalBount reciprocate(RationalBound input) {
         return new RationalBound(
-            (this.numerator * minuend.denomenator)
-            - (minuend.numerator * this.denomenator)
-            , this.denomenator * minuend.denomenator
-        );
+            input.denomenator
+            , input.numerator
+            , (!input.infinite)
+        )
+    }
+
+    // Subtraction
+    public RationalBound subtract(RationalBound minuend, int roundDirection) {
+        return this.add(negate(minuend), roundDirection);
     }
 
     // Absoulte Value
@@ -302,7 +314,7 @@ class RationalBound
     protected static RationalBound handleMinValue(RationalBound input) {
         int maybeNumerator = input.numerator;
         int maybeDenomenator = input.denomenator;
-        assert maybeDenomenator != 0 : "CHAOS: / by zero";
+        assert maybeDenomenator != 0 : "Algebra error: / by zero";
         if (!(maybeNumerator==Integer.MIN_VALUE)) {;} else {
             maybeNumerator = -Integer.MAX_VALUE;
         }
