@@ -147,6 +147,24 @@ public class RationalTest {
         return Arbitraries.integers().filter(v -> v == 1 || v == -1);
     }
 
+    @Test
+    public void multTest() {
+        RationalBound a = new RationalBound(5);
+        RationalBound b = new RationalBound(6);
+        RationalBound answer = a.multiply(b, 1);
+        String s = answer.toString();
+        assertEquals("30/1", s);
+    }
+
+    @Test
+    public void multTest2() {
+        RationalBound a = new RationalBound(-5);
+        RationalBound b = new RationalBound(6);
+        RationalBound answer = a.multiply(b, 1);
+        String s = answer.toString();
+        assertEquals("-30/1", s);
+    }
+
 
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////

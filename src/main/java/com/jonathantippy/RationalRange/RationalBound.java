@@ -108,25 +108,16 @@ class RationalBound
     // Multiplication
     public RationalBound multiply(RationalBound that, int roundDirection) {
         
-        long expandedNumerator = (long) this.numerator * (long) that.numerator;
-        long expandedDenomenator = (long) this.denomenator * (long) that.denomenator;
+        long fatNumerator = (long) this.numerator * (long) that.numerator;
+        long fatDenomenator = (long) this.denomenator * (long) that.denomenator;
         
-        int maxBitLength = Math.max(
-            util.bitLength(expandedNumerator)
-            , util.bitLength(expandedDenomenator)
-        );
+        boolean isInfinite = (this.infinite || that.infinite);
 
-        int bitsToDrop = util.branchlessDOZ(maxBitLength, 31);
-
-        int newNumerator = (int) util.cut(expandedNumerator, bitsToDrop, roundDirection);
-        int newDenomenator = (int) util.cut(expandedDenomenator, bitsToDrop, -roundDirection);
-        
-        boolean becameInfinite = (newDenomenator == 0);
-
-        return new RationalBound(
-            newNumerator
-            , newDenomenator
-            , (this.infinite || that.infinite || becameInfinite)
+        return cutConstruct(
+            fatNumerator
+            , fatDenomenator
+            , roundDirection
+            , isInfinite
         );
     }
 
@@ -186,6 +177,25 @@ class RationalBound
             , Long.numberOfTrailingZeros(branchlessAbs(d))
         );
         return new RationalBound(n>>t, d>>t);
+    }
+
+    private RationalBound cutConstruct(long fatNum, long fatDen, int r, boolean infinite) {
+
+        int maxBitLength = Math.max(
+            util.bitLength(fatNum)
+            , util.bitLength(fatDen)
+        );
+
+        int bitsToDrop = util.branchlessDOZ(maxBitLength, 31);
+
+        int newNumerator = (int) util.cut(fatNum, bitsToDrop, r);
+        int newDenomenator = (int) util.cut(fatDen, bitsToDrop, -r);
+
+        return new RationalBound(
+            newNumerator
+            , newDenomenator
+            , (infinite || (newDenomenator == 0))
+        );
     }
 
     // crush with bias
