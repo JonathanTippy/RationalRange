@@ -48,4 +48,62 @@ class RationalRange
         }
     }
 
+    // Accessors
+    public RationalBound getUpperBound() {
+        return this.upperBound;
+    }
+    public RationalBound getLowerBound() {
+        return this.lowerBound;
+    }
+
+    // Display
+    @Override
+    public String toString() {
+        StringBuilder numberConstruct = new StringBuilder();
+        numberConstruct.append(upperBound.toString());
+        numberConstruct.append(" to ");
+        numberConstruct.append(lowerBound.toString());
+        return numberConstruct.toString();
+    }
+
+    // UTILS
+    public boolean isExact() {
+        return lowerBound.equals(upperBound);
+    }
+
+    // Multiply
+
+    public RationalRange multiply(RationalRange that) {
+        return new RationalRange(
+            this.upperBound.multiply(that.upperBound, 1)
+            , this.lowerBound.multiply(that.lowerBound, -1)
+        )
+    }
+
+    // Divide
+
+    public RationalRange divide(RationalRange that) {
+        return new RationalRange(
+            this.upperBound.divide(that.upperBound, 1)
+            , this.lowerBound.divide(that.lowerBound, -1)
+        )
+    }
+
+    // Add
+
+    public RationalRange add(RationalRange that) {
+        return new RationalRange(
+            this.upperBound.add(that.upperBound, 1)
+            , this.lowerBound.add(that.lowerBound, -1)
+        )
+    }
+
+    // Subtract
+
+    public RationalRange subtract(RationalRange that) {
+        return new RationalRange(
+            this.upperBound.subtract(that.upperBound, 1)
+            , this.lowerBound.subtract(that.lowerBound, -1)
+        )
+    }
 }
