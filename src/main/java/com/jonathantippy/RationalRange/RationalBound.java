@@ -29,32 +29,44 @@ class RationalBound
     private int denomenator;
     private boolean infinite;
     private boolean infinitesimal;
+    private boolean infSign;
 
     // Constructors with both numerator and denomenator
-    public RationalBound(int numerator, int denomenator, boolean infinite) 
-    throws ArithmeticException {
+    public RationalBound(
+        int numerator
+        , int denomenator
+        , boolean infinite
+        , boolean infinitesimal
+        , boolean infSign
+        ) throws ArithmeticException {
 
-        util.validateRationalBound(numerator, denomenator, infinite);
         this.numerator = numerator;
         this.denomenator = denomenator;
         this.infinite = infinite;
+        this.infinitesimal = infinitesimal;
+        this.infSign = infSign;
+        validate();
     }
     public RationalBound(int numerator, int denomenator) 
     throws ArithmeticException {
 
-        util.validateRationalBound(numerator, denomenator, false);
         this.numerator = numerator;
         this.denomenator = denomenator;
         this.infinite = false;
+        this.infinitesimal = false;
+        this.infSign = false;
+        validate();
     }
 
     // Constructors with integers
     public RationalBound(int units) {
 
-        util.validateRationalBound(units, 1, false);
         this.numerator = units; 
         this.denomenator = 1;
         this.infinite = false;
+        this.infinitesimal = false;
+        this.infSign = false;
+        validate();
     }
 
     // Adaptive constructors
@@ -71,12 +83,28 @@ class RationalBound
                 tnum = Integer.parseInt(fraction);
                 tden = 1;
             }
-            util.validateRationalBound(tnum, tden, false);
             this.numerator = tnum;
             this.denomenator = tden;
             this.infinite = false;
+            this.infinitesimal = false;
+            this.infSign = false;
         } else {
             throw new IllegalArgumentException("Not a fraction");
+        }
+        validate();
+    }
+
+    // Validate
+
+    public void validate() throws ArithmeticException {
+        if (!(infinite && infinitesimal)) {;} else {
+            throw new ArithmeticException("bounds cannot be both infinitesimal and infinite");
+        }
+        if (numerator!=Integer.MIN_VALUE&&denomenator!=Integer.MIN_VALUE) {;} else {
+            throw new ArithmeticException("int min value detected");
+        }
+        if (denomenator!=0||infinite) {;} else {
+            throw new ArithmeticException("/ by zero");
         }
     }
 
@@ -98,6 +126,12 @@ class RationalBound
     // Display
     @Override
     public String toString() {
+        if (!infinite) {;} else {
+
+        }
+        if (!infinitesimal) {;} else {
+
+        }
         StringBuilder numberConstruct = new StringBuilder();
         numberConstruct.append(numerator);
         numberConstruct.append('/');
@@ -112,12 +146,18 @@ class RationalBound
         long fatDenomenator = (long) this.denomenator * (long) that.denomenator;
         
         boolean isInfinite = (this.infinite || that.infinite);
+        boolean isInfinitesimal = (this.infinitesimal || that.infinitesimal);
+        if (!(isInfinite && isInfinitesimal)) {;} else {
+            if (roundDirection)
+        }
 
         return cutConstruct(
             fatNumerator
             , fatDenomenator
             , roundDirection
             , isInfinite
+            , isInfinitesimal
+            , newInfSign
         );
     }
 
@@ -192,7 +232,14 @@ class RationalBound
         return new RationalBound(n>>t, d>>t);
     }
 
-    private RationalBound cutConstruct(long fatNum, long fatDen, int r, boolean infinite) {
+    private RationalBound cutConstruct(
+        long fatNum
+        , long fatDen
+        , int r
+        , boolean infinite
+        , boolean infinitesimal
+        , boolean infSign
+        ) {
 
         int maxBitLength = Math.max(
             util.bitLength(fatNum)
@@ -208,6 +255,8 @@ class RationalBound
             newNumerator
             , newDenomenator
             , (infinite || (newDenomenator == 0))
+            , infinitesimal
+            , infSign
         );
     }
 

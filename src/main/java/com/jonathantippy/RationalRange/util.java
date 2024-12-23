@@ -151,8 +151,11 @@ class util {
         return 63 - bitLength(input);
     }
 
-    static void validateRationalBound(int numerator, int denomenator, boolean infinite)
+    static void validateRationalBound(int numerator, int denomenator, boolean infinite, boolean infinitesimal)
     throws ArithmeticException {
+        if (!(infinite && infinitesimal)) {;} else {
+            throw new ArithmeticException("bounds cannot be both infinitesimal and infinite");
+        }
         if (numerator!=Integer.MIN_VALUE&&denomenator!=Integer.MIN_VALUE) {;} else {
             throw new ArithmeticException("int min value detected");
         }
