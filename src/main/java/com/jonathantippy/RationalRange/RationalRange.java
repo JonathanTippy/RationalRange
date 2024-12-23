@@ -82,10 +82,13 @@ class RationalRange
 
     // Divide
 
+    // largest upper bound is big / small
+    // and smallest lower bound is small / big
+
     public RationalRange divide(RationalRange that) {
         return new RationalRange(
-            this.upperBound.divide(that.upperBound, 1)
-            , this.lowerBound.divide(that.lowerBound, -1)
+            this.upperBound.divide(that.lowerBound, 1)
+            , this.lowerBound.divide(that.upperBound, -1)
         )
     }
 
@@ -100,10 +103,12 @@ class RationalRange
 
     // Subtract
 
+    // largest upper bound is big - small
+    // and smallest lower bound is small - big
     public RationalRange subtract(RationalRange that) {
         return new RationalRange(
-            this.upperBound.subtract(that.upperBound, 1)
-            , this.lowerBound.subtract(that.lowerBound, -1)
+            this.upperBound.subtract(that.lowerBound, 1)
+            , this.lowerBound.subtract(that.upperBound, -1)
         )
     }
 }

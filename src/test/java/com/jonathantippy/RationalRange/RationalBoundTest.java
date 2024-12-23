@@ -15,7 +15,7 @@ import com.jonathantippy.RationalRange.util;
 import net.jqwik.api.*;
 
 
-public class RationalTest {
+public class RationalBoundTest {
 
     static Random random = new Random();
 
