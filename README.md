@@ -11,6 +11,5 @@ Unlike with floats, this number system can't represent any number larger than it
 - If an integer can be represented, it can be perfectly divided by any other integer that can be represented. 
 - If an operation yields a value whose upper bound and lower bound are the same, the result is exactly correct. 
 
-Because of the distribution of precision, this number system is ideal for, for example, in a graphing calculator, cases of scrolling for up to 30 seconds either in or out from zero. 
 It should also be able to handle the dreaded 0.1 + 0.2 very easily 
 (no decimals in the from string constructor yet though)
