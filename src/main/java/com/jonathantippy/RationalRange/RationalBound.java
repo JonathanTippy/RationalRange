@@ -28,6 +28,7 @@ class RationalBound
     private int numerator;
     private int denomenator;
     private boolean infinite;
+    private boolean infinitesimal;
 
     // Constructors with both numerator and denomenator
     public RationalBound(int numerator, int denomenator, boolean infinite) 
