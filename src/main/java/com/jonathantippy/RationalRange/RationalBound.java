@@ -29,7 +29,6 @@ class RationalBound
     private int denomenator;
     private boolean infinite;
 
-
     // Constructors with both numerator and denomenator
     public RationalBound(int numerator, int denomenator, boolean infinite) 
     throws ArithmeticException {
@@ -51,7 +50,7 @@ class RationalBound
     // Constructors with integers
     public RationalBound(int units) {
 
-        util.validateRationalBound(numerator, 1, false);
+        util.validateRationalBound(units, 1, false);
         this.numerator = units; 
         this.denomenator = 1;
         this.infinite = false;

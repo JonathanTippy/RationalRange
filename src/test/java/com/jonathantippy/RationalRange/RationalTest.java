@@ -142,6 +142,19 @@ public class RationalTest {
         : answer + " or in decimal " + answer.toDouble() + " is not greater than one";
     }
 
+    @Property
+    void multiplyDivide(@ForAll int a, @ForAll int b, @ForAll("one") int r) {
+        if (a!=0&&b!=0&&a!=Integer.MIN_VALUE&&b!=Integer.MIN_VALUE) {;} else {
+            return;
+        }
+
+        RationalBound factorOne = new RationalBound(a, a);
+        RationalBound factorTwo = new RationalBound(b, b);
+        RationalBound answer = factorOne.multiply(factorTwo, r);
+        assert(!answer.compareToOne(-r)) // for "or equals"
+        : answer + " or in decimal " + answer.toDouble() + " is not greater than one";
+    }
+
     @Provide
     Arbitrary<Integer> one() {
         return Arbitraries.integers().filter(v -> v == 1 || v == -1);
