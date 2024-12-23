@@ -106,7 +106,7 @@ public class RationalTest {
     public void divisionTest() {
         RationalBound dividend = new RationalBound(1);
         RationalBound divisor = new RationalBound(3);
-        RationalBound answer = dividend.divide(divisor);
+        RationalBound answer = dividend.divide(divisor, 1);
         String s = answer.toString();
         assertEquals("1/3", s);
     }
@@ -115,7 +115,7 @@ public class RationalTest {
     public void hardDivisionTest() {
         RationalBound dividend = new RationalBound("5/6");
         RationalBound divisor = new RationalBound("2/3");
-        RationalBound answer = dividend.divide(divisor);
+        RationalBound answer = dividend.divide(divisor, 1);
         String s = answer.toString();
         assertEquals("15/12", s);
     }
@@ -178,7 +178,7 @@ public class RationalTest {
     public void additionTest() {
         RationalBound a = new RationalBound(5);
         RationalBound b = new RationalBound(6);
-        RationalBound answer = a.add(b);
+        RationalBound answer = a.add(b, 1);
         String s = answer.toString();
         assertEquals("11/1", s);
     }
@@ -187,7 +187,7 @@ public class RationalTest {
     public void subtractionTest() {
         RationalBound a = new RationalBound(5);
         RationalBound b = new RationalBound(6);
-        RationalBound answer = a.subtract(b);
+        RationalBound answer = a.subtract(b, 1);
         String s = answer.toString();
         assertEquals("-1/1", s);
     }

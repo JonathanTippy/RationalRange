@@ -132,9 +132,10 @@ class RationalBound
         long fatNumerator = 
             ((long) this.numerator * (long) addend.denomenator)
             + ((long) addend.numerator * (long) this.denomenator);
-        long fatDenomenator = (long) this.denomenator * (long) addend.denomenator
+        long fatDenomenator = 
+            (long) this.denomenator * (long) addend.denomenator;
 
-        boolean isInfinite = (this.infinite || that.infinite);
+        boolean isInfinite = (this.infinite || addend.infinite);
 
         return cutConstruct(
             fatNumerator
@@ -154,12 +155,12 @@ class RationalBound
     }
 
     // Reciprocal
-    public RationalBount reciprocate(RationalBound input) {
+    public RationalBound reciprocate(RationalBound input) {
         return new RationalBound(
             input.denomenator
             , input.numerator
             , (!input.infinite)
-        )
+        );
     }
 
     // Subtraction
