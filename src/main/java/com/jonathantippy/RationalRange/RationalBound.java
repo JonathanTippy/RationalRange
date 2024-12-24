@@ -27,24 +27,24 @@ class RationalBound
     // FIELDS
     private int numerator;
     private int denomenator;
-    private boolean infinite;
-    private boolean infinitesimal;
-    private boolean infSign;
+    private boolean unbounded;
+    private boolean unboundedPower;
+    private boolean unboundedFactor;
 
     // Constructors with both numerator and denomenator
     public RationalBound(
         int numerator
         , int denomenator
-        , boolean infinite
-        , boolean infinitesimal
-        , boolean infSign
+        , boolean unbounded
+        , boolean unboundedPower
+        , boolean unboundedFactor
         ) throws ArithmeticException {
 
         this.numerator = numerator;
         this.denomenator = denomenator;
-        this.infinite = infinite;
-        this.infinitesimal = infinitesimal;
-        this.infSign = infSign;
+        this.unbounded = unbounded;
+        this.unboundedPower = unboundedPower; // reciprocity
+        this.unboundedFactor = unboundedFactor; // sign
         validate();
     }
     public RationalBound(int numerator, int denomenator) 
@@ -52,9 +52,9 @@ class RationalBound
 
         this.numerator = numerator;
         this.denomenator = denomenator;
-        this.infinite = false;
-        this.infinitesimal = false;
-        this.infSign = false;
+        this.unbounded = false;
+        this.unboundedPower = true;
+        this.unboundedFactor = true;
         validate();
     }
 
@@ -63,9 +63,9 @@ class RationalBound
 
         this.numerator = units; 
         this.denomenator = 1;
-        this.infinite = false;
-        this.infinitesimal = false;
-        this.infSign = false;
+        this.unbounded = false;
+        this.unboundedPower = true;
+        this.unboundedFactor = true;
         validate();
     }
 
@@ -85,9 +85,9 @@ class RationalBound
             }
             this.numerator = tnum;
             this.denomenator = tden;
-            this.infinite = false;
-            this.infinitesimal = false;
-            this.infSign = false;
+            this.unbounded = false;
+            this.unboundedPower = true;
+            this.unboundedFactor = true;
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
@@ -97,13 +97,13 @@ class RationalBound
     // Validate
 
     public void validate() throws ArithmeticException {
-        if (!(infinite && infinitesimal)) {;} else {
-            throw new ArithmeticException("bounds cannot be both infinitesimal and infinite");
+        if (!(unbounded && unboundedPower)) {;} else {
+            throw new ArithmeticException("bounds cannot be both unboundedPower and unbounded");
         }
         if (numerator!=Integer.MIN_VALUE&&denomenator!=Integer.MIN_VALUE) {;} else {
             throw new ArithmeticException("int min value detected");
         }
-        if (denomenator!=0||infinite) {;} else {
+        if (denomenator!=0||unbounded) {;} else {
             throw new ArithmeticException("/ by zero");
         }
     }
@@ -126,10 +126,10 @@ class RationalBound
     // Display
     @Override
     public String toString() {
-        if (!infinite) {;} else {
+        if (!unbounded) {;} else {
 
         }
-        if (!infinitesimal) {;} else {
+        if (!unboundedPower) {;} else {
 
         }
         StringBuilder numberConstruct = new StringBuilder();
@@ -145,8 +145,8 @@ class RationalBound
         long fatNumerator = (long) this.numerator * (long) that.numerator;
         long fatDenomenator = (long) this.denomenator * (long) that.denomenator;
         
-        boolean isInfinite = (this.infinite || that.infinite);
-        boolean isInfinitesimal = (this.infinitesimal || that.infinitesimal);
+        boolean isInfinite = (this.unbounded || that.unbounded);
+        boolean isInfinitesimal = (this.unboundedPower || that.unboundedPower);
         if (!(isInfinite && isInfinitesimal)) {;} else {
             if (roundDirection)
         }
@@ -175,7 +175,7 @@ class RationalBound
         long fatDenomenator = 
             (long) this.denomenator * (long) addend.denomenator;
 
-        boolean isInfinite = (this.infinite || addend.infinite);
+        boolean isInfinite = (this.unbounded || addend.unbounded);
 
         return cutConstruct(
             fatNumerator
@@ -190,7 +190,7 @@ class RationalBound
         return new RationalBound(
             - input.numerator
             , input.denomenator
-            , input.infinite
+            , input.unbounded
         );
     }
 
@@ -199,7 +199,7 @@ class RationalBound
         return new RationalBound(
             input.denomenator
             , input.numerator
-            , (!input.infinite)
+            , (!input.unbounded)
         );
     }
 
@@ -236,9 +236,9 @@ class RationalBound
         long fatNum
         , long fatDen
         , int r
-        , boolean infinite
-        , boolean infinitesimal
-        , boolean infSign
+        , boolean unbounded
+        , boolean unboundedPower
+        , boolean unboundedFactor
         ) {
 
         int maxBitLength = Math.max(
@@ -254,9 +254,9 @@ class RationalBound
         return new RationalBound(
             newNumerator
             , newDenomenator
-            , (infinite || (newDenomenator == 0))
-            , infinitesimal
-            , infSign
+            , (unbounded || (newDenomenator == 0))
+            , unboundedPower
+            , unboundedFactor
         );
     }
 
