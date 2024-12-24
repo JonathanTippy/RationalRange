@@ -27,24 +27,18 @@ class RationalBound
     // FIELDS
     private int numerator;
     private int denomenator;
-    private boolean unbounded;
-    private boolean unboundedPower;
-    private boolean unboundedFactor;
+    private boolean excluded;
 
     // Constructors with both numerator and denomenator
     public RationalBound(
         int numerator
         , int denomenator
-        , boolean unbounded
-        , boolean unboundedPower
-        , boolean unboundedFactor
+        , boolean excluded
         ) throws ArithmeticException {
 
         this.numerator = numerator;
         this.denomenator = denomenator;
-        this.unbounded = unbounded;
-        this.unboundedPower = unboundedPower; // reciprocity
-        this.unboundedFactor = unboundedFactor; // sign
+        this.excluded = excluded;
         validate();
     }
     public RationalBound(int numerator, int denomenator) 
@@ -52,9 +46,7 @@ class RationalBound
 
         this.numerator = numerator;
         this.denomenator = denomenator;
-        this.unbounded = false;
-        this.unboundedPower = true;
-        this.unboundedFactor = true;
+        this.excluded = false;
         validate();
     }
 
@@ -63,9 +55,7 @@ class RationalBound
 
         this.numerator = units; 
         this.denomenator = 1;
-        this.unbounded = false;
-        this.unboundedPower = true;
-        this.unboundedFactor = true;
+        this.excluded = false;
         validate();
     }
 
@@ -85,9 +75,7 @@ class RationalBound
             }
             this.numerator = tnum;
             this.denomenator = tden;
-            this.unbounded = false;
-            this.unboundedPower = true;
-            this.unboundedFactor = true;
+            this.excluded = false;
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
@@ -126,13 +114,11 @@ class RationalBound
     // Display
     @Override
     public String toString() {
-        if (!unbounded) {;} else {
 
-        }
-        if (!unboundedPower) {;} else {
-
-        }
         StringBuilder numberConstruct = new StringBuilder();
+        if (!excluded) {;} else {
+            numberConstruct.append("excluded ");
+        }
         numberConstruct.append(numerator);
         numberConstruct.append('/');
         numberConstruct.append(denomenator);
@@ -145,19 +131,13 @@ class RationalBound
         long fatNumerator = (long) this.numerator * (long) that.numerator;
         long fatDenomenator = (long) this.denomenator * (long) that.denomenator;
         
-        boolean isInfinite = (this.unbounded || that.unbounded);
-        boolean isInfinitesimal = (this.unboundedPower || that.unboundedPower);
-        if (!(isInfinite && isInfinitesimal)) {;} else {
-            if (roundDirection)
-        }
+        boolean isExcluded = (this.excluded || that.excluded);
 
         return cutConstruct(
             fatNumerator
             , fatDenomenator
             , roundDirection
-            , isInfinite
-            , isInfinitesimal
-            , newInfSign
+            , isExcluded
         );
     }
 
@@ -175,13 +155,13 @@ class RationalBound
         long fatDenomenator = 
             (long) this.denomenator * (long) addend.denomenator;
 
-        boolean isInfinite = (this.unbounded || addend.unbounded);
+        boolean isExcluded = (this.excluded || addend.excluded);
 
         return cutConstruct(
             fatNumerator
             , fatDenomenator
             , roundDirection
-            , isInfinite
+            , isExcluded
         );
     }
 
@@ -190,7 +170,7 @@ class RationalBound
         return new RationalBound(
             - input.numerator
             , input.denomenator
-            , input.unbounded
+            , input.excluded
         );
     }
 
@@ -199,7 +179,7 @@ class RationalBound
         return new RationalBound(
             input.denomenator
             , input.numerator
-            , (!input.unbounded)
+            , input.excluded
         );
     }
 
@@ -236,9 +216,7 @@ class RationalBound
         long fatNum
         , long fatDen
         , int r
-        , boolean unbounded
-        , boolean unboundedPower
-        , boolean unboundedFactor
+        , boolean excluded
         ) {
 
         int maxBitLength = Math.max(
@@ -251,63 +229,14 @@ class RationalBound
         int newNumerator = (int) util.cut(fatNum, bitsToDrop, r);
         int newDenomenator = (int) util.cut(fatDen, bitsToDrop, -r);
 
+        boolean squashed = (fatDen!=0&&newDenomenator==0);
+
         return new RationalBound(
             newNumerator
             , newDenomenator
-            , (unbounded || (newDenomenator == 0))
-            , unboundedPower
-            , unboundedFactor
+            , (excluded || squashed)
         );
     }
-
-    // crush with bias
-
-    protected RationalBound cut(int bitsToDrop, int roundDirection) {
-        return new RationalBound(
-            util.cut(this.numerator, bitsToDrop, roundDirection)
-            , util.cut(this.denomenator, bitsToDrop, -roundDirection)
-            );
-    }
-/*
-    RationalBound fit(int maxBits, int roundDirection) {
-        return new RationalBound(
-            util.fit(this.numerator, maxBits, roundDirection)
-            , util.fit(this.denomenator, maxBits, -roundDirection)
-            ); 
-    }
-*/
-
-    RationalBound fit(int maxBits, int roundDirection) {
-        int tnum;
-        int tden;
-        // bits removed must be balanced or the franctoion will fall over
-        tnum = this.numerator;
-        tden = this.denomenator;
-
-        int largerBits = (int) util.branchlessMax(util.bitLength(tnum), util.bitLength(tden));
-        int bitsToRemove = (int) util.branchlessDOZ(largerBits, maxBits);
-
-        tnum = util.cut(this.numerator, bitsToRemove, roundDirection);
-        tden = util.cut(this.denomenator, bitsToRemove, -roundDirection);
-
-        boolean inf = (tden == 0);
-
-        return new RationalBound(
-            tnum
-            , tden
-            , inf
-            );
-    }
-
-
-    protected int handleZero(int a) { 
-        if (a!=0) {;} else {
-            return 1;
-        }
-        return a;
-    } // medium sized numbers get their denomenators crushed and hit 0 and lose a lot of data
-
-
 
     // UTILS
 
@@ -315,6 +244,7 @@ class RationalBound
         return new RationalBound(
             util.bySignZ(this.numerator, sign)
             , this.denomenator
+            , this.excluded
         );
     }
 
@@ -359,21 +289,4 @@ class RationalBound
     public boolean isOne() {
         return (numerator == denomenator);
     }
-
-
-    protected static RationalBound handleMinValue(RationalBound input) {
-        int maybeNumerator = input.numerator;
-        int maybeDenomenator = input.denomenator;
-        assert maybeDenomenator != 0 : "Algebra error: / by zero";
-        if (!(maybeNumerator==Integer.MIN_VALUE)) {;} else {
-            maybeNumerator = -Integer.MAX_VALUE;
-        }
-        if (!(maybeDenomenator==Integer.MIN_VALUE)) {;} else {
-            maybeDenomenator = -Integer.MAX_VALUE;
-        }
-        return new RationalBound(maybeNumerator, maybeDenomenator);
-    } // if min value is found it will result in an error huge
-
-    // FuzzyFractions stuff
-
 }

@@ -31,10 +31,24 @@ class RationalRange
     // Adaptive constructors
     public RationalRange(String fraction) 
     throws ArithmeticException, IllegalArgumentException {
-        RationalBound r = new RationalBound(fraction);
-
-        this.upperBound = r;
-        this.lowerBound = r;
+        int tnum;
+        int tden;
+        if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
+            if (fraction.contains("/")) {
+                String[] terms = fraction.split("/");
+                tnum = Integer.parseInt(terms[0]);
+                tden = Integer.parseInt(terms[1]);
+            } else {
+                tnum = Integer.parseInt(fraction);
+                tden = 1;
+            }
+            RationalBound r = new RationalBound(tnum, tden);
+            this.upperBound = r;
+            this.lowerBound = r;
+        } else {
+            throw new IllegalArgumentException("Not a fraction");
+        }
+        validate();
     }
 
     // Accessors
