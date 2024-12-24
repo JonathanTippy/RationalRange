@@ -251,18 +251,6 @@ public class RationalBoundTest {
     }
 
 
-    
-    @Property
-    void cutTest(@ForAll int a, @ForAll("one") int r) {
-        if (a!=0&&a!=Integer.MIN_VALUE) {;} else {
-            return;
-        }
-
-        RationalBound a2 = new RationalBound(a, a);
-        RationalBound answer = a2.fit(32, r);
-        assert(!answer.compareToOne(-r))
-        : answer + " or in decimal " + answer.toDouble() + " is greater than one";
-    }
 
 
     @Test

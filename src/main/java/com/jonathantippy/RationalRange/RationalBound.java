@@ -85,13 +85,11 @@ class RationalBound
     // Validate
 
     public void validate() throws ArithmeticException {
-        if (!(unbounded && unboundedPower)) {;} else {
-            throw new ArithmeticException("bounds cannot be both unboundedPower and unbounded");
-        }
+
         if (numerator!=Integer.MIN_VALUE&&denomenator!=Integer.MIN_VALUE) {;} else {
             throw new ArithmeticException("int min value detected");
         }
-        if (denomenator!=0||unbounded) {;} else {
+        if (denomenator!=0||excluded) {;} else {
             throw new ArithmeticException("/ by zero");
         }
     }

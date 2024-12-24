@@ -1,5 +1,10 @@
 package com.jonathantippy.RationalRange;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.jonathantippy.RationalRange.RationalBound;
+
 class RationalRange
 {
 
@@ -8,6 +13,12 @@ class RationalRange
     //FIELDS
     private RationalBound upperBound;
     private RationalBound lowerBound;
+
+    // Constructor with both bounds 
+    private RationalRange(RationalBound upperBound, RationalBound lowerBound) {
+        this.upperBound = upperBound;
+        this.lowerBound = lowerBound;
+    }
 
     // Constructors with both numerator and denomenator
     public RationalRange(int numerator, int denomenator) 
@@ -48,7 +59,6 @@ class RationalRange
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
-        validate();
     }
 
     // Accessors
@@ -80,7 +90,7 @@ class RationalRange
         return new RationalRange(
             this.upperBound.multiply(that.upperBound, 1)
             , this.lowerBound.multiply(that.lowerBound, -1)
-        )
+        );
     }
 
     // Divide
@@ -92,7 +102,7 @@ class RationalRange
         return new RationalRange(
             this.upperBound.divide(that.lowerBound, 1)
             , this.lowerBound.divide(that.upperBound, -1)
-        )
+        );
     }
 
     // Add
@@ -101,7 +111,7 @@ class RationalRange
         return new RationalRange(
             this.upperBound.add(that.upperBound, 1)
             , this.lowerBound.add(that.lowerBound, -1)
-        )
+        );
     }
 
     // Subtract
@@ -112,6 +122,6 @@ class RationalRange
         return new RationalRange(
             this.upperBound.subtract(that.lowerBound, 1)
             , this.lowerBound.subtract(that.upperBound, -1)
-        )
+        );
     }
 }
