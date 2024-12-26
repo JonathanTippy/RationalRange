@@ -14,7 +14,7 @@ class RationalRange
     private RationalBound upperBound;
     private RationalBound lowerBound;
 
-    // Constructor with both bounds 
+    // Constructor with both bounds (unsafe)
     private RationalRange(RationalBound upperBound, RationalBound lowerBound) {
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;

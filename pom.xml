@@ -5,7 +5,7 @@
     <!-- Project Deets -->
     <groupId>com.jonathantippy.RationalRange</groupId>
     <artifactId>rational-range</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>Rational Range</name>
     <description>Fuzzy Fractions!</description>
 
