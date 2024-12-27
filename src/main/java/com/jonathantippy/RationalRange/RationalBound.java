@@ -39,7 +39,7 @@ class RationalBound
         this.numerator = numerator;
         this.denomenator = denomenator;
         this.excluded = excluded;
-        validate();
+        validate(this);
     }
     public RationalBound(int numerator, int denomenator) 
     throws ArithmeticException {
@@ -47,7 +47,7 @@ class RationalBound
         this.numerator = numerator;
         this.denomenator = denomenator;
         this.excluded = false;
-        validate();
+        validate(this);
     }
 
     // Constructors with integers
@@ -56,7 +56,7 @@ class RationalBound
         this.numerator = units; 
         this.denomenator = 1;
         this.excluded = false;
-        validate();
+        validate(this);
     }
 
     // Adaptive constructors
@@ -79,25 +79,25 @@ class RationalBound
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
-        validate();
+        validate(this);
     }
 
     // Validate
 
-    public void validate() throws ArithmeticException {
+    public static final void validate(RationalBound input) throws ArithmeticException {
 
-        if (numerator!=Integer.MIN_VALUE&&denomenator!=Integer.MIN_VALUE) {;} else {
+        if (input.numerator!=Integer.MIN_VALUE&&input.denomenator!=Integer.MIN_VALUE) {;} else {
             throw new ArithmeticException("int min value detected");
         }
-        if (denomenator!=0||excluded) {;} else {
+        if (input.denomenator!=0||input.excluded) {;} else {
             throw new ArithmeticException("/ by zero");
         }
     }
 
     // Conversions
 
-    public double toDouble() {
-        return (double) (((double) numerator) / ((double) denomenator));
+    public static final double toDouble(RationalBound input) {
+        return (double) (((double) input.numerator) / ((double) input.denomenator));
     }
 
 
@@ -124,12 +124,12 @@ class RationalBound
     }
 
     // Multiplication
-    public RationalBound multiply(RationalBound that, int roundDirection) {
+    public static final RationalBound multiply(RationalBound fac1 RationalBound fac2, int roundDirection) {
         
-        long fatNumerator = (long) this.numerator * (long) that.numerator;
-        long fatDenomenator = (long) this.denomenator * (long) that.denomenator;
+        long fatNumerator = (long) fac1.numerator * (long) fac2.numerator;
+        long fatDenomenator = (long) fac1.denomenator * (long) fac2.denomenator;
         
-        boolean isExcluded = (this.excluded || that.excluded);
+        boolean isExcluded = (fac1.excluded || fac2.excluded);
 
         return cutConstruct(
             fatNumerator
@@ -140,20 +140,20 @@ class RationalBound
     }
 
     // Division
-    public RationalBound divide(RationalBound divisor, int roundDirection) {
-        return this.multiply(divisor.reciprocate(), roundDirection);
+    public static final RationalBound divide(RationalBound div1 RationalBound div2, int roundDirection) {
+        return multiply(div1, reciprocate(div2), roundDirection);
     }
 
     // Addition
-    public RationalBound add(RationalBound addend, int roundDirection) {
+    public static final RationalBound add(RationalBound add1 RationalBound add2, int roundDirection) {
 
         long fatNumerator = 
-            ((long) this.numerator * (long) addend.denomenator)
-            + ((long) addend.numerator * (long) this.denomenator);
+            ((long) add1.numerator * (long) add2.denomenator)
+            + ((long) add2.numerator * (long) add1.denomenator);
         long fatDenomenator = 
-            (long) this.denomenator * (long) addend.denomenator;
+            (long) add1.denomenator * (long) add2.denomenator;
 
-        boolean isExcluded = (this.excluded || addend.excluded);
+        boolean isExcluded = (add1.excluded || add2.excluded);
 
         return cutConstruct(
             fatNumerator
@@ -164,51 +164,39 @@ class RationalBound
     }
 
     // Negation
-    public RationalBound negate() {
+    public static final RationalBound negate(RationalBound input) {
         return new RationalBound(
-            - this.numerator
-            , this.denomenator
-            , this.excluded
+            - input.numerator
+            , input.denomenator
+            , input.excluded
         );
     }
 
     // Reciprocal
-    public RationalBound reciprocate() {
+    public static final RationalBound reciprocate(RationalBound input) {
         return new RationalBound(
-            this.denomenator
-            , this.numerator
-            , this.excluded
+            input.denomenator
+            , input.numerator
+            , input.excluded
         );
     }
 
     // Subtraction
-    public RationalBound subtract(RationalBound minuend, int roundDirection) {
-        return this.add(minuend.negate(), roundDirection);
+    public static final RationalBound subtract(RationalBound sub1, RationalBound sub2, int roundDirection) {
+        return add(sub1, negate(sub2), roundDirection);
     }
 
     // Absoulte Value
-    public RationalBound abs() {
+    public static final RationalBound abs(RationalBound input) {
         return new RationalBound(
-            branchlessAbs(this.numerator)
-            , branchlessAbs(this.denomenator)
+            branchlessAbs(input.numerator)
+            , branchlessAbs(input.denomenator)
             );
     }
 
 
 
-     // Crushes (approximate simplfication)
-
-
-    protected RationalBound twoSimplify() {
-        int n = this.getNumerator();
-        int d = this.getDenomenator();
-
-        int t = Math.min(
-            Long.numberOfTrailingZeros(branchlessAbs(n))
-            , Long.numberOfTrailingZeros(branchlessAbs(d))
-        );
-        return new RationalBound(n>>t, d>>t);
-    }
+    // Simplification
 
     private RationalBound cutConstruct(
         long fatNum
@@ -238,53 +226,49 @@ class RationalBound
 
     // UTILS
 
-    public RationalBound bySign(int sign) {
+    public static final RationalBound bySign(RationalBound input, int sign) {
         return new RationalBound(
-            util.bySignZ(this.numerator, sign)
-            , this.denomenator
-            , this.excluded
+            util.bySignZ(input.numerator, sign)
+            , input.denomenator
+            , input.excluded
         );
     }
 
-    public boolean maybeDiffer(RationalBound that) {
+    public static final boolean maybeDiffer(RationalBound comp1, RationalBound comp2) {
         return (
-            branchlessAbs(this.numerator) != branchlessAbs(that.numerator)
-            || branchlessAbs(this.denomenator) != branchlessAbs(that.denomenator)
-            )&&(this.isPositive() == that.isPositive());
+            branchlessAbs(comp1.numerator) != branchlessAbs(comp2.numerator)
+            || branchlessAbs(comp1.denomenator) != branchlessAbs(comp2.denomenator)
+            )&&(comp1.isPositive() == comp2.isPositive());
     }
 
-    public int signum() {
-        return (int) util.bySign(Long.signum(this.numerator),this.denomenator);
+    public static final int signum(RationalBound input) {
+        return (int) util.bySign(Long.signum(input.numerator),input.denomenator);
     }
 
-    public boolean isGreaterThanOne() {
+    public static final boolean isGreaterThanOne(RationalBound input) {
         return (
-            (branchlessAbs(numerator) > branchlessAbs(denomenator))
+            (branchlessAbs(input.numerator) > branchlessAbs(input.denomenator))
             && isPositive()
             );
     }
 
-    public boolean compareToOne(int direction) {
+    public static final boolean compareToOne(RationanlBound input, int direction) {
         return (
-            (util.bySign(branchlessAbs(numerator), direction)
-            > util.bySign(branchlessAbs(denomenator), direction))
+            (util.bySign(branchlessAbs(input.numerator), direction)
+            > util.bySign(branchlessAbs(input.denomenator), direction))
             && isPositive()
             );
     }
 
-    public boolean isPositive() {
-        return (signum() > 0);
+    public static final boolean isPositive(RationalBound input) {
+        return (signum(input) > 0);
     }
 
-    public boolean isZero() {
-        return (numerator == 0);
+    public static final boolean isZero(RationalBound input) {
+        return ((input.numerator == 0) && !input.excluded);
     }
 
-    public boolean isInfinity() {
-        return (denomenator == 0);
-    }
-
-    public boolean isOne() {
+    public static final boolean isOne() {
         return (numerator == denomenator);
     }
 }
