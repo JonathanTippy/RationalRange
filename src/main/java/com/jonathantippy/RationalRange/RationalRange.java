@@ -79,16 +79,12 @@ public class RationalRange
         return numberConstruct.toString();
     }
 
-    // UTILS
-    public boolean isExact() {
-        return lowerBound.equals(upperBound);
-    }
     // Multiply
 
-    public RationalRange multiply(RationalRange that) {
+    public static final RationalRange multiply(RationalRange mul1, RationalRange mul2) {
         return new RationalRange(
-            this.upperBound.multiply(that.upperBound, 1)
-            , this.lowerBound.multiply(that.lowerBound, -1)
+            RationalBound.multiply(mul1.upperBound, mul2.upperBound, 1)
+            , RationalBound.multiply(mul1.lowerBound, mul2.lowerBound, -1)
         );
     }
 
@@ -97,19 +93,16 @@ public class RationalRange
     // largest upper bound is big / small
     // and smallest lower bound is small / big
 
-    public RationalRange divide(RationalRange that) {
-        return new RationalRange(
-            this.upperBound.divide(that.lowerBound, 1)
-            , this.lowerBound.divide(that.upperBound, -1)
-        );
+    public static final RationalRange divide(RationalRange div1, RationalRange div2) {
+        return multiply(div1, reciprocate(div2));
     }
 
     // Add
 
-    public RationalRange add(RationalRange that) {
+    public static final RationalRange add(RationalRange add1, RationalRange add2) {
         return new RationalRange(
-            this.upperBound.add(that.upperBound, 1)
-            , this.lowerBound.add(that.lowerBound, -1)
+            RationalBound.add(add1.upperBound, add2.upperBound, 1)
+            , RationalBound.add(add1.lowerBound, add2.lowerBound, -1)
         );
     }
 
@@ -117,24 +110,29 @@ public class RationalRange
 
     // largest upper bound is big - small
     // and smallest lower bound is small - big
-    public RationalRange subtract(RationalRange that) {
+    public static final RationalRange subtract(RationalRange sub1, RationalRange sub2) {
+        return add(sub1, negate(sub2));
+    }
+
+    public static final RationalRange negate(RationalRange input) {
         return new RationalRange(
-            this.upperBound.subtract(that.lowerBound, 1)
-            , this.lowerBound.subtract(that.upperBound, -1)
+            RationalBound.negate(input.lowerBound)
+            , RationalBound.negate(input.upperBound)
         );
     }
 
-    public RationalRange negate() {
-        return new RationalRange(
-            this.lowerBound.negate()
-            , this.upperBound.negate()
-        );
-    }
+    public static final RationalRange reciprocate(RationalRange input) {
+        
+        if (RationalBound.signum(lowerBound) == RationalBound.signum(upperBound)) {;} else {
+            return new RationalRange(
+                RationalBound.reciprocate(input.upperBound)
+                , RationalBound.reciprocate(input.lowerBound)
+            );
+        }   
 
-    public RationalRange reciprocate() {
         return new RationalRange(
-            this.lowerBound.reciprocate()
-            , this.upperBound.reciprocate()
+            RationalBound.reciprocate(input.lowerBound)
+            , RationalBound.reciprocate(input.upperBound)
         );
     }
 }

@@ -124,7 +124,7 @@ class RationalBound
     }
 
     // Multiplication
-    public static final RationalBound multiply(RationalBound fac1 RationalBound fac2, int roundDirection) {
+    public static final RationalBound multiply(RationalBound fac1, RationalBound fac2, int roundDirection) {
         
         long fatNumerator = (long) fac1.numerator * (long) fac2.numerator;
         long fatDenomenator = (long) fac1.denomenator * (long) fac2.denomenator;

@@ -10,6 +10,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import com.jonathantippy.RationalRange.RationalBound;
+import static com.jonathantippy.RationalRange.RationalBound.*;
 import com.jonathantippy.RationalRange.util;
 
 import net.jqwik.api.*;
@@ -106,7 +107,7 @@ public class RationalBoundTest {
     public void divisionTest() {
         RationalBound dividend = new RationalBound(1);
         RationalBound divisor = new RationalBound(3);
-        RationalBound answer = dividend.divide(divisor, 1);
+        RationalBound answer = divide(dividend, divisor, 1);
         String s = answer.toString();
         assertEquals("1/3", s);
     }
@@ -115,7 +116,7 @@ public class RationalBoundTest {
     public void hardDivisionTest() {
         RationalBound dividend = new RationalBound("5/6");
         RationalBound divisor = new RationalBound("2/3");
-        RationalBound answer = dividend.divide(divisor, 1);
+        RationalBound answer = divide(dividend, divisor, 1);
         String s = answer.toString();
         assertEquals("15/12", s);
     }
@@ -137,20 +138,7 @@ public class RationalBoundTest {
 
         RationalBound factorOne = new RationalBound(a, a);
         RationalBound factorTwo = new RationalBound(b, b);
-        RationalBound answer = factorOne.multiply(factorTwo, r);
-        assert(!answer.compareToOne(-r)) // for "or equals"
-        : answer + " or in decimal " + answer.toDouble() + " is not greater than one";
-    }
-
-    @Property
-    void multiplyDivide(@ForAll int a, @ForAll int b, @ForAll("one") int r) {
-        if (a!=0&&b!=0&&a!=Integer.MIN_VALUE&&b!=Integer.MIN_VALUE) {;} else {
-            return;
-        }
-
-        RationalBound factorOne = new RationalBound(a, a);
-        RationalBound factorTwo = new RationalBound(b, b);
-        RationalBound answer = factorOne.multiply(factorTwo, r);
+        RationalBound answer = multiply(factorOne, factorTwo, r);
         assert(!answer.compareToOne(-r)) // for "or equals"
         : answer + " or in decimal " + answer.toDouble() + " is not greater than one";
     }
@@ -164,7 +152,7 @@ public class RationalBoundTest {
     public void multTest() {
         RationalBound a = new RationalBound(5);
         RationalBound b = new RationalBound(6);
-        RationalBound answer = a.multiply(b, 1);
+        RationalBound answer = multiply(a, b, 1);
         String s = answer.toString();
         assertEquals("30/1", s);
     }
@@ -173,7 +161,7 @@ public class RationalBoundTest {
     public void multTest2() {
         RationalBound a = new RationalBound(-5);
         RationalBound b = new RationalBound(6);
-        RationalBound answer = a.multiply(b, 1);
+        RationalBound answer = multiply(a, b, 1);
         String s = answer.toString();
         assertEquals("-30/1", s);
     }
@@ -191,7 +179,7 @@ public class RationalBoundTest {
     public void additionTest() {
         RationalBound a = new RationalBound(5);
         RationalBound b = new RationalBound(6);
-        RationalBound answer = a.add(b, 1);
+        RationalBound answer = add(a, b, 1);
         String s = answer.toString();
         assertEquals("11/1", s);
     }
@@ -200,7 +188,7 @@ public class RationalBoundTest {
     public void subtractionTest() {
         RationalBound a = new RationalBound(5);
         RationalBound b = new RationalBound(6);
-        RationalBound answer = a.subtract(b, 1);
+        RationalBound answer = subtract(a, b, 1);
         String s = answer.toString();
         assertEquals("-1/1", s);
     }
@@ -276,14 +264,14 @@ public class RationalBoundTest {
             return;
         }
         RationalBound x = new RationalBound(a, b);
-        assert (isGTOne(x) == x.isGreaterThanOne()): 
-        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + x.isGreaterThanOne();
+        assert (isGTOne(x) == isGreaterThanOne(x)): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + isGreaterThanOne(x);
         RationalBound y = new RationalBound(a, a);
-        assert (isGTOne(y) == y.isGreaterThanOne()): 
-        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(y) + " while fast said " + y.isGreaterThanOne();
+        assert (isGTOne(y) == isGreaterThanOne(y)): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(y) + " while fast said " + isGreaterThanOne(y);
         RationalBound z = new RationalBound(b, b);
-        assert (isGTOne(z) == z.isGreaterThanOne()): 
-        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(z) + " while fast said " + z.isGreaterThanOne();
+        assert (isGTOne(z) == isGreaterThanOne(z)): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(z) + " while fast said " + isGreaterThanOne(z);
     }
 
 

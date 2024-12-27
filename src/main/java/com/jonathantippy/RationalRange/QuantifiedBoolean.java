@@ -1,25 +1,29 @@
 public class QuantifiedBoolean {
+
     private byte value;
+
     public QuantifiedBoolean(byte value) {
         this.value = value;
     }
-    public byte getValue() {
-        return value;
+    public static final byte getValue(QuantifiedBoolean input) {
+        return input.value;
     }
-    public QuantifiedBoolean and(QuantifiedBoolean that) {
-        return new QuantifiedBoolean(((this.value & 0xFF) * (that.value & 0xFF))/255);
+    public static final QuantifiedBoolean and(QuantifiedBoolean input1, QuantifiedBoolean input2) {
+        return new QuantifiedBoolean((byte)(((input1.value & 0xFF) * (input2.value & 0xFF))/255));
     }
-    public final QuantifiedBoolean not() {
-        return 255 - (this.value & 0xFF);
+    public static final QuantifiedBoolean not(QuantifiedBoolean input) {
+        return (byte) (255 - (input.value & 0xFF));
     }
-    public QuantifiedBoolean or(QuantifiedBoolean that) {
-        return not(this.nor(that));
+    public static final QuantifiedBoolean or(QuantifiedBoolean input1, QuantifiedBoolean input2) {
+        return not(input1.nor(input2));
     }
-    public QuantifiedBoolean nor(QuantifiedBoolean that) {
-        return not(this).and(not(that));
+    public static final QuantifiedBoolean nor(QuantifiedBoolean input1, QuantifiedBoolean input2) {
+        return not(input1).and(not(input2));
     }
-    public QuantifiedBoolean nand(QuantifiedBoolean that) {
-        return
+    public static final QuantifiedBoolean nand(QuantifiedBoolean input1, QuantifiedBoolean input2) {
+        return not(and(input1, input2));
     }
-    
+    public static final QuantifiedBoolean xor(QuantifiedBoolean input1, QuantifiedBoolean input2) {
+        return and(or(input1, input2), not(and(input1, input2)));
+    }
 }
