@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.jonathantippy.RationalRange.RationalBound;
 
-class RationalRange
+public class RationalRange
 {
 
     private static final Logger log = LogManager.getLogger(RationalRange.class);
@@ -83,7 +83,6 @@ class RationalRange
     public boolean isExact() {
         return lowerBound.equals(upperBound);
     }
-
     // Multiply
 
     public RationalRange multiply(RationalRange that) {
