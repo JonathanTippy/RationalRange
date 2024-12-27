@@ -82,6 +82,32 @@ class RationalBound
         validate(this);
     }
 
+    // Simplification
+
+    private RationalBound(
+        long fatNum
+        , long fatDen
+        , int r
+        , boolean excluded
+        ) {
+
+        int maxBitLength = Math.max(
+            util.bitLength(fatNum)
+            , util.bitLength(fatDen)
+        );
+
+        int bitsToDrop = util.branchlessDOZ(maxBitLength, 31);
+
+        int newNumerator = (int) util.cut(fatNum, bitsToDrop, r);
+        int newDenomenator = (int) util.cut(fatDen, bitsToDrop, -r);
+
+        boolean squashed = (fatDen!=0&&newDenomenator==0);
+
+        this.numerator = newNumerator;
+        this.denomenator = newDenomenator;
+        this.excluded = (excluded || squashed);
+        validate(this);
+    }
     // Validate
 
     public static final void validate(RationalBound input) throws ArithmeticException {
@@ -131,7 +157,7 @@ class RationalBound
         
         boolean isExcluded = (fac1.excluded || fac2.excluded);
 
-        return cutConstruct(
+        return new RationalBound(
             fatNumerator
             , fatDenomenator
             , roundDirection
@@ -140,12 +166,12 @@ class RationalBound
     }
 
     // Division
-    public static final RationalBound divide(RationalBound div1 RationalBound div2, int roundDirection) {
+    public static final RationalBound divide(RationalBound div1, RationalBound div2, int roundDirection) {
         return multiply(div1, reciprocate(div2), roundDirection);
     }
 
     // Addition
-    public static final RationalBound add(RationalBound add1 RationalBound add2, int roundDirection) {
+    public static final RationalBound add(RationalBound add1, RationalBound add2, int roundDirection) {
 
         long fatNumerator = 
             ((long) add1.numerator * (long) add2.denomenator)
@@ -155,7 +181,7 @@ class RationalBound
 
         boolean isExcluded = (add1.excluded || add2.excluded);
 
-        return cutConstruct(
+        return new RationalBound(
             fatNumerator
             , fatDenomenator
             , roundDirection
@@ -194,36 +220,6 @@ class RationalBound
             );
     }
 
-
-
-    // Simplification
-
-    private RationalBound cutConstruct(
-        long fatNum
-        , long fatDen
-        , int r
-        , boolean excluded
-        ) {
-
-        int maxBitLength = Math.max(
-            util.bitLength(fatNum)
-            , util.bitLength(fatDen)
-        );
-
-        int bitsToDrop = util.branchlessDOZ(maxBitLength, 31);
-
-        int newNumerator = (int) util.cut(fatNum, bitsToDrop, r);
-        int newDenomenator = (int) util.cut(fatDen, bitsToDrop, -r);
-
-        boolean squashed = (fatDen!=0&&newDenomenator==0);
-
-        return new RationalBound(
-            newNumerator
-            , newDenomenator
-            , (excluded || squashed)
-        );
-    }
-
     // UTILS
 
     public static final RationalBound bySign(RationalBound input, int sign) {
@@ -238,7 +234,7 @@ class RationalBound
         return (
             branchlessAbs(comp1.numerator) != branchlessAbs(comp2.numerator)
             || branchlessAbs(comp1.denomenator) != branchlessAbs(comp2.denomenator)
-            )&&(comp1.isPositive() == comp2.isPositive());
+            )&&(isPositive(comp1) == isPositive(comp2));
     }
 
     public static final int signum(RationalBound input) {
@@ -248,15 +244,15 @@ class RationalBound
     public static final boolean isGreaterThanOne(RationalBound input) {
         return (
             (branchlessAbs(input.numerator) > branchlessAbs(input.denomenator))
-            && isPositive()
+            && isPositive(input)
             );
     }
 
-    public static final boolean compareToOne(RationanlBound input, int direction) {
+    public static final boolean compareToOne(RationalBound input, int direction) {
         return (
             (util.bySign(branchlessAbs(input.numerator), direction)
             > util.bySign(branchlessAbs(input.denomenator), direction))
-            && isPositive()
+            && isPositive(input)
             );
     }
 
@@ -268,7 +264,7 @@ class RationalBound
         return ((input.numerator == 0) && !input.excluded);
     }
 
-    public static final boolean isOne() {
-        return (numerator == denomenator);
+    public static final boolean isOne(RationalBound input) {
+        return (input.numerator == input.denomenator);
     }
 }

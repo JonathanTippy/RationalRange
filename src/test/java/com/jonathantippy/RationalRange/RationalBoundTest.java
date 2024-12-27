@@ -139,8 +139,8 @@ public class RationalBoundTest {
         RationalBound factorOne = new RationalBound(a, a);
         RationalBound factorTwo = new RationalBound(b, b);
         RationalBound answer = multiply(factorOne, factorTwo, r);
-        assert(!answer.compareToOne(-r)) // for "or equals"
-        : answer + " or in decimal " + answer.toDouble() + " is not greater than one";
+        assert(!compareToOne(answer, -r)) // for "or equals"
+        : answer + " or in decimal " + RationalBound.toDouble(answer) + " is not greater than one";
     }
 
     @Provide
@@ -287,10 +287,10 @@ public class RationalBoundTest {
         if (input.getNumerator() == input.getDenomenator()) {
             return false;
         }
-        if (input.signum() == 1) {
+        if (signum(input) == 1) {
             return Math.abs(input.getNumerator()) > Math.abs(input.getDenomenator());
         }
-        if (input.signum() == -1) {
+        if (signum(input) == -1) {
             return false;
         }
         return false;

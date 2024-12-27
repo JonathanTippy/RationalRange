@@ -123,7 +123,7 @@ public class RationalRange
 
     public static final RationalRange reciprocate(RationalRange input) {
         
-        if (RationalBound.signum(lowerBound) == RationalBound.signum(upperBound)) {;} else {
+        if (RationalBound.signum(input.lowerBound) == RationalBound.signum(input.upperBound)) {;} else {
             return new RationalRange(
                 RationalBound.reciprocate(input.upperBound)
                 , RationalBound.reciprocate(input.lowerBound)
