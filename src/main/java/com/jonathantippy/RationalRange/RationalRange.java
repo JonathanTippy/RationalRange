@@ -123,4 +123,18 @@ public class RationalRange
             , this.lowerBound.subtract(that.upperBound, -1)
         );
     }
+
+    public RationalRange negate() {
+        return new RationalRange(
+            this.lowerBound.negate()
+            , this.upperBound.negate()
+        );
+    }
+
+    public RationalRange reciprocate() {
+        return new RationalRange(
+            this.lowerBound.reciprocate()
+            , this.upperBound.reciprocate()
+        );
+    }
 }

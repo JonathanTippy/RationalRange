@@ -141,7 +141,7 @@ class RationalBound
 
     // Division
     public RationalBound divide(RationalBound divisor, int roundDirection) {
-        return this.multiply(reciprocate(divisor), roundDirection);
+        return this.multiply(divisor.reciprocate(), roundDirection);
     }
 
     // Addition
@@ -164,26 +164,26 @@ class RationalBound
     }
 
     // Negation
-    public RationalBound negate(RationalBound input) {
+    public RationalBound negate() {
         return new RationalBound(
-            - input.numerator
-            , input.denomenator
-            , input.excluded
+            - this.numerator
+            , this.denomenator
+            , this.excluded
         );
     }
 
     // Reciprocal
-    public RationalBound reciprocate(RationalBound input) {
+    public RationalBound reciprocate() {
         return new RationalBound(
-            input.denomenator
-            , input.numerator
-            , input.excluded
+            this.denomenator
+            , this.numerator
+            , this.excluded
         );
     }
 
     // Subtraction
     public RationalBound subtract(RationalBound minuend, int roundDirection) {
-        return this.add(negate(minuend), roundDirection);
+        return this.add(minuend.negate(), roundDirection);
     }
 
     // Absoulte Value
