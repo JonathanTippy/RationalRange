@@ -5,7 +5,7 @@ This number system allows you to know how much you know; if a number can't be de
 
 Epsilon is the smallest between zero and one, and epsilon can grow to any size. In many rational cases, however, epsilon is exactly zero. 
 
-With the addition of upper bounds and lower bounds, if a number can be calculated exactly, it will be exact, but if it cannot, its epsilon will grow. 
+With the addition of upper bounds and lower bounds, if a number can be calculated exactly, it will be exact, but if it cannot, its epsilon will grow. The bounds represent an area where the value is, but the value is actually a single point. The range is not a range where all possible values are valid.
 
 A bound is not really an exact value, but rather a limit; it can approach its value from either direction. This way, 'approaches zero' can be neatly distinguished from 'can be zero'.
 
