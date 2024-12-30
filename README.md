@@ -1,5 +1,5 @@
 # RationalRange
-(WIP) Fuzzy, Fast Rational number in java.
+(WIP) Honest Rational number in java.
 
 This number system allows you to know what you know and don't know. if you have an exact answer, you know it. If you don't, you know how much precision you have.
 
@@ -11,7 +11,7 @@ Unlike with floats, this number system can't represent any number larger than it
 
 ### Goodies:
 - If an integer can be represented, it can be perfectly divided by any other integer that can be represented. 
-- If an operation yields a value whose upper bound and lower bound are the same, the result is exactly correct. 
+- If an operation yields a value whose upper bound and lower bound are the same (and act to include rather than exclude their value), the result is exactly that value.
 
 It should also be able to handle the dreaded 0.1 + 0.2 very easily 
 (no decimals in the from string constructor yet though)

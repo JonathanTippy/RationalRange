@@ -237,7 +237,10 @@ class RationalBound
             )&&(isPositive(comp1) == isPositive(comp2));
     }
 
-    public static final int signum(RationalBound input) {
+    public static final int signum(RationalBound input, int roundDirection) {
+        if (input.numerator != 0 && input.denomenator != 0) {;} else {
+            return roundDirection;
+        }
         return (int) util.bySign(Long.signum(input.numerator),input.denomenator);
     }
 
@@ -256,8 +259,8 @@ class RationalBound
             );
     }
 
-    public static final boolean isPositive(RationalBound input) {
-        return (signum(input) > 0);
+    public static final boolean isPositive(RationalBound input int roundDirection) {
+        return (signum(input, roundDirection) > 0);
     }
 
     public static final boolean isZero(RationalBound input) {

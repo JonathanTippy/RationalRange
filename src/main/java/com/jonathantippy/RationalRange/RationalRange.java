@@ -122,17 +122,22 @@ public class RationalRange
     }
 
     public static final RationalRange reciprocate(RationalRange input) {
-        
-        if (RationalBound.signum(input.lowerBound) == RationalBound.signum(input.upperBound)) {;} else {
-            return new RationalRange(
-                RationalBound.reciprocate(input.upperBound)
-                , RationalBound.reciprocate(input.lowerBound)
-            );
-        }   
-
         return new RationalRange(
             RationalBound.reciprocate(input.lowerBound)
             , RationalBound.reciprocate(input.upperBound)
         );
+    }
+
+    // Comparisons
+
+    public QuantifiedBoolean isPositive(RationalRange input) {
+        if (signum(input))
+        RationalRange odds = divide(input.upperBound, negate(input.lowerBound))
+        
+    }
+
+    public QuantifiedBoolean greaterThan(RationalRange com1, RationalRange com2) {
+        RationalRange diff = subtract(com1, com2);
+        return isPositive(diff);
     }
 }
