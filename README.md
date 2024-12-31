@@ -9,6 +9,7 @@ With the addition of upper bounds and lower bounds, if a number can be calculate
 
 A bound is not really an exact value, but rather a limit; it can approach its value from either direction. This way, 'approaches zero' can be neatly distinguished from 'can be zero'.
 
+Because bounds represent unknowns as to the exact value, when bounds are compared, if they overlap at all it will result in some ambiguity, which is why this project also has quantified booleans. If two bounds are the same and are perfect, it is 50/50.
 
 ### The Good:
 - If an integer can be represented, it can be perfectly divided by any other integer that can be represented. 
@@ -18,10 +19,11 @@ A bound is not really an exact value, but rather a limit; it can approach its va
 
 ### The Bad:
 - Unlike with floats, this number system can't represent any number larger than its largest integer.
+- For now, the numerator and denomenator use ints so the precision of non-perfect values is limited.
 
 ### The Weird:
 - The upper bound can be lower than the lower bound. This is caused when the reciprocal is taken of a value which may be positive or may be negative. It is intended behavior.
-- in the case of an included zero it results in a very nice "no value" behavior, the upper bound being negative unbounded, and the lower being positive unbounded.
-- zero over zero is undefined. It should be an inequality; the RationalRange type only represents a single value, one who's exact location may be in doubt, and not an inequality where all the values are acceptable.
+- in the case of an included zero it results in a very nice "no value" behavior, the upper bound being negative unbounded, and the lower being positive unbounded, which basically means "definitely not any known number"
+- zero over zero is undefined; the RationalRange type only represents a single value, one who's exact location may be in doubt, and not an inequality where all the values are acceptable.
 
 

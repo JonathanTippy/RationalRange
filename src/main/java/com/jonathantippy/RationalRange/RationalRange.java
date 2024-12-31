@@ -131,8 +131,10 @@ public class RationalRange
     // Comparisons
 
     public QuantifiedBoolean isPositive(RationalRange input) {
-        if (signum(input))
-        RationalRange odds = divide(input.upperBound, negate(input.lowerBound))
+        RationalBound u = input.upperBound;
+        RationalBound l = input.lowerBound;
+        RationalBound width = subtract(u, l);
+        RationalBound prob = divide(u, width);
         
     }
 
