@@ -7,7 +7,7 @@
     <artifactId>rational-range</artifactId>
     <version>0.0.3-SNAPSHOT</version>
     <name>Rational Range</name>
-    <description>Fuzzy Fractions!</description>
+    <description>ratio, range and limit</description>
 
 
 
