@@ -15,7 +15,10 @@ public class RationalRange
     private RationalBound lowerBound;
 
     // Constructor with both bounds (unsafe)
-    private RationalRange(RationalBound upperBound, RationalBound lowerBound) {
+    private RationalRange(
+        RationalBound upperBound
+        , RationalBound lowerBound
+        ) {
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;
     }
@@ -90,9 +93,6 @@ public class RationalRange
 
     // Divide
 
-    // largest upper bound is big / small
-    // and smallest lower bound is small / big
-
     public static final RationalRange divide(RationalRange div1, RationalRange div2) {
         return multiply(div1, reciprocate(div2));
     }
@@ -107,12 +107,13 @@ public class RationalRange
     }
 
     // Subtract
-
-    // largest upper bound is big - small
-    // and smallest lower bound is small - big
     public static final RationalRange subtract(RationalRange sub1, RationalRange sub2) {
         return add(sub1, negate(sub2));
     }
+
+    // REVERSE FUNCTIONS
+    // largest upper bound is big / small
+    // and smallest lower bound is small / big
 
     public static final RationalRange negate(RationalRange input) {
         return new RationalRange(
@@ -121,9 +122,14 @@ public class RationalRange
         );
     }
 
-    public static final RationalRange reciprocate(RationalRange input) {
+    public static final RationalRange reciprocate(RationalRange input) throws ArithmeticException {
+        if (signum(input.upperBound) == signum(input.lowerBound)) {;} else {
+            throw new ArithemticException("Possible / by zero"); 
+            // this case may be possible but complicates everything
+            // by allowing bound to be turned inside out
+        }
         return new RationalRange(
-            RationalBound.reciprocate(input.lowerBound)
+            RationalBound.reciprocate(input.lowerBound) // note the upper bound and lower bound trade places
             , RationalBound.reciprocate(input.upperBound)
         );
     }
@@ -131,10 +137,14 @@ public class RationalRange
     // Comparisons
 
     public QuantifiedBoolean isPositive(RationalRange input) {
+        // first do a subtraction (its ok, wont lose any precision)
+        // can get odds by dividing positive share by entire width
+        // 
         RationalBound u = input.upperBound;
         RationalBound l = input.lowerBound;
         RationalBound width = subtract(u, l);
         RationalBound prob = divide(u, width);
+        if (prob)
         
     }
 

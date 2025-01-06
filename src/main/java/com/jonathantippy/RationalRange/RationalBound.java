@@ -259,7 +259,7 @@ class RationalBound
             );
     }
 
-    public static final boolean isPositive(RationalBound input int roundDirection) {
+    public static final boolean isPositive(RationalBound input, int roundDirection) {
         return (signum(input, roundDirection) > 0);
     }
 
