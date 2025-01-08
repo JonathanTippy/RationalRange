@@ -220,6 +220,14 @@ class RationalBound
             );
     }
 
+    // Comparison
+    public static final boolean greaterThan(RationalBound a, RationalBound b) {
+        // implied common denomenator not required for comparison
+        long acdn = (long) a.numerator * (long) b.denomenator;
+        long bcdn = (long) b.numerator * (long) a.denomenator;
+        return (acdn > bcdn);
+    }
+
     // UTILS
 
     public static final RationalBound bySign(RationalBound input, int sign) {
@@ -230,11 +238,11 @@ class RationalBound
         );
     }
 
-    public static final boolean maybeDiffer(RationalBound comp1, RationalBound comp2) {
+    public static final boolean mayDiffer(RationalBound comp1, RationalBound comp2) {
         return (
-            branchlessAbs(comp1.numerator) != branchlessAbs(comp2.numerator)
-            || branchlessAbs(comp1.denomenator) != branchlessAbs(comp2.denomenator)
-            )&&(isPositive(comp1) == isPositive(comp2));
+            comp1.numerator != comp2.numerator
+            || comp1.denomenator != comp2.denomenator
+        );
     }
 
     public static final int signum(RationalBound input, int roundDirection) {
@@ -242,13 +250,6 @@ class RationalBound
             return roundDirection;
         }
         return (int) util.bySign(Long.signum(input.numerator),input.denomenator);
-    }
-
-    public static final boolean isGreaterThanOne(RationalBound input) {
-        return (
-            (branchlessAbs(input.numerator) > branchlessAbs(input.denomenator))
-            && isPositive(input)
-            );
     }
 
     public static final boolean compareToOne(RationalBound input, int direction) {
