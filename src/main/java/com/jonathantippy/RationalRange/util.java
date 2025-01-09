@@ -68,7 +68,7 @@ class util {
             ));
     }
 
-    static int branchlessMin(int inputA, int inputB) { // ocd, see?
+    static int branchlessMin(int inputA, int inputB) {
         int o = (inputA>>31) ^ (inputB>>31); //obvious
         int oc = inputB>>31; //obvious choice
         int d = inputB - inputA; //difference

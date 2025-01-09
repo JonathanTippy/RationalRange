@@ -222,10 +222,14 @@ class RationalBound
 
     // Comparison
     public static final boolean greaterThan(RationalBound a, RationalBound b) {
-        // implied common denomenator not required for comparison
+        // The common denomenator is left implied
+        // the comparison can be made with it;
+        // as the implied common denomenator is a scalar, it may 
+        // reverse the direction so absolute value is used
+        
         long acdn = (long) a.numerator * (long) b.denomenator;
         long bcdn = (long) b.numerator * (long) a.denomenator;
-        return (acdn > bcdn);
+        return (branchlessAbs(acdn) > branchlessAbs(bcdn));
     }
 
     // UTILS
