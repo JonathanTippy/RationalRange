@@ -138,6 +138,7 @@ public class RationalRange
 
     public QuantifiedBoolean isPositive(RationalRange input) {
         // first do a subtraction (its ok, wont lose any precision)
+        //(ok maybe some but remember that rounding can never ruin sign)
         // can get odds by dividing positive share by entire width
         // 
         RationalBound u = input.upperBound;

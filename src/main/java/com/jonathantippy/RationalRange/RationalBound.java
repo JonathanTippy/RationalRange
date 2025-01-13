@@ -50,6 +50,7 @@ class RationalBound
         validate(this);
     }
 
+
     // Constructors with integers
     public RationalBound(int units) {
 
@@ -101,22 +102,44 @@ class RationalBound
         int newNumerator = (int) util.cut(fatNum, bitsToDrop, r);
         int newDenomenator = (int) util.cut(fatDen, bitsToDrop, -r);
 
-        boolean squashed = (fatDen!=0&&newDenomenator==0);
+        // For a while min value was disallowed
+        // In practice, min value means there was a. an honest min value answer
+        // or b. an overflow caused by the asymmetry of ints introduced by negatives
+        // In both cases the real value is "larger than largest known" if in numerator
+        // or "smaller than smallest known" if in denomenator"
+        // The directionality is known by what bound it is; zero on the opposite side suffices.
+        // The zero destroys the normal sign.
+
+        if (newNumerator!=Integer.MIN_VALUE&&newDenomenator!=Integer.MIN_VALUE) {;} else {
+            if (!(newNumerator==Integer.MIN_VALUE&&newDenomenator==Integer.MIN_VALUE)) {;} else {
+                newNumerator = 0;
+                newDenomenator = 0;
+            }
+            if (newNumerator==Integer.MIN_VALUE) {
+                newDenomenator = 0; 
+            } else {
+                newNumerator = 0; 
+            }
+        }
+
+        // if the answer was rounded, the exact value can no longer be considered a possible answer.
+
+        boolean split = (((long)newNumerator)!=(fatNum)||((long)newDenomenator)!=(fatDen));
 
         this.numerator = newNumerator;
         this.denomenator = newDenomenator;
-        this.excluded = (excluded || squashed);
-        validate(this);
+        this.excluded = (excluded || split);
+        //validate is not needed as the overflow handling is already done
     }
     // Validate
 
-    public static final void validate(RationalBound input) throws ArithmeticException {
+    public static final void validate(RationalBound input) {
+
+        // In practice, min value means there was an overflow.
+        // directionality is known higher up; this suffices. zero destroys any sign of numerator.
 
         if (input.numerator!=Integer.MIN_VALUE&&input.denomenator!=Integer.MIN_VALUE) {;} else {
-            throw new ArithmeticException("int min value detected");
-        }
-        if (input.denomenator!=0||input.excluded) {;} else {
-            throw new ArithmeticException("/ by zero");
+            input.denomenator = 0; 
         }
     }
 
@@ -250,8 +273,27 @@ class RationalBound
     }
 
     public static final int signum(RationalBound input, int roundDirection) {
+
+        // handle cases where simple sign is gone
+        // round direction is taken to imply bound direction and thus inclusion / exclusion direction
+        
         if (input.numerator != 0 && input.denomenator != 0) {;} else {
-            return roundDirection;
+            if (!(input.numerator==0&&input.denomenator==0)) {;} else {
+                return 0; //unknowne
+            }
+            if (input.numerator==0) {
+                if (input.excluded) {
+                    return -roundDirection;
+                } else {
+                    return roundDirection;
+                }
+            } else {
+                if (input.excluded) {
+                    return roundDirection;
+                } else {
+                    return -roundDirection;
+                }
+            }
         }
         return (int) util.bySign(Long.signum(input.numerator),input.denomenator);
     }
