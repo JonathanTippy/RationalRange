@@ -152,6 +152,10 @@ class RationalBound
         return (double) (((double) input.numerator) / ((double) input.denomenator));
     }
 
+    public static final int toInt(RationalBound input) {
+        return input.numerator / input.denomenator;
+    }
+
 
     // Accessors
     public int getNumerator() {
@@ -309,12 +313,20 @@ class RationalBound
         return (int) util.bySign(Long.signum(input.numerator),input.denomenator);
     }
 
-    public static final boolean compareToOne(RationalBound input, int direction) {
+    public static final boolean greaterThanOne(RationalBound input, int roundDirection) {
         return (
-            (util.bySign(branchlessAbs(input.numerator), direction)
-            > util.bySign(branchlessAbs(input.denomenator), direction))
-            && isPositive(input)
-            );
+            Math.abs(input.numerator)
+            > Math.abs(input.denomenator)
+            && isPositive(input, roundDirection)
+        );
+    }
+
+    public static final boolean compareToOne(RationalBound input, int compareDirection) {
+        return (
+            util.bySign(compareDirection, Math.abs(input.numerator))
+            > util.bySign(compareDirection, Math.abs(input.denomenator))
+            && isPositive(input, compareDirection)
+        );
     }
 
     public static final boolean isPositive(RationalBound input, int roundDirection) {

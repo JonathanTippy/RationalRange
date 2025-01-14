@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.jonathantippy.RationalRange.RationalBound;
+import com.jonathantippy.RationalRange.QuantifiedBoolean;
+
 
 public class RationalRange
 {
@@ -26,9 +28,9 @@ public class RationalRange
         this.lowerBound = lowerBound;
         this.reciprocated = reciprocated;
 
-        // if exploded set to indeterminate value
+        // if inverted value imploded, set to indeterminate value
 
-        if ( !(reciprocated && greaterThan(upperBound, lowerBound))) {;} else {
+        if ( !(reciprocated && RationalBound.greaterThan(upperBound, lowerBound))) {;} else {
             this.upperBound = new RationalBound(0, 0);
             this.lowerBound = new RationalBound(0, 0);
         }
@@ -106,7 +108,7 @@ public class RationalRange
         return new RationalRange(
             RationalBound.multiply(mul1.upperBound, mul2.upperBound, 1)
             , RationalBound.multiply(mul1.lowerBound, mul2.lowerBound, -1)
-            , (mul1.reciprocated||mult2.reciprocated)
+            , (mul1.reciprocated||mul2.reciprocated)
         );
     }
 
@@ -156,21 +158,37 @@ public class RationalRange
 
     public QuantifiedBoolean isPositive(RationalRange input) {
         
+        if (!input.reciprocated) {;} else {
+            return QuantifiedBoolean.tossUp;
+        }
+        if (RationalBound.signum(input.lowerBound,-1)>0 || RationalBound.signum(input.upperBound,-1)<0) {
+            return new QuantifiedBoolean(RationalBound.signum(input.upperBound,-1)<0);
+        }
+
         // can get odds by dividing positive share by entire width
-        // 
+    
         RationalBound u = input.upperBound;
         RationalBound l = input.lowerBound;
-        RationalBound width = subtract(u, l);
-        RationalBound prob = divide(u, width);
-        if (prob)
+        RationalBound width = RationalBound.subtract(u, l,-1);
+        RationalBound prob = RationalBound.divide(u, width,-1);
+        if (RationalBound.greaterThanOne(prob, -1)) { //TODO: not sure this is right
+            return new QuantifiedBoolean(
+                (byte) RationalBound.toInt(RationalBound.multiply(RationalBound.reciprocate(prob), new RationalBound(255),-1))
+            );
+        } else {
+            return new QuantifiedBoolean(
+                (byte) RationalBound.toInt(RationalBound.multiply(prob, new RationalBound(255),-1))
+            );
+        }
         
     }
 
     public QuantifiedBoolean greaterThan(RationalRange com1, RationalRange com2) {
         // first do a subtraction (its ok, wont lose any precision)
         // (ok maybe some but remember that rounding can never ruin sign)
-        // also as a number approaches zero or infinity the change in probability
-        // will be minor
+        // also as both bounds approach zero or infinity the change in probability
+        // will be minor 
+        // TODO: minimize uncertainty
         RationalRange diff = subtract(com1, com2);
         return isPositive(diff);
     }
