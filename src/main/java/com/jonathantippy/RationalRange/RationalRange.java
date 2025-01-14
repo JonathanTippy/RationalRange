@@ -22,20 +22,15 @@ public class RationalRange
         , boolean reciprocated
         ) {
         
-        if (!reciprocated) {
-            this.upperBound = upperBound;
-            this.lowerBound = lowerBound;
-            this.reciprocated = reciprocated;
-        } else {
-            if (!greaterThan(upperBound, lowerBound)) {
-                this.upperBound = upperBound;
-                this.lowerBound = lowerBound;
-                this.reciprocated = reciprocated;
-            } else {
-                this.upperBound = new RationalBound(0, 0);
-                this.lowerBound = new RationalBound(0, 0);
-                this.reciprocated = reciprocated;
-            }
+        this.upperBound = upperBound;
+        this.lowerBound = lowerBound;
+        this.reciprocated = reciprocated;
+
+        // if exploded set to indeterminate value
+
+        if ( !(reciprocated && greaterThan(upperBound, lowerBound))) {;} else {
+            this.upperBound = new RationalBound(0, 0);
+            this.lowerBound = new RationalBound(0, 0);
         }
         
     }
