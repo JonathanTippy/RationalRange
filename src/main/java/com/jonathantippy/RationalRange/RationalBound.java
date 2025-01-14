@@ -104,9 +104,9 @@ class RationalBound
 
         // For a while min value was disallowed
         // In practice, min value means there was a. an honest min value answer
-        // or b. an overflow caused by the asymmetry of ints introduced by negatives
+        // or b. an overflow while rounding up from int max value
         // In both cases the real value is "larger than largest known" if in numerator
-        // or "smaller than smallest known" if in denomenator"
+        // or "smaller than smallest known" if in denomenator
         // The directionality is known by what bound it is; zero on the opposite side suffices.
         // The zero destroys the normal sign.
 
@@ -116,13 +116,16 @@ class RationalBound
                 newDenomenator = 0;
             }
             if (newNumerator==Integer.MIN_VALUE) {
+                newNumerator = 1;
                 newDenomenator = 0; 
             } else {
                 newNumerator = 0; 
+                newDenomenator = 1; 
             }
         }
 
-        // if the answer was rounded, the exact value can no longer be considered a possible answer.
+        // if the answer was rounded, 
+        // the exact value can no longer be considered a possible answer.
 
         boolean split = (((long)newNumerator)!=(fatNum)||((long)newDenomenator)!=(fatDen));
 

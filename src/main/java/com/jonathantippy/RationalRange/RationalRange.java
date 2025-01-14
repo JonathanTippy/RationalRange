@@ -13,14 +13,31 @@ public class RationalRange
     //FIELDS
     private RationalBound upperBound;
     private RationalBound lowerBound;
+    private boolean reciprocated;
 
     // Constructor with both bounds (unsafe)
     private RationalRange(
         RationalBound upperBound
         , RationalBound lowerBound
+        , boolean reciprocated
         ) {
-        this.upperBound = upperBound;
-        this.lowerBound = lowerBound;
+        
+        if (!reciprocated) {
+            this.upperBound = upperBound;
+            this.lowerBound = lowerBound;
+            this.reciprocated = reciprocated;
+        } else {
+            if (!greaterThan(upperBound, lowerBound)) {
+                this.upperBound = upperBound;
+                this.lowerBound = lowerBound;
+                this.reciprocated = reciprocated;
+            } else {
+                this.upperBound = new RationalBound(0, 0);
+                this.lowerBound = new RationalBound(0, 0);
+                this.reciprocated = reciprocated;
+            }
+        }
+        
     }
 
     // Constructors with both numerator and denomenator
@@ -31,6 +48,7 @@ public class RationalRange
 
         this.upperBound = r;
         this.lowerBound = r;
+        this.reciprocated = false;
     }
 
     // Constructors with integers
@@ -40,6 +58,7 @@ public class RationalRange
 
         this.upperBound = r; 
         this.lowerBound = r;
+        this.reciprocated = false;
     }
 
     // Adaptive constructors
@@ -59,6 +78,7 @@ public class RationalRange
             RationalBound r = new RationalBound(tnum, tden);
             this.upperBound = r;
             this.lowerBound = r;
+            this.reciprocated = false;
         } else {
             throw new IllegalArgumentException("Not a fraction");
         }
@@ -70,6 +90,9 @@ public class RationalRange
     }
     public RationalBound getLowerBound() {
         return this.lowerBound;
+    }
+    public boolean getReciprocated() {
+        return this.reciprocated;
     }
 
     // Display
@@ -88,6 +111,7 @@ public class RationalRange
         return new RationalRange(
             RationalBound.multiply(mul1.upperBound, mul2.upperBound, 1)
             , RationalBound.multiply(mul1.lowerBound, mul2.lowerBound, -1)
+            , (mul1.reciprocated||mult2.reciprocated)
         );
     }
 
@@ -103,6 +127,7 @@ public class RationalRange
         return new RationalRange(
             RationalBound.add(add1.upperBound, add2.upperBound, 1)
             , RationalBound.add(add1.lowerBound, add2.lowerBound, -1)
+            , (add1.reciprocated||add2.reciprocated)
         );
     }
 
@@ -119,13 +144,16 @@ public class RationalRange
         return new RationalRange(
             RationalBound.negate(input.lowerBound)
             , RationalBound.negate(input.upperBound)
+            , input.reciprocated
         );
     }
 
-    public static final RationalRange reciprocate(RationalRange input) throws ArithmeticException {
+    public static final RationalRange reciprocate(RationalRange input) {
+        // note the upper bound and lower bound trade places
         return new RationalRange(
-            RationalBound.reciprocate(input.lowerBound) // note the upper bound and lower bound trade places
+            RationalBound.reciprocate(input.lowerBound) 
             , RationalBound.reciprocate(input.upperBound)
+            , (!input.reciprocated)
         );
     }
 
