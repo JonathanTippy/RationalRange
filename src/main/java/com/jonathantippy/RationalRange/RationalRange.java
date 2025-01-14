@@ -123,11 +123,6 @@ public class RationalRange
     }
 
     public static final RationalRange reciprocate(RationalRange input) throws ArithmeticException {
-        if (signum(input.upperBound) == signum(input.lowerBound)) {;} else {
-            throw new ArithemticException("Possible / by zero"); 
-            // this case may be possible but complicates everything
-            // by allowing bound to be turned inside out
-        }
         return new RationalRange(
             RationalBound.reciprocate(input.lowerBound) // note the upper bound and lower bound trade places
             , RationalBound.reciprocate(input.upperBound)
@@ -137,8 +132,7 @@ public class RationalRange
     // Comparisons
 
     public QuantifiedBoolean isPositive(RationalRange input) {
-        // first do a subtraction (its ok, wont lose any precision)
-        //(ok maybe some but remember that rounding can never ruin sign)
+        
         // can get odds by dividing positive share by entire width
         // 
         RationalBound u = input.upperBound;
@@ -150,6 +144,10 @@ public class RationalRange
     }
 
     public QuantifiedBoolean greaterThan(RationalRange com1, RationalRange com2) {
+        // first do a subtraction (its ok, wont lose any precision)
+        // (ok maybe some but remember that rounding can never ruin sign)
+        // also as a number approaches zero or infinity the change in probability
+        // will be minor
         RationalRange diff = subtract(com1, com2);
         return isPositive(diff);
     }

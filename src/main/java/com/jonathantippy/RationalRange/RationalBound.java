@@ -245,14 +245,22 @@ class RationalBound
 
     // Comparison
     public static final boolean greaterThan(RationalBound a, RationalBound b) {
+        
         // The common denomenator is left implied
         // the comparison can be made with it;
-        // as the implied common denomenator is a scalar, it may 
-        // reverse the direction so absolute value is used
+        // as the implied common denomenator is a scalar, the original sign
+        // is multiplied into the numerator so it is comparatively representative
+        // in magnitude and direction.
         
-        long acdn = (long) a.numerator * (long) b.denomenator;
-        long bcdn = (long) b.numerator * (long) a.denomenator;
-        return (branchlessAbs(acdn) > branchlessAbs(bcdn));
+        long acdn = 
+            (long) a.numerator * (long) b.denomenator 
+            * Integer.signum(a.denomenator);
+
+        long bcdn = 
+            (long) b.numerator * (long) a.denomenator 
+            * Integer.signum(b.denomenator);
+
+        return (acdn > bcdn);
     }
 
     // UTILS
@@ -276,7 +284,7 @@ class RationalBound
 
         // handle cases where simple sign is gone
         // round direction is taken to imply bound direction and thus inclusion / exclusion direction
-        
+
         if (input.numerator != 0 && input.denomenator != 0) {;} else {
             if (!(input.numerator==0&&input.denomenator==0)) {;} else {
                 return 0; //unknowne
