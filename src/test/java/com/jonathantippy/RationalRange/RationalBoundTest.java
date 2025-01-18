@@ -264,14 +264,14 @@ public class RationalBoundTest {
             return;
         }
         RationalBound x = new RationalBound(a, b);
-        assert (isGTOne(x) == isGreaterThanOne(x)): 
-        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + isGreaterThanOne(x);
+        assert (isGTOne(x) == greaterThanOne(x, 1)): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(x) + " while fast said " + greaterThanOne(x, 1);
         RationalBound y = new RationalBound(a, a);
-        assert (isGTOne(y) == isGreaterThanOne(y)): 
-        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(y) + " while fast said " + isGreaterThanOne(y);
+        assert (isGTOne(y) == greaterThanOne(y, 1)): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(y) + " while fast said " + greaterThanOne(y, 1);
         RationalBound z = new RationalBound(b, b);
-        assert (isGTOne(z) == isGreaterThanOne(z)): 
-        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(z) + " while fast said " + isGreaterThanOne(z);
+        assert (isGTOne(z) == greaterThanOne(z, 1)): 
+        "Issue: input was " + a + " and " + b + " slow said " + isGTOne(z) + " while fast said " + greaterThanOne(z, 1);
     }
 
 
@@ -287,10 +287,10 @@ public class RationalBoundTest {
         if (input.getNumerator() == input.getDenomenator()) {
             return false;
         }
-        if (signum(input) == 1) {
+        if (signum(input, 1) == 1) {
             return Math.abs(input.getNumerator()) > Math.abs(input.getDenomenator());
         }
-        if (signum(input) == -1) {
+        if (signum(input, 1) == -1) {
             return false;
         }
         return false;
