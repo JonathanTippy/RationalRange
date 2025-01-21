@@ -142,6 +142,16 @@ class RationalBound
         // directionality is known higher up; this suffices. zero destroys any sign of numerator.
 
         if (input.numerator!=Integer.MIN_VALUE&&input.denomenator!=Integer.MIN_VALUE) {;} else {
+            if ((input.numerator==Integer.MIN_VALUE)&&(input.denomenator==Integer.MIN_VALUE)) {
+                input.numerator = 0;
+                input.denomenator = 0;
+            } else {
+                if (input.numerator==Integer.MIN_VALUE) {
+
+                } else {
+
+                }
+            }
             input.denomenator = 0; 
         }
     }
