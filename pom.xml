@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
     <!-- Project Deets -->
-    <groupId>com.jonathantippy.RationalRange</groupId>
+    <groupId>com.jonathantippy</groupId>
     <artifactId>rational-range</artifactId>
     <version>0.0.3-SNAPSHOT</version>
     <name>Rational Range</name>

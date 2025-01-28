@@ -1,4 +1,5 @@
 // For experimentation
+package com.jonathantippy.RationalRange;
 
 import java.util.Scanner;
 
