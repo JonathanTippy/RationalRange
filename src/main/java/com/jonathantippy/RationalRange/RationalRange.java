@@ -59,17 +59,17 @@ public class RationalRange
     }
 
     // Adaptive constructors
-    public RationalRange(String fraction) 
+    public RationalRange(String input) 
     throws ArithmeticException, IllegalArgumentException {
         int tnum;
         int tden;
-        if (fraction.matches("^(-?)\\d+(/(-?)\\d+)?")) {
-            if (fraction.contains("/")) {
-                String[] terms = fraction.split("/");
+        if (input.matches("^(-?)\\d+(/(-?)\\d+)?")) {
+            if (input.contains("/")) {
+                String[] terms = input.split("/");
                 tnum = Integer.parseInt(terms[0]);
                 tden = Integer.parseInt(terms[1]);
             } else {
-                tnum = Integer.parseInt(fraction);
+                tnum = Integer.parseInt(input);
                 tden = 1;
             }
             RationalBound r = new RationalBound(tnum, tden);
@@ -77,7 +77,20 @@ public class RationalRange
             this.lowerBound = r;
             this.reciprocated = false;
         } else {
-            throw new IllegalArgumentException("Not a fraction");
+            if (input.matches("^(-?)\\d+(\\.\\d+)?")) {
+                String[] parts = input.split(".");
+                System.out.println("parts 0:" + parts[0] + " parts 1:" + parts[1]);
+                int tint = Integer.parseInt(parts[0]);
+                int tdec = Integer.parseInt(parts[1]);
+                RationalBound tintb = new RationalBound(tint);
+                int decDen = (int) Math.pow(10,parts[1].length()+1);
+                RationalBound tdecb = new RationalBound(tdec, decDen);
+                this.upperBound = RationalBound.add(tintb, tdecb, 1);
+                this.lowerBound = RationalBound.add(tintb, tdecb, -1);
+                this.reciprocated = false;
+            } else {
+                throw new IllegalArgumentException("Not a fraction or decimal");
+            }
         }
     }
 
