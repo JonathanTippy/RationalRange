@@ -23,6 +23,8 @@ class RationalBound
     = new RationalBound(1, Integer.MAX_VALUE, false);
     public static final RationalBound MAX_NEGATIVE_VALUE 
     = new RationalBound(-1, Integer.MAX_VALUE, false);
+    public static final RationalBound ZEROOVERZERO
+    = new RationalBound(0, 0, false);
 
     // FIELDS
     private int numerator;
@@ -189,6 +191,23 @@ class RationalBound
         return numberConstruct.toString();
     }
 
+    // Equality
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        return (
+            this.numerator == ((RationalBound)obj).numerator 
+            && this.denomenator==((RationalBound)obj).denomenator
+            && this.excluded ==((RationalBound)obj).excluded
+            );
+    }
+
     // Multiplication
     public static final RationalBound multiply(RationalBound fac1, RationalBound fac2, int roundDirection) {
         
@@ -278,6 +297,39 @@ class RationalBound
             * Integer.signum(b.denomenator);
 
         return (acdn > bcdn);
+    }
+    public static final boolean lessThan(RationalBound a, RationalBound b) {
+        
+        // The common denomenator is left implied
+        // the comparison can be made with it;
+        // as the implied common denomenator is a scalar, the original sign
+        // is multiplied into the numerator so it is comparatively representative
+        // in magnitude and direction.
+        
+        long acdn = 
+            (long) a.numerator * (long) b.denomenator 
+            * Integer.signum(a.denomenator);
+
+        long bcdn = 
+            (long) b.numerator * (long) a.denomenator 
+            * Integer.signum(b.denomenator);
+
+        return (acdn < bcdn);
+    }
+
+    public static final boolean lessThan(RationalBound a, double b) {
+        
+        // Invert for gt or eq
+        
+        double aDouble = (double) a.numerator / (double) a.denomenator;
+        return aDouble < b;
+    }
+     public static final boolean greaterThan(RationalBound a, double b) {
+        
+        // Invert for lt or eq
+        
+        double aDouble = (double) a.numerator / (double) a.denomenator;
+        return aDouble > b;
     }
 
     // UTILS

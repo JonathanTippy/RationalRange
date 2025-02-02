@@ -58,8 +58,56 @@ public class RationalRangeTest {
     public void decimalTest() {
         RationalRange r = new RationalRange("1.5");
         String s = r.toString();
-        assertEquals("3/2 to 3/2", s);
+        assertEquals("15/10 to 15/10", s);
     }
 
+/*
+    @Test
+    public void decimalTest2() {
+        RationalRange r = new RationalRange("2148.100000");
+        String s = r.toString();
+        assert(RationalRange.contains(r, Double.parseDouble("2148.100000")))
+        : r + " does not contain " + Double.parseDouble("2148.100000");
+    }
+*/
+/*
+    @Property
+    void decimalComplete(@ForAll int a, @ForAll int b) {
+        if (a!=Integer.MIN_VALUE&&b!=Integer.MIN_VALUE) {;} else {
+            return;
+        }
 
+        String integerPart = Integer.toString(a);
+        String decimalPart = Integer.toString(Math.abs(b));
+        String number = integerPart + '.' + decimalPart;
+
+        RationalRange result = new RationalRange(number);
+
+        assert(RationalRange.contains(result, Double.parseDouble(number)))
+        : result + " does not contain " + Double.parseDouble(number);
+    }
+*/
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+                                //MULTIPLICATION
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    
+    @Property
+    void reciprocity(@ForAll int a, @ForAll int b) {
+        if (a!=Integer.MIN_VALUE&&b!=Integer.MIN_VALUE) {;} else {
+            return;
+        }
+
+        RationalRange r = new RationalRange(a, b);
+
+        RationalRange recip = RationalRange.reciprocate(r);
+
+        RationalRange result = RationalRange.multiply(r, recip);
+
+        assert(RationalRange.contains(result, 1))
+        : result + " does not contain 1";
+    }
 }

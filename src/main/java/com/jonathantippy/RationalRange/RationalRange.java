@@ -78,12 +78,15 @@ public class RationalRange
             this.reciprocated = false;
         } else {
             if (input.matches("^(-?)\\d+(\\.\\d+)?")) {
-                String[] parts = input.split(".");
-                System.out.println("parts 0:" + parts[0] + " parts 1:" + parts[1]);
+                String inputWithoutExtraZeros = input;
+                inputWithoutExtraZeros.replace("0", " ");
+                inputWithoutExtraZeros.trim();
+                inputWithoutExtraZeros.replace(" ", "0");
+                String[] parts = input.split("\\.");
                 int tint = Integer.parseInt(parts[0]);
                 int tdec = Integer.parseInt(parts[1]);
                 RationalBound tintb = new RationalBound(tint);
-                int decDen = (int) Math.pow(10,parts[1].length()+1);
+                int decDen = (int) Math.pow(10,parts[1].length());
                 RationalBound tdecb = new RationalBound(tdec, decDen);
                 this.upperBound = RationalBound.add(tintb, tdecb, 1);
                 this.lowerBound = RationalBound.add(tintb, tdecb, -1);
@@ -169,7 +172,7 @@ public class RationalRange
 
     // Comparisons
 
-    public QuantifiedBoolean isPositive(RationalRange input) {
+    public static final QuantifiedBoolean isPositive(RationalRange input) {
         
         if (!input.reciprocated) {;} else {
             return QuantifiedBoolean.tossUp;
@@ -196,7 +199,7 @@ public class RationalRange
         
     }
 
-    public QuantifiedBoolean greaterThan(RationalRange com1, RationalRange com2) {
+    public static final QuantifiedBoolean greaterThan(RationalRange com1, RationalRange com2) {
         // first do a subtraction (its ok, wont lose any precision)
         // (ok maybe some but remember that rounding can never ruin sign)
         // also as both bounds approach zero or infinity the change in probability
@@ -204,5 +207,37 @@ public class RationalRange
         // TODO: minimize uncertainty
         RationalRange diff = subtract(com1, com2);
         return isPositive(diff);
+    }
+
+    public static final boolean contains(RationalRange r, double d) {
+        
+        if (!r.reciprocated) {;} else {
+            // check that value is not inside inverted bounds
+            boolean lowerBoundGreaterOrEq = (!RationalBound.lessThan(r.lowerBound, d));
+            boolean upperBoundLesserOrEq = (!RationalBound.greaterThan(r.upperBound, d));
+            return (!(lowerBoundGreaterOrEq||upperBoundLesserOrEq));
+        }
+        // check that value is inside bounds
+        boolean upperBoundGreaterOrEq = (!RationalBound.lessThan(r.upperBound, d));
+        boolean lowerBoundLesserOrEq = (!RationalBound.greaterThan(r.lowerBound, d));
+        return (upperBoundGreaterOrEq&&lowerBoundLesserOrEq);
+    }
+
+    public static final boolean contains(RationalRange r, int i) {
+        if (!(r.upperBound.equals(RationalBound.ZEROOVERZERO)||r.upperBound.equals(RationalBound.ZEROOVERZERO))) {;} else {
+            return true;   
+        }
+        RationalBound ri = new RationalBound(i);
+
+        if (!r.reciprocated) {;} else {
+            // check that value is not inside inverted bounds
+            boolean lowerBoundGreaterOrEq = (!RationalBound.lessThan(r.lowerBound, ri));
+            boolean upperBoundLesserOrEq = (!RationalBound.greaterThan(r.upperBound, ri));
+            return (!(lowerBoundGreaterOrEq||upperBoundLesserOrEq));
+        }
+        // check that value is inside bounds
+        boolean upperBoundGreaterOrEq = (!RationalBound.lessThan(r.upperBound, ri));
+        boolean lowerBoundLesserOrEq = (!RationalBound.greaterThan(r.lowerBound, ri));
+        return (upperBoundGreaterOrEq&&lowerBoundLesserOrEq);
     }
 }
